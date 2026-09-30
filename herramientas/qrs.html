@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Generador de QRs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --tinta: #2b2233; --suave: #5b4e63; --oro: #b8893a; --papel: #fbf6ec; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px 16px 48px; background: var(--papel); color: var(--tinta); font: 16px/1.6 Inter, system-ui, sans-serif; }
+    main { max-width: 860px; margin: 0 auto; }
+    h1 { font: 600 36px/1.1 "Cormorant Garamond", Georgia, serif; margin: 0 0 8px; }
+    p { color: var(--suave); margin: 0 0 16px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    input { width: 100%; min-height: 48px; padding: 10px 14px; font: inherit; border: 1px solid #cdbfa8; border-radius: 12px; background: #fff; }
+    .fila { display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0 32px; }
+    button { min-height: 48px; padding: 10px 22px; border: 0; border-radius: 999px; font: 600 16px Inter, sans-serif; cursor: pointer; background: var(--tinta); color: #fff; }
+    button.claro { background: transparent; color: var(--tinta); border: 1px solid var(--tinta); }
+    .rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+    .qr { background: #fff; border: 1px dashed #cdbfa8; border-radius: 16px; padding: 20px; text-align: center; break-inside: avoid; }
+    .qr h2 { font: 600 24px/1.2 "Cormorant Garamond", Georgia, serif; margin: 0 0 12px; }
+    .qr .codigo { display: inline-block; margin: 0 auto; }
+    .qr small { display: block; margin-top: 10px; color: var(--suave); word-break: break-all; font-size: 12px; }
+    @media print { .no-imprimir { display: none; } body { background: #fff; padding: 0; } .qr { border-style: solid; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="no-imprimir">
+      <h1>Generador de QRs</h1>
+      <p>Solo para el modo <strong>"qr"</strong>. Pon la dirección donde publicaste la página (GitHub Pages) y se crean los 4 códigos con las llaves de <code>datos.js</code>. Imprímelos, recórtalos y escóndelos.</p>
+      <label for="base">Dirección de la página</label>
+      <input id="base" type="url" placeholder="https://tu-usuario.github.io/nosotros/">
+      <div class="fila">
+        <button id="generar" type="button">Generar QRs</button>
+        <button id="imprimir" class="claro" type="button">Imprimir</button>
+      </div>
+    </div>
+    <div class="rejilla" id="rejilla"></div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="../datos.js"></script>
+  <script>
+    const NOMBRES = { carta: "I · La carta", acertijos: "II · Los acertijos", wrapped: "III · Nuestro Wrapped", cielo: "IV · El cielo" };
+    const base = document.getElementById("base");
+    base.value = location.href.replace(/herramientas\/qrs\.html.*$/, "");
+
+    function generar() {
+      if (typeof QRCode === "undefined") {
+        document.getElementById("rejilla").innerHTML = "<p>No se pudo cargar el generador. Revisa tu conexión a internet y recarga.</p>";
+        return;
+      }
+      const url = base.value.trim().replace(/\/?$/, "/");
+      const rejilla = document.getElementById("rejilla");
+      rejilla.innerHTML = "";
+      for (const [cap, llave] of Object.entries(DATOS.llaves)) {
+        const destino = `${url}?llave=${encodeURIComponent(llave)}`;
+        const tarjeta = document.createElement("section");
+        tarjeta.className = "qr";
+        tarjeta.innerHTML = `<h2>${NOMBRES[cap]}</h2><div class="codigo"></div><small>${destino}</small>`;
+        rejilla.append(tarjeta);
+        new QRCode(tarjeta.querySelector(".codigo"), { text: destino, width: 180, height: 180, colorDark: "#2b2233", colorLight: "#ffffff" });
+      }
+    }
+    document.getElementById("generar").onclick = generar;
+    document.getElementById("imprimir").onclick = () => print();
+    generar();
+  </script>
+</body>
+</html>
