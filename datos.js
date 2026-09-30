@@ -52,41 +52,41 @@ window.DATOS = {
   // "foto" es la ruta a una imagen dentro de la carpeta fotos/
   acertijos: [
     {
+      pregunta: "¿Cómo nos *conocimos*?",
+      opciones: ["En una fiesta", "En la escuela", "Por un amigo en común", "En el gym"],
+      correcta: 2,
+      pista: "Alguien tuvo que presentarnos…",
+      recuerdo: {
+        titulo: "Donde todo *empezó*",
+        fecha: "14 de febrero, 2021",
+        lugar: "Casa de Andrés",
+        texto: "Yo ni quería ir ese día. Qué bueno que fui.",
+        foto: "fotos/recuerdo-1.jpg",
+      },
+    },
+    {
       pregunta: "¿Dónde fue nuestra *primera cita*?",
       opciones: ["En el cine", "En un café del centro", "En la playa", "En un parque"],
       correcta: 1,
       pista: "Había olor a pan recién hecho…",
       recuerdo: {
         titulo: "Nuestra *primera* cita",
-        fecha: "14 de febrero, 2021",
+        fecha: "marzo, 2021",
         lugar: "Café La Esquina",
         texto: "Pediste un capuchino, yo no sabía qué decir y terminamos hablando cuatro horas.",
-        foto: "fotos/recuerdo-1.jpg",
-      },
-    },
-    {
-      pregunta: "¿Qué canción sonaba en nuestro *primer baile*?",
-      opciones: ["Perfect", "Tu jardín con enanitos", "Yellow", "La de la boda de tu prima"],
-      correcta: 2,
-      pista: "Es de un color…",
-      recuerdo: {
-        titulo: "El primer *baile*",
-        fecha: "mayo, 2021",
-        lugar: "La sala de tu casa",
-        texto: "Sin música buena, sin espacio, sin saber bailar. Y aun así, perfecto.",
         foto: "fotos/recuerdo-2.jpg",
       },
     },
     {
-      pregunta: "¿Cuál fue nuestro primer *viaje* juntos?",
-      opciones: ["Oaxaca", "Cancún", "San Miguel de Allende", "Guadalajara"],
-      correcta: 0,
-      pista: "Mole, mezcal y mucho calor.",
+      pregunta: "¿Cuál es *nuestra canción*?",
+      opciones: ["Perfect", "Tu jardín con enanitos", "Yellow", "La Macarena"],
+      correcta: 2,
+      pista: "Es de un color…",
       recuerdo: {
-        titulo: "Nuestro primer *viaje*",
-        fecha: "diciembre, 2021",
-        lugar: "Oaxaca",
-        texto: "Nos perdimos tres veces y fue lo mejor del viaje.",
+        titulo: "La canción de los *dos*",
+        fecha: "abril, 2021",
+        lugar: "En el coche, a todo volumen",
+        texto: "No sabemos cantar, pero eso nunca nos ha detenido.",
         foto: "fotos/recuerdo-3.jpg",
       },
     },
@@ -107,7 +107,7 @@ window.DATOS = {
 
   // ── Capítulo 3: Nuestro Wrapped ───────────────────────────
   wrapped: {
-    // Fecha en que empezaron (AAAA-MM-DD) → se calculan los días juntos
+    // Fecha en que se conocieron (AAAA-MM-DD) → se calculan los días desde entonces
     fechaInicio: "2021-02-14",
     ciudad: "Ciudad de México",
     cancion: {
@@ -125,8 +125,8 @@ window.DATOS = {
     // Datos curiosos. Si exportas su chat de WhatsApp puedes poner números reales.
     datos: [
       { valor: "48,213", texto: "mensajes de WhatsApp" },
-      { valor: "3,102", texto: "veces que dijimos “te amo”" },
-      { valor: "127", texto: "veces que me dijiste “ya llegué”" },
+      { valor: "1,207", texto: "notas de voz" },
+      { valor: "642", texto: "veces que nos dijimos “buenas noches”" },
       { valor: "1", texto: "vez que admitiste que yo tenía razón" },
     ],
   },
@@ -135,13 +135,15 @@ window.DATOS = {
   cielo: {
     intro: "Toca las estrellas",
     // Cada estrella revela una parte de la pregunta
-    palabras: ["¿Te", "quieres", "casar", "conmigo?"],
+    palabras: ["¿Quieres", "ser", "mi", "novia?"],
     // La pregunta como se ve al final (con *énfasis* si quieres)
-    pregunta: "¿Te quieres *casar* conmigo?",
+    pregunta: "¿Quieres ser mi *novia*?",
     botonSi: "Sí",
-    botonSi2: "Sí, mil veces",
+    botonSi2: "¡Obvio sí!",
     tituloSi: "Dijiste que sí",
-    mensajeFinal: "Esta es la mejor historia que me ha pasado. Gracias por escribirla conmigo.",
+    // Aparece junto a la fecha y hora exactas en que dijo que sí
+    etiquetaFecha: "Nuestro día 1",
+    mensajeFinal: "Hoy empieza oficialmente lo nuestro. Gracias por escribir esta historia conmigo.",
   },
 
   // ── Solo para modo "qr" ───────────────────────────────────

@@ -515,12 +515,12 @@
         tema: "h-champan", claro: true,
         nodos: [
           el("div", { className: "forma circulo-borde" }),
-          eyebrow("Llevamos juntos"),
+          eyebrow("Desde que nos conocimos"),
           el("div", { className: "w-centro r" }, [
             el("p", { className: "w-mega", textContent: "0", dataset: { contar: dias } }),
             el("p", { className: "w-titulo" }, el("em", { textContent: "días" })),
           ]),
-          el("p", { className: "w-texto r", textContent: `Desde el ${largaFecha}, en ${w.ciudad}.` }),
+          el("p", { className: "w-texto r", textContent: `Todo empezó el ${largaFecha}, en ${w.ciudad}.` }),
         ],
       },
       {
@@ -783,10 +783,7 @@
     f.hidden = false;
     anim($("cielo"), [{ opacity: 1 }, { opacity: 0 }], { dur: 1400, fill: "forwards" });
     anim(f, [{ opacity: 0 }, { opacity: 1 }], { dur: 1600, fill: "backwards" });
-    anim($("anillo"), [
-      { opacity: 0, transform: "translateY(36px) scale(.88)", filter: "blur(10px)" },
-      { opacity: 1, transform: "none", filter: "blur(0px)" },
-    ], { dur: 1800, delay: 500, fill: "backwards" });
+    emblema();
 
     if (D.final === "mirame") {
       q.textContent = "Mírame";
@@ -808,6 +805,32 @@
   }
   const palabrasPregunta = () => D.cielo.palabras.join(" ");
 
+  // El corazón de estrellas del cielo, en pequeño y dorado
+  function emblema() {
+    const svg = $("emblema-svg");
+    const M = 24;
+    const pts = Array.from({ length: M }, (_, k) => corazon((k / M) * Math.PI * 2));
+    const d = `M${pts.map((p) => p.map((v) => v.toFixed(2)).join(" ")).join("L")}Z`;
+    const grandes = [0, 6, 12, 18];
+    const chispa = "M0-1C.07-.42.42-.07 1 0 .42.07.07.42 0 1-.07.42-.42.07-1 0-.42-.07-.07-.42 0-1z";
+    svg.innerHTML = `
+      <defs><radialGradient id="g-emblema" cx=".5" cy=".45" r=".6"><stop offset="0" stop-color="#ecd9b8" stop-opacity=".28"/><stop offset="1" stop-color="#ecd9b8" stop-opacity="0"/></radialGradient></defs>
+      <path d="${d}" fill="url(#g-emblema)" class="emblema-relleno"/>
+      <path d="${d}" class="emblema-trazo" pathLength="1"/>
+      ${pts.map((p, k) => (grandes.includes(k) ? "" : `<circle class="emblema-punto" cx="${p[0].toFixed(2)}" cy="${p[1].toFixed(2)}" r="1.1"/>`)).join("")}
+      ${grandes.map((k) => `<path class="emblema-estrella" transform="translate(${pts[k][0].toFixed(2)} ${pts[k][1].toFixed(2)}) scale(5)" d="${chispa}"/>`).join("")}
+      ${[[18, 6, 3.2], [88, 18, 4], [76, 78, 2.6]].map(([x, y, e], k) => `<g transform="translate(${x} ${y}) scale(${e})"><path class="destello" style="animation-delay:${-k * 0.8}s" fill="#fff" d="${chispa}"/></g>`).join("")}`;
+
+    const caja = $("emblema");
+    caja.classList.remove("latiendo");
+    entrar(caja, { delay: 400, dur: 1400, y: 20, blur: 8 });
+    anim(svg.querySelector(".emblema-trazo"), [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { dur: 2000, delay: 700, ease: EASE.vaiven, fill: "both" });
+    anim(svg.querySelector(".emblema-relleno"), [{ opacity: 0 }, { opacity: 1 }], { dur: 1400, delay: 2200, fill: "backwards" });
+    svg.querySelectorAll(".emblema-punto").forEach((c, k) => anim(c, [{ opacity: 0 }, { opacity: 1 }], { dur: 500, delay: 700 + (k / M) * 2000, fill: "backwards" }));
+    svg.querySelectorAll(".emblema-estrella").forEach((c, k) => anim(c, [{ opacity: 0 }, { opacity: 1 }], { dur: 700, delay: 800 + k * 480, fill: "backwards" }));
+    setTimeout(() => caja.classList.add("latiendo"), calmado ? 0 : 2900);
+  }
+
   async function aceptar() {
     const c = D.cielo;
     const botones = $("final-botones");
@@ -820,11 +843,13 @@
 
     const ahora = new Date();
     $("final-si").textContent = c.tituloSi || "Dijiste que sí";
+    $("final-etiqueta").textContent = c.etiquetaFecha || "Nuestro día 1";
     $("final-fecha").textContent = `${ahora.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" })} · ${ahora.toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" })}`;
     $("final-mensaje").textContent = c.mensajeFinal;
     $("final-recuerdo").hidden = false;
     anim($("final-si"), [{ clipPath: "inset(0 100% 0 0)", opacity: 1 }, { clipPath: "inset(0 0% 0 0)", opacity: 1 }], { dur: 1900, ease: "cubic-bezier(.45,.05,.55,.95)", fill: "backwards" });
-    entrar($("final-fecha"), { delay: 1500 });
+    entrar($("final-etiqueta"), { delay: 1400 });
+    entrar($("final-fecha"), { delay: 1600 });
     entrar($("final-mensaje"), { delay: 1900, dur: 1200 });
     try { localStorage.setItem("nuestra-historia-si", ahora.toISOString()); } catch {}
   }
@@ -843,7 +868,7 @@
     addEventListener("resize", ajustar);
     if (calmado) return;
 
-    const caja = $("anillo").getBoundingClientRect();
+    const caja = $("emblema").getBoundingClientRect();
     const ox = caja.left + caja.width / 2;
     const oy = caja.top + caja.height * 0.3;
     const colores = ["248,236,212", "236,217,184", "227,194,131", "255,255,255", "232,167,161", "243,213,150"];

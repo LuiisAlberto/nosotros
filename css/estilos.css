@@ -619,10 +619,14 @@ em { font-style: italic; }
   background: radial-gradient(60% 45% at 50% 32%, rgba(64, 48, 120, .4), transparent 70%), rgba(7, 7, 12, .6);
   text-align: center;
 }
-.anillo { position: relative; width: min(46vw, 190px); aspect-ratio: 1; }
-.anillo::before { content: ""; position: absolute; inset: -30%; border-radius: 50%; background: radial-gradient(circle, rgba(236, 217, 184, .28), transparent 62%); animation: aura 4s var(--vaiven) infinite; }
+.emblema { position: relative; width: min(54vw, 220px); aspect-ratio: 1; }
+.emblema::before { content: ""; position: absolute; inset: -25%; border-radius: 50%; background: radial-gradient(circle, rgba(236, 217, 184, .24), transparent 62%); animation: aura 4s var(--vaiven) infinite; }
 @keyframes aura { 50% { transform: scale(1.12); opacity: .7; } }
-.anillo svg { position: relative; width: 100%; height: 100%; overflow: visible; }
+.emblema svg { position: relative; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 5px rgba(236, 217, 184, .6)); }
+.emblema.latiendo svg { animation: latir-corazon 2.4s var(--vaiven) infinite; }
+.emblema-trazo { fill: none; stroke: var(--champan); stroke-width: .75; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+.emblema-punto { fill: var(--champan-luz); }
+.emblema-estrella { fill: #fff; }
 .destello { transform-box: fill-box; transform-origin: center; animation: destello 2.4s var(--vaiven) infinite; }
 .destello:nth-of-type(2) { animation-delay: -.8s; }
 .destello:nth-of-type(3) { animation-delay: -1.6s; }

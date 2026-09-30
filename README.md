@@ -1,12 +1,12 @@
-# Nuestra historia 💍
+# Nuestra historia 💌
 
-Una experiencia web para pedir matrimonio, en 4 capítulos:
+Una experiencia web para pedirle que sea tu novia, en 4 capítulos:
 
 0. **Portada** — "Para *su nombre*" en caligrafía sobre un cielo nocturno.
 1. **La carta** — un sobre con estampilla y matasellos. Se voltea, rompe el sello de cera con sus iniciales, se abre la solapa y sale una carta que se "escribe" sola.
 2. **Los acertijos** — preguntas sobre ustedes; cada respuesta correcta revela una polaroid que se "revela" como foto instantánea.
-3. **Nuestro Wrapped** — historias estilo Spotify: días juntos, reloj en vivo del tiempo juntos, su canción en vinil, su emoji y sus datos. Mantén presionado para pausar.
-4. **El cielo** — cada estrella que toca revela una palabra; al final se dibuja una constelación en forma de corazón y aparece el anillo con la pregunta.
+3. **Nuestro Wrapped** — historias estilo Spotify: días desde que se conocieron, reloj en vivo, su canción en vinil, su emoji y sus datos. Mantén presionado para pausar.
+4. **El cielo** — cada estrella que toca revela una palabra; al final se dibuja una constelación en forma de corazón y aparece la pregunta. Cuando dice que sí, queda guardado "Nuestro día 1" con la fecha y hora exactas.
 
 Dura 10–15 minutos. Funciona en el celular, sin instalar nada y sin internet (las fuentes vienen incluidas).
 

@@ -45,7 +45,6 @@
       <radialGradient id="g-cera" cx=".36" cy=".3" r=".75"><stop offset="0" stop-color="#d9566b"/><stop offset=".55" stop-color="#a22239"/><stop offset="1" stop-color="#6a0f22"/></radialGradient>
       <radialGradient id="g-cera-centro" cx=".6" cy=".7" r=".8"><stop offset="0" stop-color="#b3283f"/><stop offset="1" stop-color="#8a1a2e"/></radialGradient>
 
-      <linearGradient id="g-oro" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3d6"/><stop offset=".3" stop-color="#e3c283"/><stop offset=".55" stop-color="#9f773c"/><stop offset=".78" stop-color="#f6dfae"/><stop offset="1" stop-color="#8a6532"/></linearGradient>
     </defs>
   </svg>
 
@@ -222,34 +221,14 @@
 
   <!-- Final -->
   <div class="final" id="final" role="dialog" aria-modal="true" aria-labelledby="final-pregunta" hidden>
-    <div class="anillo" id="anillo" aria-hidden="true">
-      <svg viewBox="0 0 200 200">
-        <path d="M91 58 L95 82 H105 L109 58Z" fill="url(#g-oro)"/>
-        <path fill-rule="evenodd" fill="url(#g-oro)" d="M42 128a58 52 0 1 0 116 0a58 52 0 1 0-116 0ZM53 131a47 41 0 1 0 94 0a47 41 0 1 0-94 0Z"/>
-        <path d="M49 110a58 52 0 0 1 51-34" fill="none" stroke="#fff8e6" stroke-width="1.6" stroke-linecap="round" opacity=".75"/>
-        <path d="M150 150a58 52 0 0 1-30 27" fill="none" stroke="#fff8e6" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
-        <g stroke="#ffffff" stroke-width=".5" stroke-opacity=".8" stroke-linejoin="round">
-          <path d="M70 40 82 26 85 40Z" fill="#e9f0fb"/>
-          <path d="M82 26 100 40 85 40Z" fill="#ffffff"/>
-          <path d="M82 26H118L100 40Z" fill="#f4f8ff"/>
-          <path d="M118 26 115 40 100 40Z" fill="#ffffff"/>
-          <path d="M118 26 130 40 115 40Z" fill="#cddbf0"/>
-          <path d="M70 40H85L100 74Z" fill="#c3d3ec"/>
-          <path d="M85 40H100V74Z" fill="#eef4fd"/>
-          <path d="M100 40H115L100 74Z" fill="#b5c7e4"/>
-          <path d="M115 40H130L100 74Z" fill="#dfe8f7"/>
-        </g>
-        <g fill="#ffffff">
-          <path class="destello" d="M78 12c.4 3 2.6 5.2 5.6 5.6-3 .4-5.2 2.6-5.6 5.6-.4-3-2.6-5.2-5.6-5.6 3-.4 5.2-2.6 5.6-5.6z"/>
-          <path class="destello" d="M134 22c.5 3.8 3.3 6.6 7 7-3.7.5-6.5 3.3-7 7-.5-3.7-3.3-6.5-7-7 3.7-.4 6.5-3.2 7-7z"/>
-          <path class="destello" d="M112 50c.3 2.2 1.9 3.8 4.1 4.1-2.2.3-3.8 1.9-4.1 4.1-.3-2.2-1.9-3.8-4.1-4.1 2.2-.3 3.8-1.9 4.1-4.1z"/>
-        </g>
-      </svg>
+    <div class="emblema" id="emblema" aria-hidden="true">
+      <svg viewBox="0 0 100 100" id="emblema-svg"></svg>
     </div>
     <h1 class="final-pregunta" id="final-pregunta" tabindex="-1"></h1>
     <div class="final-botones" id="final-botones"></div>
     <div class="final-recuerdo" id="final-recuerdo" hidden>
       <p class="guion final-si" id="final-si"></p>
+      <p class="pastilla" id="final-etiqueta"></p>
       <p class="final-fecha" id="final-fecha"></p>
       <p class="parrafo-carta final-mensaje" id="final-mensaje"></p>
     </div>
