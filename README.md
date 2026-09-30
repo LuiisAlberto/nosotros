@@ -2,18 +2,20 @@
 
 Una experiencia web para pedir matrimonio, en 4 capítulos:
 
-1. **La carta** — un sobre con su nombre que se abre y la reta: *"te lo vas a tener que ganar"*.
-2. **Los acertijos** — preguntas sobre ustedes; cada respuesta correcta revela un recuerdo con foto.
-3. **Nuestro Wrapped** — historias estilo Spotify: días juntos, su canción, su emoji, datos curiosos.
-4. **El cielo** — un cielo estrellado; cada estrella que toca revela una palabra de la pregunta.
+0. **Portada** — "Para *su nombre*" en caligrafía sobre un cielo nocturno.
+1. **La carta** — un sobre con estampilla y matasellos. Se voltea, rompe el sello de cera con sus iniciales, se abre la solapa y sale una carta que se "escribe" sola.
+2. **Los acertijos** — preguntas sobre ustedes; cada respuesta correcta revela una polaroid que se "revela" como foto instantánea.
+3. **Nuestro Wrapped** — historias estilo Spotify: días juntos, reloj en vivo del tiempo juntos, su canción en vinil, su emoji y sus datos. Mantén presionado para pausar.
+4. **El cielo** — cada estrella que toca revela una palabra; al final se dibuja una constelación en forma de corazón y aparece el anillo con la pregunta.
 
-Dura 10–15 minutos. Funciona en el celular, sin instalar nada.
+Dura 10–15 minutos. Funciona en el celular, sin instalar nada y sin internet (las fuentes vienen incluidas).
 
 ## Cómo personalizarla
 
 Solo tienes que tocar **dos cosas**:
 
-1. **`datos.js`** — su nombre, la carta, los acertijos, fechas, canción, datos del Wrapped y la pregunta final.
+1. **`datos.js`** — su nombre, sus iniciales (para el sello), la carta, los acertijos, fechas, canción, datos del Wrapped y la pregunta final.
+   Pon palabras entre `*asteriscos*` para resaltarlas en cursiva dorada.
 2. **`fotos/`** — una foto por recuerdo (lee `fotos/LEEME.md`).
 
 ## Dos modos
@@ -48,7 +50,7 @@ Y el `final`:
 
 ## Probarla
 
-- Ver un capítulo directo: `?capitulo=carta`, `?capitulo=acertijos`, `?capitulo=wrapped` o `?capitulo=cielo` (solo modo sencilla).
+- Ver un capítulo directo: `?capitulo=carta`, `?capitulo=acertijos`, `?capitulo=wrapped`, `?capitulo=cielo` o `?capitulo=final` (solo modo sencilla).
 - Borrar el progreso del modo QR: agrega `?reiniciar` a la dirección.
 - En tu computadora: `python3 -m http.server` dentro de la carpeta y abre `http://localhost:8000`.
 
@@ -56,4 +58,6 @@ Y el `final`:
 
 - Pocos recuerdos muy buenos > muchos regulares. 4 acertijos es el punto ideal.
 - Pruébala completa en tu celular antes del día, con el brillo al máximo.
-- Si pones su canción (`wrapped.cancion.audio`), empieza a sonar al abrir el sobre.
+- Si pones su canción (`wrapped.cancion.audio`), empieza a sonar suave al tocar "Comenzar".
+- En Android se pone en pantalla completa sola. En iPhone, ábrela desde Safari → Compartir → "Agregar a inicio" para verla sin barras.
+- Respeta el modo "reducir movimiento" del celular: si está activo, todo aparece con desvanecidos suaves.

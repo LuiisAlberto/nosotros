@@ -3,106 +3,261 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0b1026">
-  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#07070c">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Nuestra historia</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23e8c27a' d='M12 2l2.9 6.9L22 9.3l-5.5 4.8L18.2 22 12 18.3 5.8 22l1.7-7.9L2 9.3l7.1-.4z'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ecd9b8' d='M12 2c.7 5.2 4.8 9.3 10 10-5.2.7-9.3 4.8-10 10-.7-5.2-4.8-9.3-10-10 5.2-.7 9.3-4.8 10-10z'/%3E%3C/svg%3E">
+  <link rel="preload" href="fuentes/pinyon-script-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fuentes/instrument-serif-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fuentes/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fuentes/cormorant-garamond-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body>
-  <canvas id="estrellas-fondo" aria-hidden="true"></canvas>
+<body class="cargando">
 
-  <main id="app" aria-live="polite">
-    <!-- Pantalla de bloqueo (solo modo QR) -->
-    <section class="escena" id="bloqueo" hidden>
-      <div class="bloqueo">
-        <svg class="icono icono-xl" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-        <p class="eyebrow" id="bloqueo-capitulo"></p>
-        <h1 class="titulo">Aún no es momento</h1>
-        <p class="texto" id="bloqueo-pista"></p>
+  <!-- Iconos y degradados compartidos -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-flecha" viewBox="0 0 24 24"><path d="M5 12h14M13.5 6.5 19 12l-5.5 5.5"/></symbol>
+      <symbol id="i-chispa" viewBox="0 0 24 24"><path d="M12 2c.7 5.2 4.8 9.3 10 10-5.2.7-9.3 4.8-10 10-.7-5.2-4.8-9.3-10-10 5.2-.7 9.3-4.8 10-10z"/></symbol>
+      <symbol id="i-corazon" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.4-9.3-9.2C1.4 7.9 3.6 4.5 7 4.5c2 0 3.5 1.1 5 2.9 1.5-1.8 3-2.9 5-2.9 3.4 0 5.6 3.4 4.3 6.8-1.8 4.8-9.3 9.2-9.3 9.2z"/></symbol>
+      <symbol id="i-candado" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5M12 14.5v2"/></symbol>
+      <symbol id="i-qr" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M14 14h2v2h-2zM18 18h2v2h-2zM14 18h2M18 14h2"/></symbol>
+      <symbol id="i-audifonos" viewBox="0 0 24 24"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></symbol>
+      <symbol id="i-camara" viewBox="0 0 24 24"><path d="M4 8.5h3l1.5-2h7l1.5 2h3v10H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+      <symbol id="i-luz" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.9V16h5v-.2c0-.8.4-1.5 1-1.9A6 6 0 0 0 12 3z"/></symbol>
+
+      <linearGradient id="g-solapa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3e9d8"/><stop offset="1" stop-color="#e9dcc6"/></linearGradient>
+      <linearGradient id="g-lado-i" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e3d4bb"/><stop offset="1" stop-color="#ede1cd"/></linearGradient>
+      <linearGradient id="g-lado-d" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#e3d4bb"/><stop offset="1" stop-color="#ede1cd"/></linearGradient>
+      <linearGradient id="g-base" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#e8dcc7"/><stop offset="1" stop-color="#f5ecdd"/></linearGradient>
+      <pattern id="p-forro" width="14" height="14" patternUnits="userSpaceOnUse">
+        <rect width="14" height="14" fill="#271c42"/>
+        <circle cx="3.5" cy="4" r=".8" fill="#ecd9b8" opacity=".7"/>
+        <circle cx="10.5" cy="11" r=".55" fill="#ecd9b8" opacity=".45"/>
+      </pattern>
+      <filter id="f-sombra-arriba" x="-10%" y="-30%" width="120%" height="160%"><feDropShadow dx="0" dy="-1.2" stdDeviation="1.4" flood-color="#3a2a1a" flood-opacity=".2"/></filter>
+      <filter id="f-sombra-abajo" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="1.6" stdDeviation="1.6" flood-color="#3a2a1a" flood-opacity=".26"/></filter>
+
+      <radialGradient id="g-cera" cx=".36" cy=".3" r=".75"><stop offset="0" stop-color="#d9566b"/><stop offset=".55" stop-color="#a22239"/><stop offset="1" stop-color="#6a0f22"/></radialGradient>
+      <radialGradient id="g-cera-centro" cx=".6" cy=".7" r=".8"><stop offset="0" stop-color="#b3283f"/><stop offset="1" stop-color="#8a1a2e"/></radialGradient>
+
+      <linearGradient id="g-oro" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3d6"/><stop offset=".3" stop-color="#e3c283"/><stop offset=".55" stop-color="#9f773c"/><stop offset=".78" stop-color="#f6dfae"/><stop offset="1" stop-color="#8a6532"/></linearGradient>
+    </defs>
+  </svg>
+
+  <div class="cielo-fondo" aria-hidden="true"><canvas id="estrellas"></canvas></div>
+  <div class="ambiente" id="ambiente" aria-hidden="true"></div>
+
+  <main id="app">
+
+    <!-- ═══ Portada ═══ -->
+    <section class="escena portada" id="portada" hidden>
+      <p class="pastilla" data-entrada="0">Una historia en cuatro capítulos</p>
+      <div class="portada-centro">
+        <p class="portada-para" data-entrada="1">Para</p>
+        <h1 class="portada-nombre" id="portada-nombre" data-entrada="2"></h1>
+        <div class="ornamento" aria-hidden="true" data-entrada="3"><span></span><svg class="i i-lleno"><use href="#i-chispa"/></svg><span></span></div>
+        <p class="portada-de" id="portada-de" data-entrada="4"></p>
+      </div>
+      <div class="portada-pie" data-entrada="5">
+        <button class="boton" id="portada-comenzar" type="button">
+          <span>Comenzar</span>
+          <span class="boton-icono"><svg class="i"><use href="#i-flecha"/></svg></span>
+        </button>
+        <p class="nota" id="portada-sonido" hidden><svg class="i"><use href="#i-audifonos"/></svg>Mejor con sonido</p>
       </div>
     </section>
 
-    <!-- Capítulo 1: La carta -->
+    <!-- ═══ Bloqueo (modo QR) ═══ -->
+    <section class="escena bloqueo" id="bloqueo" hidden>
+      <div class="bloqueo-icono" aria-hidden="true"><span><svg class="i"><use href="#i-candado"/></svg></span></div>
+      <p class="pastilla" id="bloqueo-capitulo"></p>
+      <h1 class="titulo-grande" tabindex="-1">Aún no es <em>momento</em></h1>
+      <p class="parrafo-carta" id="bloqueo-pista"></p>
+      <p class="nota"><svg class="i"><use href="#i-qr"/></svg>Escanea el código con la cámara de tu celular</p>
+    </section>
+
+    <!-- ═══ Capítulo I · La carta ═══ -->
     <section class="escena" id="carta" hidden>
-      <p class="eyebrow">Capítulo I</p>
-      <div class="sobre" id="sobre">
-        <button class="sobre-boton" id="sobre-abrir" aria-label="Abrir el sobre">
-          <span class="sobre-cuerpo"></span>
-          <span class="sobre-solapa"></span>
-          <span class="sobre-sello" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.2 5 6.6 5c2 0 3.4 1 4.4 2.4h2C14 6 15.4 5 17.4 5 20.8 5 23 8.3 21.5 11.8 19.5 16.4 12 21 12 21z"/></svg>
-          </span>
-          <span class="sobre-nombre" id="sobre-nombre"></span>
-        </button>
-        <p class="ayuda" id="sobre-ayuda">Toca el sobre para abrirlo</p>
+      <div class="sobre-escena" id="sobre-escena">
+        <div class="sobre-flotar" id="sobre-flotar">
+          <div class="sobre" id="sobre" role="button" tabindex="0" aria-label="Voltear el sobre">
+
+            <div class="sobre-cara sobre-anverso" id="sobre-anverso">
+              <p class="sobre-remitente" id="sobre-remitente"></p>
+              <div class="estampilla" aria-hidden="true">
+                <div class="estampilla-cara">
+                  <svg viewBox="0 0 40 40"><path d="M25 7a13 13 0 1 0 9 21A11 11 0 1 1 25 7z" fill="currentColor"/><path d="M9 9c.2 1.6 1.4 2.8 3 3-1.6.2-2.8 1.4-3 3-.2-1.6-1.4-2.8-3-3 1.6-.2 2.8-1.4 3-3z M32 30c.15 1.1 1 1.9 2 2-1 .15-1.85 1-2 2-.15-1-1-1.85-2-2 1-.1 1.85-.9 2-2z" fill="currentColor"/></svg>
+                  <span id="estampilla-fecha"></span>
+                </div>
+              </div>
+              <svg class="matasellos" viewBox="0 0 120 60" aria-hidden="true">
+                <defs><path id="arco-matasellos" d="M30 30m-20 0a20 20 0 1 1 40 0a20 20 0 1 1-40 0"/></defs>
+                <circle cx="30" cy="30" r="25" fill="none" stroke="currentColor" stroke-width="1.1"/>
+                <circle cx="30" cy="30" r="15" fill="none" stroke="currentColor" stroke-width=".7"/>
+                <text font-size="5" letter-spacing=".9" fill="currentColor" font-family="Geist, sans-serif" font-weight="600"><textPath href="#arco-matasellos" id="matasellos-texto"></textPath></text>
+                <path d="M30 35.5s-5-2.9-6.2-6.1c-.9-2.3.6-4.5 2.8-4.5 1.3 0 2.3.7 3.4 1.9 1-1.2 2-1.9 3.4-1.9 2.2 0 3.7 2.2 2.8 4.5-1.2 3.2-6.2 6.1-6.2 6.1z" fill="currentColor"/>
+                <path d="M58 18q7.5-5 15 0t15 0 15 0 15 0M58 26q7.5-5 15 0t15 0 15 0 15 0M58 34q7.5-5 15 0t15 0 15 0 15 0M58 42q7.5-5 15 0t15 0 15 0 15 0" fill="none" stroke="currentColor" stroke-width="1"/>
+              </svg>
+              <div class="sobre-destino">
+                <p class="sobre-para">Para</p>
+                <p class="guion sobre-nombre" id="sobre-nombre"></p>
+                <span class="sobre-raya"></span>
+                <p class="sobre-leyenda">Personal · Entregar en mano</p>
+              </div>
+            </div>
+
+            <div class="sobre-cara sobre-reverso" id="sobre-reverso" hidden>
+              <div class="sobre-interior"></div>
+              <div class="sobre-carta" id="sobre-carta" aria-hidden="true">
+                <p class="guion" id="sobre-carta-para"></p><i></i><i></i>
+              </div>
+              <svg class="sobre-bolsillo" viewBox="0 0 300 200" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0 0 L150 112 L0 200Z" fill="url(#g-lado-i)" filter="url(#f-sombra-abajo)"/>
+                <path d="M300 0 L150 112 L300 200Z" fill="url(#g-lado-d)" filter="url(#f-sombra-abajo)"/>
+                <path d="M0 200 L126 106 Q150 90 174 106 L300 200Z" fill="url(#g-base)" filter="url(#f-sombra-arriba)"/>
+              </svg>
+              <div class="sobre-solapa" id="sobre-solapa">
+                <svg class="cara" viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 0H300L163 111Q150 121 137 111Z" fill="url(#g-solapa)" filter="url(#f-sombra-abajo)"/>
+                </svg>
+                <svg class="forro" viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 0H300L163 111Q150 121 137 111Z" fill="#efe4d2"/>
+                  <path d="M10 0H290L159 103Q150 110 141 103Z" fill="url(#p-forro)"/>
+                </svg>
+              </div>
+              <button class="sello" id="sello" type="button" aria-label="Romper el sello">
+                <span class="sello-onda"></span>
+                <span class="sello-mitad izq"></span>
+                <span class="sello-mitad der"></span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+        <p class="nota latido" id="sobre-ayuda">Toca el sobre</p>
       </div>
 
       <article class="carta" id="carta-papel" hidden>
-        <p class="carta-saludo" id="carta-saludo"></p>
-        <div class="carta-cuerpo" id="carta-cuerpo"></div>
-        <p class="carta-firma" id="carta-firma"></p>
-        <button class="boton" id="carta-siguiente"></button>
+        <div class="hoja">
+          <div class="hoja-monograma" id="hoja-monograma" aria-hidden="true"></div>
+          <h1 class="guion hoja-saludo" id="hoja-saludo" tabindex="-1"></h1>
+          <div class="hoja-cuerpo" id="hoja-cuerpo"></div>
+          <p class="hoja-despedida" id="hoja-despedida"></p>
+          <p class="guion hoja-firma" id="hoja-firma"></p>
+        </div>
+        <button class="boton" id="carta-siguiente" type="button">
+          <span id="carta-siguiente-texto"></span>
+          <span class="boton-icono"><svg class="i"><use href="#i-flecha"/></svg></span>
+        </button>
       </article>
     </section>
 
-    <!-- Capítulo 2: Los acertijos -->
+    <!-- ═══ Capítulo II · Los acertijos ═══ -->
     <section class="escena" id="acertijos" hidden>
-      <header class="cabecera">
-        <p class="eyebrow">Capítulo II · Los acertijos</p>
-        <ol class="puntos" id="acertijo-progreso" aria-label="Progreso"></ol>
-      </header>
-
-      <div class="tarjeta" id="acertijo-tarjeta">
-        <p class="contador" id="acertijo-numero"></p>
-        <h2 class="titulo" id="acertijo-pregunta"></h2>
-        <div class="opciones" id="acertijo-opciones" role="group"></div>
-        <p class="pista" id="acertijo-pista" hidden></p>
+      <div class="acertijo" id="acertijo">
+        <div class="acertijo-cabeza">
+          <p class="pastilla" id="acertijo-numero"></p>
+          <ol class="progreso" id="acertijo-progreso" aria-hidden="true"></ol>
+        </div>
+        <h2 class="pregunta" id="acertijo-pregunta" tabindex="-1"></h2>
+        <div class="bisel"><div class="bisel-nucleo">
+          <div class="opciones" id="acertijo-opciones" role="group" aria-labelledby="acertijo-pregunta"></div>
+        </div></div>
+        <p class="pista" id="acertijo-pista" role="status" hidden></p>
       </div>
 
       <figure class="recuerdo" id="recuerdo" hidden>
-        <div class="recuerdo-foto" id="recuerdo-foto"></div>
-        <figcaption>
-          <p class="recuerdo-meta"><span id="recuerdo-fecha"></span><span aria-hidden="true"> · </span><span id="recuerdo-lugar"></span></p>
-          <h3 class="titulo" id="recuerdo-titulo"></h3>
-          <p class="texto" id="recuerdo-texto"></p>
+        <div class="polaroid" id="polaroid">
+          <span class="cinta" aria-hidden="true"></span>
+          <div class="polaroid-foto" id="recuerdo-foto"></div>
+          <p class="guion polaroid-pie" id="recuerdo-fecha"></p>
+        </div>
+        <figcaption class="recuerdo-texto">
+          <p class="pastilla" id="recuerdo-lugar"></p>
+          <h3 class="recuerdo-titulo" id="recuerdo-titulo" tabindex="-1"></h3>
+          <p class="parrafo-carta" id="recuerdo-texto"></p>
         </figcaption>
-        <button class="boton" id="recuerdo-siguiente">Siguiente</button>
+        <button class="boton" id="recuerdo-siguiente" type="button">
+          <span id="recuerdo-siguiente-texto"></span>
+          <span class="boton-icono"><svg class="i"><use href="#i-flecha"/></svg></span>
+        </button>
       </figure>
     </section>
 
-    <!-- Capítulo 3: Wrapped -->
+    <!-- ═══ Capítulo III · Wrapped ═══ -->
     <section class="escena escena-wrapped" id="wrapped" hidden>
-      <div class="historias-barras" id="wrapped-barras" aria-hidden="true"></div>
-      <div class="historias" id="wrapped-historias"></div>
-      <button class="zona-toque zona-atras" id="wrapped-atras" aria-label="Anterior"></button>
-      <button class="zona-toque zona-adelante" id="wrapped-adelante" aria-label="Siguiente"></button>
+      <div class="historias" id="historias">
+        <div class="historias-barras" id="wrapped-barras" aria-hidden="true"></div>
+        <div id="wrapped-historias"></div>
+        <button class="zona zona-atras" id="wrapped-atras" type="button" aria-label="Anterior"></button>
+        <button class="zona zona-adelante" id="wrapped-adelante" type="button" aria-label="Siguiente"></button>
+      </div>
     </section>
 
-    <!-- Capítulo 4: El cielo -->
+    <!-- ═══ Capítulo IV · El cielo ═══ -->
     <section class="escena escena-cielo" id="cielo" hidden>
-      <p class="eyebrow">Capítulo IV</p>
-      <p class="cielo-intro" id="cielo-intro"></p>
-      <div class="cielo-estrellas" id="cielo-estrellas"></div>
-      <p class="frase" id="cielo-frase" aria-live="polite"></p>
-
-      <div class="final" id="final" hidden>
-        <svg class="anillo" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="40" r="16"/>
-          <path d="M24 16l8-8 8 8-8 8z"/>
-        </svg>
-        <h1 class="final-pregunta" id="final-pregunta"></h1>
-        <div class="final-botones" id="final-botones"></div>
-        <p class="texto final-mensaje" id="final-mensaje" hidden></p>
+      <div class="cielo-cabeza" id="cielo-cabeza">
+        <h2 class="cielo-intro" id="cielo-intro" tabindex="-1"></h2>
+        <p class="cielo-contador" id="cielo-contador"></p>
       </div>
+      <div class="constelacion" id="constelacion">
+        <svg class="trazo" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path id="trazo" pathLength="1"/></svg>
+      </div>
+      <p class="frase" id="cielo-frase" aria-live="polite"></p>
     </section>
   </main>
 
+  <!-- Intertítulo entre capítulos -->
+  <div class="intertitulo" id="intertitulo" hidden>
+    <p class="pastilla" id="inter-numero"></p>
+    <h2 class="inter-titulo"><span class="mascara"><span id="inter-titulo"></span></span></h2>
+    <span class="inter-linea" id="inter-linea"></span>
+    <p class="inter-sub" id="inter-sub"></p>
+  </div>
+
+  <!-- Final -->
+  <div class="final" id="final" role="dialog" aria-modal="true" aria-labelledby="final-pregunta" hidden>
+    <div class="anillo" id="anillo" aria-hidden="true">
+      <svg viewBox="0 0 200 200">
+        <path d="M91 58 L95 82 H105 L109 58Z" fill="url(#g-oro)"/>
+        <path fill-rule="evenodd" fill="url(#g-oro)" d="M42 128a58 52 0 1 0 116 0a58 52 0 1 0-116 0ZM53 131a47 41 0 1 0 94 0a47 41 0 1 0-94 0Z"/>
+        <path d="M49 110a58 52 0 0 1 51-34" fill="none" stroke="#fff8e6" stroke-width="1.6" stroke-linecap="round" opacity=".75"/>
+        <path d="M150 150a58 52 0 0 1-30 27" fill="none" stroke="#fff8e6" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+        <g stroke="#ffffff" stroke-width=".5" stroke-opacity=".8" stroke-linejoin="round">
+          <path d="M70 40 82 26 85 40Z" fill="#e9f0fb"/>
+          <path d="M82 26 100 40 85 40Z" fill="#ffffff"/>
+          <path d="M82 26H118L100 40Z" fill="#f4f8ff"/>
+          <path d="M118 26 115 40 100 40Z" fill="#ffffff"/>
+          <path d="M118 26 130 40 115 40Z" fill="#cddbf0"/>
+          <path d="M70 40H85L100 74Z" fill="#c3d3ec"/>
+          <path d="M85 40H100V74Z" fill="#eef4fd"/>
+          <path d="M100 40H115L100 74Z" fill="#b5c7e4"/>
+          <path d="M115 40H130L100 74Z" fill="#dfe8f7"/>
+        </g>
+        <g fill="#ffffff">
+          <path class="destello" d="M78 12c.4 3 2.6 5.2 5.6 5.6-3 .4-5.2 2.6-5.6 5.6-.4-3-2.6-5.2-5.6-5.6 3-.4 5.2-2.6 5.6-5.6z"/>
+          <path class="destello" d="M134 22c.5 3.8 3.3 6.6 7 7-3.7.5-6.5 3.3-7 7-.5-3.7-3.3-6.5-7-7 3.7-.4 6.5-3.2 7-7z"/>
+          <path class="destello" d="M112 50c.3 2.2 1.9 3.8 4.1 4.1-2.2.3-3.8 1.9-4.1 4.1-.3-2.2-1.9-3.8-4.1-4.1 2.2-.3 3.8-1.9 4.1-4.1z"/>
+        </g>
+      </svg>
+    </div>
+    <h1 class="final-pregunta" id="final-pregunta" tabindex="-1"></h1>
+    <div class="final-botones" id="final-botones"></div>
+    <div class="final-recuerdo" id="final-recuerdo" hidden>
+      <p class="guion final-si" id="final-si"></p>
+      <p class="final-fecha" id="final-fecha"></p>
+      <p class="parrafo-carta final-mensaje" id="final-mensaje"></p>
+    </div>
+  </div>
+
   <canvas id="celebracion" aria-hidden="true"></canvas>
-  <audio id="audio" preload="none"></audio>
+  <div class="grano" aria-hidden="true"></div>
+  <audio id="audio" preload="none" loop></audio>
 
   <script src="datos.js"></script>
   <script src="js/app.js"></script>

@@ -4,13 +4,18 @@
  *  Este es el ÚNICO archivo que tienes que editar.
  *  Todo lo que está aquí es de ejemplo: cámbialo por lo de ustedes.
  *  Respeta las comillas "" y las comas , al final de cada línea.
+ *
+ *  Truco: pon una palabra entre *asteriscos* para resaltarla
+ *  en cursiva dorada. Ejemplo: "¿Dónde fue nuestra *primera cita*?"
  * ─────────────────────────────────────────────────────────────
  */
 window.DATOS = {
-  // Cómo le dices (aparece en el sobre y en varias partes)
+  // Cómo le dices (aparece en la portada, el sobre y la carta)
   nombre: "Mi amor",
   // Tu nombre (firma de la carta)
   tuNombre: "Luis",
+  // Iniciales para el sello de cera
+  iniciales: "M&L",
 
   // "sencilla" → todo seguido en tu celular (cena)
   // "qr"       → cada capítulo se desbloquea escaneando un QR escondido
@@ -21,15 +26,23 @@ window.DATOS = {
   // "mirame"   → aparece "Mírame" y tú se lo preguntas en persona
   final: "pregunta",
 
+  // Títulos de cada capítulo (la pantalla que aparece entre uno y otro)
+  capitulos: {
+    carta: { titulo: "La carta", sub: "Donde empieza todo" },
+    acertijos: { titulo: "Los acertijos", sub: "Veamos cuánto recuerdas" },
+    wrapped: { titulo: "Nuestro Wrapped", sub: "Lo nuestro, en números" },
+    cielo: { titulo: "El cielo", sub: "Mira hacia arriba" },
+  },
+
   // ── Capítulo 1: La carta ──────────────────────────────────
   carta: {
-    saludo: "Hola, mi amor:",
+    saludo: "Mi amor,",
     parrafos: [
-      "Hay algo que llevo tiempo queriendo decirte.",
+      "Hay algo que llevo mucho tiempo queriendo decirte.",
       "Pero no te lo voy a decir así nada más… te lo vas a tener que ganar.",
-      "Prepárate: vamos a recorrer nuestra historia, capítulo por capítulo.",
+      "Vamos a recorrer nuestra historia, capítulo por capítulo. Al final te espera una pregunta.",
     ],
-    firma: "Con todo mi corazón,",
+    despedida: "Con todo mi corazón,",
     boton: "Acepto el reto",
   },
 
@@ -39,52 +52,52 @@ window.DATOS = {
   // "foto" es la ruta a una imagen dentro de la carpeta fotos/
   acertijos: [
     {
-      pregunta: "¿Dónde fue nuestra primera cita?",
+      pregunta: "¿Dónde fue nuestra *primera cita*?",
       opciones: ["En el cine", "En un café del centro", "En la playa", "En un parque"],
       correcta: 1,
       pista: "Había olor a pan recién hecho…",
       recuerdo: {
-        titulo: "Nuestra primera cita",
-        fecha: "14 de febrero de 2021",
+        titulo: "Nuestra *primera* cita",
+        fecha: "14 de febrero, 2021",
         lugar: "Café La Esquina",
         texto: "Pediste un capuchino, yo no sabía qué decir y terminamos hablando cuatro horas.",
         foto: "fotos/recuerdo-1.jpg",
       },
     },
     {
-      pregunta: "¿Qué canción sonaba en nuestro primer baile?",
-      opciones: ["Perfect", "Tu jardín con enanitos", "Coldplay – Yellow", "La de la boda de tu prima"],
+      pregunta: "¿Qué canción sonaba en nuestro *primer baile*?",
+      opciones: ["Perfect", "Tu jardín con enanitos", "Yellow", "La de la boda de tu prima"],
       correcta: 2,
       pista: "Es de un color…",
       recuerdo: {
-        titulo: "El primer baile",
-        fecha: "Mayo de 2021",
+        titulo: "El primer *baile*",
+        fecha: "mayo, 2021",
         lugar: "La sala de tu casa",
         texto: "Sin música buena, sin espacio, sin saber bailar. Y aun así, perfecto.",
         foto: "fotos/recuerdo-2.jpg",
       },
     },
     {
-      pregunta: "¿Cuál fue nuestro primer viaje juntos?",
+      pregunta: "¿Cuál fue nuestro primer *viaje* juntos?",
       opciones: ["Oaxaca", "Cancún", "San Miguel de Allende", "Guadalajara"],
       correcta: 0,
       pista: "Mole, mezcal y mucho calor.",
       recuerdo: {
-        titulo: "Nuestro primer viaje",
-        fecha: "Diciembre de 2021",
+        titulo: "Nuestro primer *viaje*",
+        fecha: "diciembre, 2021",
         lugar: "Oaxaca",
         texto: "Nos perdimos tres veces y fue lo mejor del viaje.",
         foto: "fotos/recuerdo-3.jpg",
       },
     },
     {
-      pregunta: "¿Qué es lo que más me gusta de ti?",
+      pregunta: "¿Qué es lo que *más me gusta* de ti?",
       opciones: ["Tu risa", "Tu risa", "Tu risa", "Todas las anteriores"],
       correcta: 3,
       pista: "Es una pregunta con trampa.",
       recuerdo: {
-        titulo: "Todo de ti",
-        fecha: "Todos los días",
+        titulo: "Todo de *ti*",
+        fecha: "todos los días",
         lugar: "Donde estés tú",
         texto: "Tu risa, tu forma de cuidarme y cómo haces que todo parezca más fácil.",
         foto: "fotos/recuerdo-4.jpg",
@@ -100,11 +113,15 @@ window.DATOS = {
     cancion: {
       titulo: "Yellow",
       artista: "Coldplay",
-      // Opcional: pon un mp3 en fotos/ y escribe la ruta. Si no, déjalo "".
+      // Opcional: pon un .mp3 en fotos/ y escribe la ruta. Empieza a sonar
+      // al tocar "Comenzar". Si no tienes, déjalo "".
       audio: "",
+      // Opcional: portada del disco (imagen cuadrada en fotos/). Si no, "".
+      portada: "",
     },
     emoji: "🥺",
     emojiTexto: "El emoji que más nos mandamos",
+    emojiPie: "Y todavía funciona.",
     // Datos curiosos. Si exportas su chat de WhatsApp puedes poner números reales.
     datos: [
       { valor: "48,213", texto: "mensajes de WhatsApp" },
@@ -119,7 +136,11 @@ window.DATOS = {
     intro: "Toca las estrellas",
     // Cada estrella revela una parte de la pregunta
     palabras: ["¿Te", "quieres", "casar", "conmigo?"],
+    // La pregunta como se ve al final (con *énfasis* si quieres)
+    pregunta: "¿Te quieres *casar* conmigo?",
     botonSi: "Sí",
+    botonSi2: "Sí, mil veces",
+    tituloSi: "Dijiste que sí",
     mensajeFinal: "Esta es la mejor historia que me ha pasado. Gracias por escribirla conmigo.",
   },
 
@@ -133,6 +154,7 @@ window.DATOS = {
     cielo: "estrella",
   },
   pistasQR: {
+    carta: "Tu primera pista te espera donde empieza el día.",
     acertijos: "La siguiente pista está donde guardamos las tazas.",
     wrapped: "Busca debajo de tu almohada.",
     cielo: "Sal al balcón y mira hacia arriba.",
