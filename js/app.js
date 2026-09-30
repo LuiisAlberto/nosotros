@@ -1059,8 +1059,8 @@
   const listo = Promise.race([document.fonts?.ready ?? Promise.resolve(), esperar(1500)]);
   listo.then(() => {
     document.body.classList.remove("cargando");
-    // ?capitulo=acertijos (o carta, wrapped, cielo, final) → salta directo para probar
-    const salto = params.get("capitulo");
+    // ?capitulo=acertijos o #acertijos (también carta, wrapped, cielo, final) → salta directo para probar
+    const salto = params.get("capitulo") || decodeURIComponent(location.hash.slice(1));
     const i = CAPITULOS.indexOf(salto);
     if (!modoQR && salto === "final") {
       mostrar("cielo").then(mostrarFinal);

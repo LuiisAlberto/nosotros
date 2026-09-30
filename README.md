@@ -50,7 +50,7 @@ Y el `final`:
 
 ## Probarla
 
-- Ver un capítulo directo: `?capitulo=carta`, `?capitulo=acertijos`, `?capitulo=wrapped`, `?capitulo=cielo` o `?capitulo=final` (solo modo sencilla).
+- Ver un capítulo directo: `?capitulo=carta`, `?capitulo=acertijos`, `?capitulo=wrapped`, `?capitulo=cielo` o `?capitulo=final` (solo modo sencilla). También funciona con `#cielo`, `#final`, etc.
 - Borrar el progreso del modo QR: agrega `?reiniciar` a la dirección.
 - En tu computadora: `python3 -m http.server` dentro de la carpeta y abre `http://localhost:8000`.
 
