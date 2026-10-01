@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nosotros · Edith y Luis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&family=Permanent+Marker&display=swap">
+<style>
+/* Layout: un libro de una sola pantalla; cada capítulo es una hoja que se pasa (swipe / flechas). Look único de papel, sin modo oscuro. */
+:root {
+  color-scheme: light;
+  --desk: #D9E0EA;        /* gris de ella, hacia el azul */
+  --paper: #FBF9F4;
+  --paper-2: #F1EEE6;
+  --ink: #1E2940;
+  --ink-soft: #4A5570;
+  --azul: #2F6BD8;        /* el color de los dos */
+  --azul-claro: #AFC9F4;
+  --naranja: #F2892B;     /* de ella */
+  --naranja-os: #D2601A;
+  --naranja-claro: #F7B777;
+  --gris: #8C96A8;        /* de ella */
+  --gris-claro: #D5DAE3;
+  --amarillo: #FFCB3D;    /* de él */
+  --verde: #34A56F;       /* de él */
+
+  --f-marker: "Permanent Marker", "Comic Sans MS", "Chalkboard SE", cursive;
+  --f-script: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+  --f-body: "Patrick Hand", "Segoe Print", "Chalkboard SE", system-ui, sans-serif;
+
+  --page-max: 540px;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--desk);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 19px;
+  line-height: 1.55;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px dashed var(--azul); outline-offset: 3px; border-radius: 6px; }
+
+/* ---------- libro ---------- */
+.libro {
+  position: relative;
+  height: 100%;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  background: var(--paper);
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .12  0 0 0 0 .16  0 0 0 0 .25  0 0 0 .05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  box-shadow: 0 0 0 1px rgba(30, 41, 64, .08), 0 18px 50px rgba(30, 41, 64, .18);
+  overflow: hidden;
+}
+.hojas { position: relative; overflow: hidden; }
+.hoja {
+  position: absolute; inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 28px 22px 36px;
+  display: flex; flex-direction: column; gap: 18px;
+  transition: transform .5s var(--ease), opacity .5s var(--ease);
+  transform: translateX(0) rotate(0);
+  opacity: 1;
+}
+.hoja[data-pos="antes"]   { transform: translateX(-104%) rotate(-3deg); opacity: 0; pointer-events: none; }
+.hoja[data-pos="despues"] { transform: translateX(104%) rotate(3deg);  opacity: 0; pointer-events: none; }
+.hoja > * { flex-shrink: 0; }
+
+/* ---------- tipografía ---------- */
+.eyebrow {
+  font-family: var(--f-script); font-weight: 700; font-size: 1.5rem; line-height: 1;
+  color: var(--naranja-os);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.cuando {
+  font-family: var(--f-body); font-size: .9rem; letter-spacing: .04em;
+  color: var(--ink-soft);
+  border: 2px solid currentColor; border-radius: 999px 900px 999px 950px;
+  padding: 0 10px; line-height: 1.6;
+}
+h1, h2 { margin: 0; font-family: var(--f-marker); font-weight: 400; text-wrap: balance; line-height: 1.05; }
+h2 { font-size: clamp(1.9rem, 8vw, 2.5rem); }
+.resalta {
+  background: linear-gradient(transparent 58%, var(--hl, var(--amarillo)) 58%, var(--hl, var(--amarillo)) 90%, transparent 90%);
+  padding: 0 .1em;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.texto { display: flex; flex-direction: column; gap: 12px; max-width: 34em; }
+.texto p { margin: 0; }
+.script { font-family: var(--f-script); font-weight: 700; font-size: 1.35em; line-height: 1.1; color: var(--azul); }
+
+/* ---------- dibujos ---------- */
+.doodle { width: 100%; max-width: 300px; height: auto; align-self: center; overflow: visible; }
+.doodle .k { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.doodle .w { filter: url(#wobble); }
+.f-none { fill: none; }
+.f-ink { fill: var(--ink); }
+.f-paper { fill: var(--paper); }
+.f-azul { fill: var(--azul); }
+.f-azul-claro { fill: var(--azul-claro); }
+.f-naranja { fill: var(--naranja); }
+.f-naranja-os { fill: var(--naranja-os); }
+.f-naranja-claro { fill: var(--naranja-claro); }
+.f-gris { fill: var(--gris); }
+.f-gris-claro { fill: var(--gris-claro); }
+.f-amarillo { fill: var(--amarillo); }
+.f-verde { fill: var(--verde); }
+.t-marker { font-family: var(--f-marker); }
+.t-script { font-family: var(--f-script); font-weight: 700; }
+
+/* ---------- polaroid (aparece sólo si existe la foto) ---------- */
+.polaroid {
+  align-self: center;
+  width: min(78%, 280px);
+  background: #fff;
+  padding: 10px 10px 34px;
+  box-shadow: 0 6px 18px rgba(30, 41, 64, .18);
+  transform: rotate(var(--rot, -2deg));
+  position: relative;
+}
+.polaroid img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--paper-2); }
+.polaroid::before {
+  content: ""; position: absolute; top: -12px; left: 50%; width: 84px; height: 24px;
+  transform: translateX(-50%) rotate(3deg);
+  background: color-mix(in srgb, var(--amarillo) 55%, transparent);
+}
+
+/* ---------- nota escondida ---------- */
+.nota {
+  align-self: flex-start;
+  max-width: 290px;
+  border: 0;
+  background: var(--amarillo);
+  padding: 12px 16px 14px;
+  text-align: left;
+  box-shadow: 2px 4px 0 rgba(30, 41, 64, .15);
+  transform: rotate(-1.5deg);
+  transition: transform .2s var(--ease);
+  min-height: 44px;
+}
+.nota:hover { transform: rotate(0); }
+.nota .tapa { font-family: var(--f-script); font-weight: 700; font-size: 1.4rem; line-height: 1.1; }
+.nota .dentro { display: block; font-size: 1.05rem; }
+.nota[aria-expanded="false"] .dentro { display: none; }
+.nota[aria-expanded="true"] .tapa { display: none; }
+
+.recuerdo {
+  display: flex; gap: 12px; align-items: center;
+  font-family: var(--f-script); font-size: 1.35rem; line-height: 1.15; color: var(--ink-soft);
+  border-top: 2px dashed var(--gris-claro); padding-top: 14px;
+}
+.recuerdo svg { flex: none; }
+
+.lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.lista li { display: flex; align-items: center; gap: 12px; }
+.lista svg { flex: none; }
+
+/* ---------- capítulo en pausa ---------- */
+.hoja.pausa { background: var(--paper-2); color: var(--ink-soft); }
+.hoja.pausa h2 { color: var(--gris); }
+.hoja.pausa .eyebrow { color: var(--gris); }
+
+/* ---------- portada ---------- */
+.portada { justify-content: center; align-items: center; text-align: center; gap: 14px; }
+.portada h1 { font-size: clamp(3.2rem, 17vw, 5rem); letter-spacing: .02em; display: flex; align-items: center; justify-content: center; }
+.portada h1 svg { width: .85em; height: .85em; margin: 0 .02em; }
+.nombres { font-family: var(--f-script); font-weight: 700; font-size: clamp(2.1rem, 10vw, 2.8rem); line-height: 1; color: var(--azul); }
+.apodos { font-family: var(--f-script); font-size: 1.4rem; color: var(--naranja-os); line-height: 1.1; }
+.subt { color: var(--ink-soft); margin: 0; }
+.boton {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 8px 24px;
+  font-family: var(--f-marker); font-size: 1.15rem;
+  background: var(--azul); color: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 255px 18px 225px 18px / 18px 225px 18px 255px;
+  box-shadow: 3px 4px 0 var(--ink);
+  transition: transform .15s var(--ease), box-shadow .15s var(--ease);
+}
+.boton:hover { transform: translate(-1px, -1px); box-shadow: 4px 5px 0 var(--ink); }
+.boton:active { transform: translate(2px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+.boton.sec { background: var(--paper); color: var(--ink); }
+
+/* ---------- índice ---------- */
+.indice { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.indice button {
+  width: 100%; min-height: 48px;
+  display: grid; grid-template-columns: 2.4em 1fr; align-items: baseline; gap: 8px;
+  background: none; border: 0; border-bottom: 2px dashed var(--gris-claro);
+  padding: 8px 4px; text-align: left;
+  transition: background-color .2s;
+}
+.indice button:hover { background: color-mix(in srgb, var(--amarillo) 30%, transparent); }
+.indice .num { font-family: var(--f-script); font-weight: 700; font-size: 1.5rem; color: var(--naranja-os); line-height: 1; }
+.indice .tit { font-size: 1.1rem; min-width: 0; }
+
+/* ---------- final: la servilleta ---------- */
+.servilleta {
+  position: relative;
+  align-self: center;
+  width: min(100%, 340px);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 22px, rgba(47, 107, 216, .06) 22px 23px),
+    #fff;
+  padding: 26px 24px 24px;
+  box-shadow: 0 10px 26px rgba(30, 41, 64, .2);
+  transform: rotate(-2deg);
+  clip-path: polygon(0 2%, 4% 0, 12% 1.5%, 22% 0, 35% 1%, 48% 0, 60% 1.6%, 74% 0, 86% 1.2%, 100% 0, 99% 20%, 100% 45%, 98.6% 70%, 100% 100%, 88% 98.6%, 70% 100%, 50% 98.4%, 30% 100%, 12% 98.5%, 0 100%, 1.2% 70%, 0 40%);
+}
+.servilleta::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 49.6%, rgba(30, 41, 64, .07) 50%, transparent 50.4%);
+  pointer-events: none;
+}
+.servilleta .para { font-family: var(--f-script); font-weight: 700; font-size: 1.7rem; line-height: 1; color: var(--ink-soft); }
+.servilleta .pregunta { font-family: var(--f-script); font-weight: 700; font-size: clamp(2.3rem, 11vw, 2.9rem); line-height: 1; color: var(--ink); margin: 8px 0 4px; text-wrap: balance; }
+.servilleta .otra { font-family: var(--f-script); font-size: 1.6rem; color: var(--naranja-os); line-height: 1; }
+.opciones { display: flex; gap: 28px; margin-top: 22px; align-items: center; flex-wrap: wrap; }
+.check {
+  display: inline-flex; align-items: center; gap: 10px;
+  min-height: 48px; min-width: 48px;
+  background: none; border: 0; padding: 4px 6px;
+  font-family: var(--f-script); font-weight: 700; font-size: 2rem; line-height: 1;
+  transition: transform .25s var(--ease);
+  transform-origin: left center;
+  touch-action: manipulation;
+}
+.check .caja { width: 34px; height: 34px; flex: none; }
+.check .palomita { stroke-dasharray: 60; stroke-dashoffset: 60; transition: stroke-dashoffset .5s var(--ease); }
+.check.marcado .palomita { stroke-dashoffset: 0; }
+#btnNo.huye { position: fixed; z-index: 30; transition: left .25s var(--ease), top .25s var(--ease), transform .25s; background: var(--paper); border-radius: 12px; box-shadow: 0 4px 14px rgba(30, 41, 64, .18); }
+.respuesta { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.respuesta .grande { font-family: var(--f-marker); font-size: clamp(1.8rem, 8vw, 2.3rem); line-height: 1.1; text-wrap: balance; }
+
+/* ---------- epílogo ---------- */
+.ideas { display: flex; flex-wrap: wrap; gap: 8px; }
+.idea {
+  min-height: 44px; padding: 6px 14px;
+  background: var(--paper); border: 2px solid var(--ink-soft);
+  border-radius: 999px 900px 999px 950px;
+  font-size: 1rem;
+  transition: background-color .2s, border-color .2s;
+}
+.idea:hover { background: color-mix(in srgb, var(--azul-claro) 45%, transparent); border-color: var(--azul); }
+label.lbl { font-family: var(--f-script); font-weight: 700; font-size: 1.5rem; line-height: 1; }
+textarea {
+  width: 100%; min-height: 120px; resize: vertical;
+  font-family: var(--f-script); font-weight: 700; font-size: 1.7rem; line-height: 1.2;
+  color: var(--ink);
+  background: repeating-linear-gradient(0deg, transparent 0 33px, var(--azul-claro) 33px 34px), var(--paper);
+  border: 2px solid var(--ink-soft); border-radius: 10px 14px 8px 16px;
+  padding: 6px 12px;
+}
+.firmado {
+  font-family: var(--f-script); font-weight: 700; font-size: clamp(2rem, 9vw, 2.6rem); line-height: 1.1;
+  color: var(--azul); text-align: center; text-wrap: balance; margin: 0;
+}
+.firma { text-align: center; font-family: var(--f-script); font-size: 1.4rem; color: var(--ink-soft); margin: 0; }
+.fila { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.aviso { font-size: .95rem; color: var(--ink-soft); margin: 0; min-height: 1.5em; }
+
+/* ---------- barra: el camino ---------- */
+.camino {
+  display: grid; grid-template-columns: 48px 1fr 48px; align-items: center; gap: 6px;
+  padding: 6px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+  border-top: 2px dashed var(--gris-claro);
+  background: var(--paper);
+}
+.flecha {
+  width: 48px; height: 48px; border: 0; background: none; border-radius: 50%;
+  display: grid; place-items: center;
+  transition: background-color .2s;
+}
+.flecha:hover:not(:disabled) { background: color-mix(in srgb, var(--amarillo) 45%, transparent); }
+.flecha:disabled { opacity: .25; cursor: default; }
+.ruta { width: 100%; height: 40px; overflow: visible; }
+.ruta .calle { fill: none; stroke: var(--gris-claro); stroke-width: 12; stroke-linecap: round; }
+.ruta .raya { fill: none; stroke: var(--paper); stroke-width: 2; stroke-dasharray: 6 6; }
+.ruta .parada { fill: var(--paper); stroke: var(--gris); stroke-width: 2; }
+.ruta .parada.hecha { fill: var(--azul); stroke: var(--azul); }
+.ruta #marcador { transition: transform .5s var(--ease); }
+.pagina { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--f-script); font-size: 1.1rem; color: var(--ink-soft); text-align: center; line-height: 1; margin-top: -2px; }
+
+canvas#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 40; }
+
+[hidden] { display: none !important; }
+.col { display: flex; flex-direction: column; gap: 12px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (min-width: 600px) {
+  body { padding-block: 24px; }
+  .libro { border-radius: 6px 14px 14px 6px; }
+  .hoja { padding: 36px 40px 40px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="wobble" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="3.2"/>
+    </filter>
+  </defs>
+</svg>
+
+<main class="libro" id="libro">
+  <div class="hojas" id="hojas" aria-live="polite"></div>
+  <nav class="camino" aria-label="Páginas del libro">
+    <button class="flecha" id="atras" aria-label="Página anterior">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M18 5 Q10 12 8 14 Q12 18 18 23" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div>
+      <svg class="ruta" id="ruta" viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true">
+        <path id="rutaPath" class="calle" d="M8 20 C 45 4, 70 36, 105 20 S 165 4, 200 20 S 260 36, 292 20"/>
+        <path class="raya" d="M8 20 C 45 4, 70 36, 105 20 S 165 4, 200 20 S 260 36, 292 20"/>
+        <g id="paradas"></g>
+        <g id="marcador"><path d="M0 5 C -9 -3 -7 -11 0 -6 C 7 -11 9 -3 0 5 Z" fill="var(--naranja)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/></g>
+      </svg>
+      <div class="pagina" id="pagina"></div>
+    </div>
+    <button class="flecha" id="adelante" aria-label="Página siguiente">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M10 5 Q18 12 20 14 Q16 18 10 23" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </nav>
+</main>
+<canvas id="confeti" hidden></canvas>
+
+<script>
+/* =========================================================
+   LA HISTORIA — edita aquí los textos.
+   Fotos: pon archivos en /fotos con el nombre de "foto"
+   (ej. fotos/cap-01.jpg). Si no existe, sólo se ve el dibujo.
+   ========================================================= */
+const ELLA = "Edith";
+const EL = "Luis";
+
+const CAPITULOS = [
+  {
+    titulo: "Me gusta tu sudadera", cuando: "2019 · la prepa", dibujo: "sudadera", foto: "fotos/cap-01.jpg",
+    texto: [
+      "Yo iba en segundo, tú en tercero, tu último año. Yo estaba afuera de un baño con mi sudadera de Morat.",
+      "Pasaste con tu amiga, me dijiste <span class='script'>«me gusta tu sudadera»</span> y te fuiste.",
+      "Luego tu amiga te dijo que me pidieras mi Facebook. Lo sé porque casi lo gritó. No te animaste, así que me lo pidió ella y te lo pasó.",
+      "Al poco tiempo empezamos a hablar. Todo empezó por una sudadera."
+    ],
+    nota: "Todavía no sé si te gustó la sudadera o el que la traía puesta."
+  },
+  {
+    titulo: "Nos vemos en el receso", cuando: "2019 · la prepa", dibujo: "reloj", foto: "fotos/cap-02.jpg",
+    texto: [
+      "Después de eso, el receso se volvió la mejor parte del día.",
+      "Nos veíamos diario. Mismo lugar, las mismas ganas de verte, y siempre se nos hacía corto.",
+      "Así estuvimos un tiempo, hasta que tocó salir de la escuela juntos."
+    ]
+  },
+  {
+    titulo: "El plan de la caja de pizza", cuando: "nuestra primera cita", dibujo: "pizza", foto: "fotos/cap-03.jpg",
+    texto: [
+      "Nuestra primera cita de verdad fue en una pizzería.",
+      "Yo tenía un súper plan: pedirle a los de Domino's que escribieran en la caja si querías ser mi novia, para que lo vieras al abrirla.",
+      "Nunca nos llevaron caja.",
+      "Así que te lo escribí en una servilleta. <span class='script'>Y dijiste que sí.</span>"
+    ],
+    nota: "El plan falló. La servilleta no."
+  },
+  {
+    titulo: "Seis meses", cuando: "novios, la primera vez", dibujo: "kermes", foto: "fotos/cap-04.jpg",
+    texto: [
+      "Fueron como seis meses, pero cupieron un montón de cosas.",
+      "Te acompañaba a tu casa. Nos casamos en una kermés. Me diste varios regalos y yo a ti.",
+      "Y yo te cantaba canciones."
+    ],
+    nota: "Técnicamente seguimos casados por la kermés, ¿no?"
+  },
+  {
+    titulo: "Intermedio", cuando: "2020", dibujo: "nube", pausa: true,
+    texto: [
+      "Luego llegó la pandemia y todo se detuvo. Nosotros también.",
+      "La relación terminó y perdimos contacto un buen tiempo.",
+      "Esta página se queda un poco gris, porque así se sintió."
+    ]
+  },
+  {
+    titulo: "Siempre amigos", cuando: "los años después", dibujo: "cassette", foto: "fotos/cap-06.jpg",
+    texto: [
+      "Pero nunca nos fuimos del todo. Volvimos a hablar y con los años vivimos de todo.",
+      "Un día me dedicaste una canción de Little Jesus, y se volvió una de mis bandas favoritas.",
+      "Aparte de haber sido novios, siempre fuimos amigos. Muy unidos, con una conexión que yo diría que es única.",
+      "Y tenemos fotos de todo para comprobarlo."
+    ],
+    nota: "Little Jesus ya está en las dos playlists: la tuya y la mía."
+  },
+  {
+    titulo: "Primeras veces", cuando: "contigo", dibujo: "boleto", foto: "fotos/cap-07.jpg",
+    texto: [
+      "Contigo vi a Little Jesus en vivo por primera vez.",
+      "Contigo me quedé en un Airbnb por primera vez.",
+      "Hay cosas que uno sólo quiere estrenar con una persona."
+    ]
+  },
+  {
+    titulo: "Verte crecer", cuando: "de 2019 a hoy", dibujo: "casa", foto: "fotos/cap-08.jpg",
+    texto: [
+      "Te vi independizarte.",
+      "Conocí a Omali, tu gatita. Estuve cuando te regalaron a Rayo. Ya conozco tu casa.",
+      "Te he visto convertirte en quien eres, y cada versión tuya me ha gustado más."
+    ],
+    recuerdo: "Para Omali, que se fue en junio. En este libro se queda para siempre."
+  },
+  {
+    titulo: "Lo que tenemos", cuando: "hoy", dibujo: "audifonos", foto: "fotos/cap-09.jpg",
+    texto: [
+      "Por una razón o por otra nunca regresamos. Pero nunca dejamos de gustarnos."
+    ],
+    lista: [
+      ["Casi la misma música", true],
+      ["El mismo humor", true],
+      ["Las mismas ganas de vivir juntos", true],
+      ["Tu familia ya me conoce", true],
+      ["Conciertos por delante", false]
+    ]
+  },
+  {
+    titulo: "Esta vez", cuando: "ahora", dibujo: "letrero", foto: "fotos/cap-10.jpg",
+    texto: [
+      "Nos conocemos desde 2019. Hemos sido novios, amigos y casi todo lo que hay en medio.",
+      "Y esta vez lo estamos intentando de verdad.",
+      "<span class='script'>Quiero que esta vez funcione.</span>",
+      "Falta muchísimo por contar. Por eso este libro no se acaba aquí."
+    ]
+  }
+];
+
+/* ---------- dibujos (SVG hechos a mano) ---------- */
+const estrella = (x, y, s = 1, c = "f-amarillo") =>
+  `<path class="k ${c}" stroke-width="2" transform="translate(${x} ${y}) scale(${s})" d="M0 -9 L2.4 -2.4 L9 0 L2.4 2.4 L0 9 L-2.4 2.4 L-9 0 L-2.4 -2.4 Z"/>`;
+const corazon = (x, y, s = 1, c = "f-naranja") =>
+  `<path class="k ${c}" stroke-width="2" transform="translate(${x} ${y}) scale(${s})" d="M0 6 C -11 -4 -8 -13 0 -7 C 8 -13 11 -4 0 6 Z"/>`;
+const nota = (x, y, c = "f-ink") =>
+  `<g transform="translate(${x} ${y})"><path class="k f-none" d="M0 0 V-26 L14 -30 V-4"/><ellipse class="${c}" cx="-4" cy="1" rx="6" ry="4.6"/><ellipse class="${c}" cx="10" cy="-3" rx="6" ry="4.6"/></g>`;
+
+const DIBUJOS = {
+  sudadera: `
+    <g class="w">
+      <path class="k f-azul" d="M74 36 Q110 20 146 36 L180 50 L198 140 L176 146 L156 94 L156 152 L64 152 L64 94 L44 146 L22 140 L40 50 Z"/>
+      <path class="k f-azul-claro" d="M86 34 Q110 70 134 34 Q110 44 86 34 Z"/>
+      <path class="k f-none" d="M102 54 L99 80 M118 54 L121 80"/>
+      <path class="k f-none" d="M82 124 H138 L130 144 H90 Z"/>
+      <path class="k f-none" d="M24 130 L46 136 M196 130 L174 136"/>
+      <text x="110" y="106" text-anchor="middle" class="t-marker" font-size="19" fill="var(--paper)">MORAT</text>
+    </g>
+    ${estrella(22, 30, 1.1)} ${estrella(200, 150, .8, "f-verde")} ${corazon(200, 26, 1.2)}`,
+  reloj: `
+    <g class="w">
+      <path class="k f-none" d="M78 136 L66 154 M142 136 L154 154"/>
+      <circle class="k f-naranja" cx="74" cy="38" r="16"/>
+      <circle class="k f-naranja" cx="146" cy="38" r="16"/>
+      <circle class="k f-amarillo" cx="110" cy="90" r="56"/>
+      <circle class="k f-paper" cx="110" cy="90" r="45"/>
+      <path class="k f-none" d="M110 50 V58 M150 90 H142 M110 130 V122 M70 90 H78"/>
+      <path class="k f-none" stroke-width="4" d="M110 90 V62 M110 90 L132 102"/>
+      <circle class="f-ink" cx="110" cy="90" r="4"/>
+      <text x="110" y="118" text-anchor="middle" class="t-script" font-size="15" fill="var(--naranja-os)">receso</text>
+    </g>
+    ${corazon(28, 70, 1)} ${corazon(194, 110, .9, "f-azul")} ${estrella(196, 40, .9)}`,
+  pizza: `
+    <g class="w">
+      <path class="k f-amarillo" d="M26 44 Q72 22 120 36 L76 154 Z"/>
+      <path class="k f-naranja" d="M26 44 Q72 22 120 36 L116 50 Q72 38 32 57 Z"/>
+      <circle class="k f-naranja-os" cx="70" cy="70" r="8"/>
+      <circle class="k f-naranja-os" cx="92" cy="72" r="6"/>
+      <circle class="k f-naranja-os" cx="78" cy="104" r="7"/>
+      <circle class="k f-naranja-os" cx="62" cy="88" r="5"/>
+      <g transform="rotate(9 162 100)">
+        <path class="k f-paper" d="M124 56 L200 58 L198 140 L126 138 Z"/>
+        <path class="f-none" stroke="var(--gris-claro)" stroke-width="2" d="M124 56 L198 140"/>
+        <text x="162" y="94" text-anchor="middle" class="t-script" font-size="20" fill="var(--ink)">¿novia?</text>
+        <rect x="140" y="106" width="12" height="12" class="k f-none" stroke-width="2"/>
+        <path class="f-none" stroke="var(--azul)" stroke-width="3" stroke-linecap="round" d="M141 112 L146 117 L156 102"/>
+        <text x="170" y="118" text-anchor="middle" class="t-script" font-size="15" fill="var(--ink)">sí</text>
+      </g>
+    </g>
+    ${estrella(206, 30, .9)} ${corazon(22, 140, 1.1)}`,
+  kermes: `
+    <g class="w">
+      <path class="k f-none" d="M6 26 Q110 64 214 26"/>
+      <path class="k f-azul" d="M22 32 L42 38 L30 60 Z"/>
+      <path class="k f-naranja" d="M52 41 L72 46 L60 68 Z"/>
+      <path class="k f-amarillo" d="M84 47 L104 49 L94 72 Z"/>
+      <path class="k f-verde" d="M116 49 L136 47 L126 72 Z"/>
+      <path class="k f-gris" d="M148 46 L168 41 L160 68 Z"/>
+      <path class="k f-azul" d="M178 38 L198 32 L190 60 Z"/>
+      <circle class="f-none" cx="110" cy="122" r="30" stroke="var(--amarillo)" stroke-width="10"/>
+      <circle class="k f-none" cx="110" cy="122" r="35"/>
+      <circle class="k f-none" cx="110" cy="122" r="25"/>
+      <path class="k f-azul-claro" d="M96 86 L110 72 L124 86 L110 100 Z"/>
+      <path class="k f-none" stroke-width="2" d="M96 86 H124"/>
+    </g>
+    ${estrella(186, 110, 1.1)} ${estrella(36, 130, .8, "f-verde")} ${corazon(170, 150, 1)}`,
+  nube: `
+    <g class="w">
+      <path class="k f-gris-claro" d="M52 96 Q46 66 78 66 Q86 40 116 48 Q142 34 158 60 Q186 58 184 86 Q188 108 160 108 L72 108 Q50 108 52 96 Z"/>
+      <path class="k f-none" stroke="var(--gris)" d="M84 122 L78 138 M112 122 L106 138 M140 122 L134 138"/>
+      <path class="f-none" stroke="var(--gris)" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 10" d="M20 152 H200"/>
+    </g>`,
+  cassette: `
+    <g class="w">
+      <rect class="k f-verde" x="36" y="38" width="148" height="96" rx="10"/>
+      <rect class="k f-paper" x="52" y="50" width="116" height="36" rx="4"/>
+      <text x="110" y="76" text-anchor="middle" class="t-script" font-size="22" fill="var(--ink)">para ti</text>
+      <rect class="k f-gris-claro" x="70" y="94" width="80" height="26" rx="10"/>
+      <circle class="k f-paper" cx="86" cy="107" r="9"/>
+      <circle class="k f-paper" cx="134" cy="107" r="9"/>
+      <path class="k f-none" d="M62 134 L72 122 H148 L158 134"/>
+    </g>
+    ${nota(198, 44)} ${nota(18, 150, "f-azul")} ${corazon(204, 120, 1)}`,
+  boleto: `
+    <g class="w">
+      <g transform="rotate(-8 100 80)">
+        <path class="k f-naranja" d="M24 46 H176 V66 A10 10 0 0 0 176 86 V106 H24 V86 A10 10 0 0 0 24 66 Z"/>
+        <path class="f-none" stroke="var(--ink)" stroke-width="2.5" stroke-dasharray="5 6" d="M140 50 V102"/>
+        <text x="82" y="76" text-anchor="middle" class="t-marker" font-size="15" fill="var(--paper)">LITTLE JESUS</text>
+        <text x="82" y="96" text-anchor="middle" class="t-script" font-size="17" fill="var(--ink)">en vivo · la primera</text>
+        <text x="158" y="82" text-anchor="middle" class="t-script" font-size="18" fill="var(--ink)">x2</text>
+      </g>
+      <circle class="k f-amarillo" cx="140" cy="134" r="15"/>
+      <circle class="k f-paper" cx="140" cy="134" r="5"/>
+      <path class="k f-none" stroke-width="4" d="M155 134 H204 M194 134 V145 M203 134 V142"/>
+      <path class="k f-azul-claro" d="M96 124 L120 124 L120 150 L96 150 Z" transform="rotate(-10 108 137)"/>
+      <path class="k f-none" stroke-width="2" d="M120 130 L126 132"/>
+      <text x="108" y="142" text-anchor="middle" class="t-script" font-size="12" fill="var(--ink)" transform="rotate(-10 108 137)">casa</text>
+    </g>
+    ${estrella(24, 140, .9)} ${estrella(206, 36, 1)}`,
+  casa: `
+    <g class="w">
+      <path class="k f-paper" d="M74 74 L110 44 L146 74 V136 H74 Z"/>
+      <path class="k f-naranja" d="M62 80 L110 34 L158 80 L150 86 L110 50 L70 86 Z"/>
+      <rect class="k f-azul" x="100" y="104" width="20" height="32"/>
+      <rect class="k f-azul-claro" x="84" y="84" width="16" height="14"/>
+      <rect class="k f-azul-claro" x="120" y="84" width="16" height="14"/>
+      <path class="k f-none" d="M40 136 H182"/>
+      <!-- Omali -->
+      <path class="k f-gris" d="M28 116 L30 96 L42 108 Z M58 116 L56 96 L44 108 Z"/>
+      <circle class="k f-gris" cx="43" cy="120" r="17"/>
+      <circle class="f-ink" cx="37" cy="118" r="2.4"/><circle class="f-ink" cx="49" cy="118" r="2.4"/>
+      <path class="k f-none" stroke-width="2" d="M40 126 Q43 129 46 126"/>
+      <!-- Rayo -->
+      <circle class="k f-naranja-claro" cx="180" cy="118" r="19"/>
+      <path class="k f-naranja-os" d="M164 104 Q152 112 158 132 Q166 126 168 112 Z"/>
+      <path class="k f-naranja-os" d="M196 104 Q208 112 202 132 Q194 126 192 112 Z"/>
+      <circle class="f-ink" cx="174" cy="116" r="2.4"/><circle class="f-ink" cx="186" cy="116" r="2.4"/>
+      <ellipse class="f-ink" cx="180" cy="124" rx="4" ry="3"/>
+      <path class="k f-amarillo" stroke-width="2" d="M182 138 L175 150 H181 L177 160 L188 146 H182 L186 138 Z"/>
+    </g>
+    ${estrella(43, 80, 1)} ${corazon(110, 18, 1)}`,
+  audifonos: `
+    <g class="w">
+      <path class="f-none" stroke="var(--ink)" stroke-width="14" stroke-linecap="round" d="M58 112 Q56 38 110 38 Q164 38 162 112"/>
+      <path class="f-none" stroke="var(--amarillo)" stroke-width="8" stroke-linecap="round" d="M58 112 Q56 38 110 38 Q164 38 162 112"/>
+      <rect class="k f-azul" x="40" y="98" width="34" height="50" rx="12"/>
+      <rect class="k f-verde" x="146" y="98" width="34" height="50" rx="12"/>
+    </g>
+    ${corazon(110, 104, 1.6)} ${nota(24, 60, "f-naranja-os")} ${nota(204, 70, "f-azul")} ${estrella(110, 150, .8)}`,
+  letrero: `
+    <g class="w">
+      <path class="f-none" stroke="var(--gris-claro)" stroke-width="26" stroke-linecap="round" d="M-4 150 Q70 124 120 144 T226 126"/>
+      <path class="f-none" stroke="var(--paper)" stroke-width="3" stroke-dasharray="10 10" d="M-4 150 Q70 124 120 144 T226 126"/>
+      <rect class="k f-gris" x="104" y="44" width="11" height="96"/>
+      <path class="k f-amarillo" d="M70 32 H160 L178 48 L160 64 H70 Z"/>
+      <text x="122" y="54" text-anchor="middle" class="t-marker" font-size="15" fill="var(--ink)">ESTA VEZ</text>
+      <path class="k f-azul" d="M150 74 H72 L56 88 L72 102 H150 Z"/>
+      <text x="106" y="95" text-anchor="middle" class="t-marker" font-size="15" fill="var(--paper)">2019</text>
+    </g>
+    ${estrella(200, 34, 1)} ${corazon(30, 40, 1.1)}`,
+  caja: `
+    <g class="w">
+      <path class="k f-naranja-claro" d="M26 70 L110 50 L194 70 L110 92 Z"/>
+      <path class="k f-paper" d="M26 70 L110 92 L110 150 L26 126 Z"/>
+      <path class="k f-paper" d="M194 70 L110 92 L110 150 L194 126 Z"/>
+      <text x="68" y="116" text-anchor="middle" class="t-script" font-size="17" fill="var(--naranja-os)" transform="rotate(16 68 112)">¿novia?</text>
+      <text x="152" y="116" text-anchor="middle" class="t-script" font-size="16" fill="var(--azul)" transform="rotate(-16 152 112)">esta vez sí</text>
+    </g>
+    ${corazon(110, 30, 1.4)} ${estrella(28, 38, .9)} ${estrella(196, 40, .9, "f-verde")}`
+};
+const svg = (nombre, label) =>
+  `<svg class="doodle" viewBox="0 0 220 170" role="img" aria-label="${label}">${DIBUJOS[nombre]}</svg>`;
+
+/* ---------- construir hojas ---------- */
+const hojas = [];
+const $h = document.getElementById("hojas");
+const romanos = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
+
+function hoja(html, clase = "", etiqueta = "") {
+  const el = document.createElement("section");
+  el.className = "hoja " + clase;
+  el.setAttribute("aria-label", etiqueta);
+  el.innerHTML = html;
+  $h.appendChild(el);
+  hojas.push({ el, etiqueta });
+  return el;
+}
+
+const heart = `<svg viewBox="-12 -14 24 22" aria-hidden="true"><path d="M0 6 C -11 -4 -8 -13 0 -7 C 8 -13 11 -4 0 6 Z" fill="var(--naranja)" stroke="var(--ink)" stroke-width="2.2" stroke-linejoin="round"/></svg>`;
+
+hoja(`
+  <p class="subt">un libro en ${CAPITULOS.length + 1} capítulos</p>
+  <h1 aria-label="Nosotros">NOS${heart}TROS</h1>
+  <div class="nombres">${ELLA} &amp; ${EL}</div>
+  <div class="apodos">Adancilla &amp; Ruicito</div>
+  ${svg("sudadera", "Una sudadera azul de Morat")}
+  <p class="subt">2019 — y lo que falta</p>
+  <button class="boton" data-ir="1">Abrir el libro</button>
+`, "portada", "Portada");
+
+hoja(`
+  <div class="eyebrow">Índice</div>
+  <h2>Lo que hay en <span class="resalta">este libro</span></h2>
+  <ol class="indice">
+    ${CAPITULOS.map((c, i) => `<li><button data-ir="${i + 2}"><span class="num">${romanos[i]}</span><span class="tit">${c.titulo}</span></button></li>`).join("")}
+    <li><button data-ir="${CAPITULOS.length + 2}"><span class="num">${romanos[CAPITULOS.length]}</span><span class="tit">La servilleta, otra vez</span></button></li>
+    <li><button data-ir="${CAPITULOS.length + 3}"><span class="num">~</span><span class="tit">Epílogo (lo escribimos juntos)</span></button></li>
+  </ol>
+`, "", "Índice");
+
+const tonos = ["var(--amarillo)", "var(--azul-claro)", "var(--naranja-claro)"];
+const palomita = (ok) => `<svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+  <rect x="3" y="3" width="24" height="24" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+  ${ok ? `<path d="M7 15 L13 21 L25 6" fill="none" stroke="var(--verde)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>` : ""}
+</svg>`;
+
+CAPITULOS.forEach((c, i) => {
+  const el = hoja(`
+    <div class="eyebrow">Capítulo ${romanos[i]} <span class="cuando">${c.cuando}</span></div>
+    <h2><span class="resalta" style="--hl:${c.pausa ? "var(--gris-claro)" : tonos[i % 3]}">${c.titulo}</span></h2>
+    ${svg(c.dibujo, "Dibujo del capítulo " + c.titulo)}
+    ${c.foto ? `<figure class="polaroid" hidden style="--rot:${i % 2 ? 2 : -2}deg"><img alt="Foto: ${c.titulo}" loading="lazy"></figure>` : ""}
+    <div class="texto">${c.texto.map(t => `<p>${t}</p>`).join("")}</div>
+    ${c.lista ? `<ul class="lista">${c.lista.map(([t, ok]) => `<li>${palomita(ok)}<span>${t}${ok ? "" : " <span class='script' style='font-size:1.1em'>(los que vienen)</span>"}</span></li>`).join("")}</ul>` : ""}
+    ${c.nota ? `<button class="nota" aria-expanded="false"><span class="tapa">tócame</span><span class="dentro">${c.nota}</span></button>` : ""}
+    ${c.recuerdo ? `<p class="recuerdo"><svg width="40" height="40" viewBox="-20 -20 40 40" aria-hidden="true"><path d="M-10 4 L-9 -14 L-2 -6 Z M10 4 L9 -14 L2 -6 Z" fill="var(--gris)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/><circle cy="4" r="11" fill="var(--gris)" stroke="var(--ink)" stroke-width="2"/><path d="M0 -20 L1.5 -16 L5 -15 L1.5 -14 L0 -10 L-1.5 -14 L-5 -15 L-1.5 -16 Z" fill="var(--amarillo)"/></svg><span>${c.recuerdo}</span></p>` : ""}
+  `, c.pausa ? "pausa" : "", "Capítulo " + romanos[i] + ": " + c.titulo);
+
+  if (c.foto) {
+    const fig = el.querySelector(".polaroid");
+    const img = fig.querySelector("img");
+    img.onload = () => { fig.hidden = false; };
+    img.src = c.foto;
+  }
+});
+
+const caja = `<svg class="caja" viewBox="0 0 34 34" aria-hidden="true"><path d="M4 5 L30 4 L29 30 L5 29 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><path class="palomita" d="M8 17 L15 25 L32 2" fill="none" stroke="var(--azul)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+hoja(`
+  <div class="eyebrow">Capítulo ${romanos[CAPITULOS.length]} <span class="cuando">hoy</span></div>
+  <h2><span class="resalta">La servilleta, otra vez</span></h2>
+  ${svg("caja", "Una caja de pizza que dice: esta vez sí")}
+  <div class="texto">
+    <p>La primera vez te lo pregunté en una servilleta porque la caja nunca llegó.</p>
+    <p>Así que esta vez traje las dos.</p>
+  </div>
+  <div class="servilleta" id="servilleta">
+    <div class="para">${ELLA}:</div>
+    <div class="pregunta">¿Quieres ser mi novia?</div>
+    <div class="otra">(otra vez)</div>
+    <div class="opciones">
+      <button class="check" id="btnSi">${caja}<span>Sí</span></button>
+      <button class="check" id="btnNo">${caja}<span id="noTxt">No</span></button>
+    </div>
+  </div>
+  <div class="respuesta" id="respuesta" hidden>
+    <p class="grande"><span class="resalta" style="--hl:var(--azul-claro)">Dijiste que sí. Otra vez.</span></p>
+    <p class="subt">Lo firmo con la misma letra de la servilleta: aquí empieza el capítulo uno de lo que sigue.</p>
+    <p class="script">— Ruicito</p>
+    <button class="boton" data-ir="${CAPITULOS.length + 3}">Escribir el epílogo juntos</button>
+  </div>
+`, "", "La servilleta, otra vez");
+
+hoja(`
+  <div class="eyebrow">Epílogo</div>
+  <h2>Esta parte la escribimos <span class="resalta" style="--hl:var(--azul-claro)">los dos</span></h2>
+  <p class="subt" style="margin:0">Aquí va la frase con la que cerramos este libro y empezamos el siguiente. Si no se les ocurre, arranquen con una de estas:</p>
+  <div class="ideas">
+    <button class="idea">Seguimos eligiéndonos</button>
+    <button class="idea">Esta vez, sí</button>
+    <button class="idea">Capítulo uno de muchos</button>
+    <button class="idea">Desde una sudadera hasta siempre</button>
+  </div>
+  <div id="editor" class="col">
+    <label class="lbl" for="epilogo">Nuestra frase</label>
+    <textarea id="epilogo" maxlength="220" placeholder="Escríbanla aquí…"></textarea>
+    <div class="fila">
+      <button class="boton" id="guardar">Firmar el libro</button>
+    </div>
+    <p class="aviso" id="aviso" role="status"></p>
+  </div>
+  <div id="firmado" class="col" hidden>
+    ${svg("letrero", "Letrero: esta vez")}
+    <p class="firmado" id="frase"></p>
+    <p class="firma" id="firma"></p>
+    <div class="fila" style="justify-content:center"><button class="boton sec" id="editar">Cambiar la frase</button></div>
+  </div>
+`, "", "Epílogo");
+
+/* ---------- navegación ---------- */
+let actual = 0;
+const N = hojas.length;
+const $atras = document.getElementById("atras");
+const $adelante = document.getElementById("adelante");
+const $pagina = document.getElementById("pagina");
+const rutaPath = document.getElementById("rutaPath");
+const $paradas = document.getElementById("paradas");
+const $marcador = document.getElementById("marcador");
+const largo = rutaPath.getTotalLength();
+const puntos = hojas.map((_, i) => rutaPath.getPointAtLength(largo * i / (N - 1)));
+$paradas.innerHTML = puntos.map(p => `<circle class="parada" cx="${p.x}" cy="${p.y}" r="3.2"/>`).join("");
+
+function ir(i) {
+  actual = Math.max(0, Math.min(N - 1, i));
+  hojas.forEach((h, j) => {
+    h.el.dataset.pos = j < actual ? "antes" : j > actual ? "despues" : "";
+    h.el.inert = j !== actual;
+  });
+  hojas[actual].el.scrollTop = 0;
+  $atras.disabled = actual === 0;
+  $adelante.disabled = actual === N - 1;
+  const p = puntos[actual];
+  $marcador.setAttribute("transform", `translate(${p.x} ${p.y - 8})`);
+  [...$paradas.children].forEach((c, j) => c.classList.toggle("hecha", j <= actual));
+  $pagina.textContent = hojas[actual].etiqueta;
+}
+
+$atras.onclick = () => ir(actual - 1);
+$adelante.onclick = () => ir(actual + 1);
+document.addEventListener("keydown", e => {
+  if (e.target.closest("textarea")) return;
+  if (e.key === "ArrowRight") ir(actual + 1);
+  if (e.key === "ArrowLeft") ir(actual - 1);
+});
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-ir]");
+  if (b) ir(+b.dataset.ir);
+  const n = e.target.closest(".nota");
+  if (n) n.setAttribute("aria-expanded", n.getAttribute("aria-expanded") === "true" ? "false" : "true");
+});
+
+let x0 = null, y0 = null;
+$h.addEventListener("pointerdown", e => {
+  if (e.target.closest("button, textarea, a")) { x0 = null; return; }
+  x0 = e.clientX; y0 = e.clientY;
+});
+$h.addEventListener("pointerup", e => {
+  if (x0 === null) return;
+  const dx = e.clientX - x0, dy = e.clientY - y0;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) ir(actual + (dx < 0 ? 1 : -1));
+  x0 = null;
+});
+
+/* ---------- la pregunta ---------- */
+const $si = document.getElementById("btnSi");
+const $no = document.getElementById("btnNo");
+const $noTxt = document.getElementById("noTxt");
+const frasesNo = ["¿Segura?", "Piénsalo", "¿Neta?", "Ese no sirve", "Dale al sí"];
+let intentos = 0;
+
+function huir(e) {
+  if (e) e.preventDefault();
+  intentos++;
+  $noTxt.textContent = frasesNo[Math.min(intentos - 1, frasesNo.length - 1)];
+  $si.style.transform = `scale(${Math.min(1 + intentos * .12, 1.7)})`;
+  const r = $no.getBoundingClientRect();
+  $no.classList.add("huye");
+  const w = r.width, h = r.height, m = 16;
+  const x = m + Math.random() * Math.max(0, innerWidth - w - m * 2);
+  const y = m + Math.random() * Math.max(0, innerHeight - h - 120);
+  $no.style.left = x + "px";
+  $no.style.top = y + "px";
+  if (intentos >= 7) $no.hidden = true;
+}
+$no.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") huir(); });
+$no.addEventListener("pointerdown", huir);
+$no.addEventListener("click", huir);
+
+$si.addEventListener("click", () => {
+  $si.classList.add("marcado");
+  $si.style.transform = "";
+  $no.hidden = true;
+  const r = document.getElementById("respuesta");
+  r.hidden = false;
+  setTimeout(() => r.scrollIntoView({ behavior: "smooth", block: "center" }), 350);
+  confeti();
+});
+
+/* ---------- confeti ---------- */
+function confeti() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv = document.getElementById("confeti");
+  cv.hidden = false;
+  const ctx = cv.getContext("2d");
+  const dpr = devicePixelRatio || 1;
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+  ctx.scale(dpr, dpr);
+  const css = getComputedStyle(document.documentElement);
+  const colores = ["--azul", "--naranja", "--amarillo", "--verde", "--gris", "--azul-claro"].map(v => css.getPropertyValue(v).trim());
+  const ps = Array.from({ length: 150 }, () => ({
+    x: innerWidth / 2 + (Math.random() - .5) * 80, y: innerHeight * .55,
+    vx: (Math.random() - .5) * 13, vy: -Math.random() * 15 - 6,
+    r: Math.random() * Math.PI, vr: (Math.random() - .5) * .3,
+    s: 6 + Math.random() * 7, c: colores[Math.floor(Math.random() * colores.length)],
+    h: Math.random() < .3
+  }));
+  const t0 = performance.now();
+  (function paso(t) {
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    ps.forEach(p => {
+      p.vy += .35; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+      if (p.h) {
+        const s = p.s / 7;
+        ctx.scale(s, s);
+        ctx.beginPath(); ctx.moveTo(0, 6);
+        ctx.bezierCurveTo(-11, -4, -8, -13, 0, -7); ctx.bezierCurveTo(8, -13, 11, -4, 0, 6); ctx.fill();
+      } else ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2);
+      ctx.restore();
+    });
+    if (t - t0 < 3800) requestAnimationFrame(paso); else { ctx.clearRect(0, 0, innerWidth, innerHeight); cv.hidden = true; }
+  })(t0);
+}
+
+/* ---------- epílogo ---------- */
+const $ta = document.getElementById("epilogo");
+const $editor = document.getElementById("editor");
+const $firmado = document.getElementById("firmado");
+const $aviso = document.getElementById("aviso");
+const fecha = new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
+
+function mostrarFirmado(texto, cuando) {
+  document.getElementById("frase").textContent = "«" + texto + "»";
+  document.getElementById("firma").textContent = `— ${ELLA} & ${EL}, ${cuando}`;
+  $editor.hidden = true;
+  $firmado.hidden = false;
+}
+document.querySelectorAll(".idea").forEach(b => b.onclick = () => { $ta.value = b.textContent; $ta.focus(); });
+document.getElementById("guardar").onclick = () => {
+  const t = $ta.value.trim();
+  if (!t) { $aviso.textContent = "Escriban algo primero. Aunque sea una palabra."; $ta.focus(); return; }
+  try { localStorage.setItem("nosotros:epilogo", JSON.stringify({ t, fecha })); } catch (e) {}
+  mostrarFirmado(t, fecha);
+  confeti();
+};
+document.getElementById("editar").onclick = () => {
+  $firmado.hidden = true;
+  $editor.hidden = false;
+  $ta.focus();
+};
+try {
+  const g = JSON.parse(localStorage.getItem("nosotros:epilogo") || "null");
+  if (g && g.t) { $ta.value = g.t; mostrarFirmado(g.t, g.fecha); }
+} catch (e) {}
+ir(0);
+</script>
+</body>
+</html>
