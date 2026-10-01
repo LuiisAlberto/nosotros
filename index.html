@@ -59,9 +59,10 @@ a { color: inherit; }
 @keyframes entra { from { opacity: 0; transform: translateY(14px); } }
 
 /* ---------- inicio (portada del disco) ---------- */
-.inicio { background: linear-gradient(180deg, #2F5FB8 0, #1B2F5C 340px, var(--app) 620px); }
-.inicio .pad { padding: 24px 20px 40px; display: flex; flex-direction: column; gap: 18px; }
-.portada-arte { position: relative; width: min(100%, 340px); aspect-ratio: 1; align-self: center; border-radius: 6px; overflow: hidden; background: var(--naranja); box-shadow: 0 24px 50px rgba(0, 0, 0, .5); }
+.inicio { background: var(--app); }
+.inicio .pad { background: linear-gradient(180deg, #2C5BB0 0, #1A2E58 330px, var(--app) 560px) no-repeat; }
+.inicio .pad { padding: 28px 18px 40px; display: flex; flex-direction: column; gap: 16px; }
+.portada-arte { position: relative; width: min(72%, 300px); margin-bottom: 10px; aspect-ratio: 1; align-self: center; border-radius: 6px; overflow: hidden; background: var(--naranja); box-shadow: 0 24px 50px rgba(0, 0, 0, .5); }
 .portada-arte .c1 { position: absolute; width: 120%; aspect-ratio: 1; border-radius: 50%; background: var(--azul); left: -62%; bottom: -66%; }
 .portada-arte .c2 { position: absolute; width: 62%; aspect-ratio: 1; border-radius: 50%; background: var(--amarillo); right: -14%; top: -14%; mix-blend-mode: multiply; }
 .portada-arte .c3 { position: absolute; width: 30%; aspect-ratio: 1; border-radius: 50%; background: var(--verde); right: 10%; bottom: 8%; }
@@ -73,22 +74,34 @@ a { color: inherit; }
 .portada-arte .cinta { position: absolute; width: 34%; height: 9%; background: var(--cinta); left: 33%; top: 15%; transform: rotate(4deg); }
 .portada-arte .titulo-arte { position: absolute; left: 7%; bottom: 6%; font-family: var(--f-display); font-weight: 800; font-size: clamp(1.4rem, 7.5vw, 2rem); line-height: .9; letter-spacing: -.03em; color: var(--tinta); }
 .disco-info { display: flex; flex-direction: column; gap: 6px; }
-.disco-info h1 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: clamp(1.9rem, 9vw, 2.4rem); letter-spacing: -.03em; line-height: 1; }
+.disco-info { gap: 10px; }
+.disco-info h1 { margin: 0; font-family: var(--f-ui); font-weight: 800; font-size: clamp(1.7rem, 8vw, 2.1rem); letter-spacing: -.02em; line-height: 1.1; }
 .disco-info .artista { display: flex; align-items: center; gap: 8px; font-weight: 700; }
 .disco-info .artista .av { width: 26px; height: 26px; border-radius: 50%; background: var(--naranja); display: grid; place-items: center; font-size: .7rem; color: var(--tinta); font-weight: 800; }
 .disco-info .meta { color: var(--txt-2); font-size: .9rem; }
+.acciones .izq, .acciones .der { display: flex; align-items: center; gap: 6px; }
+.accion { width: 44px; height: 44px; border: 0; background: none; color: var(--txt-2); border-radius: 50%; display: grid; place-items: center; transition: color .2s, transform .15s var(--ease); }
+.accion:hover { color: var(--txt); transform: scale(1.06); }
+.pie-disco { margin-top: 10px; color: var(--txt-2); font-size: .88rem; display: flex; flex-direction: column; gap: 2px; }
+.pie-disco p { margin: 0; }
+.pie-disco p:first-child { color: var(--txt); font-weight: 600; }
+.pie-disco .copy { font-size: .78rem; margin-top: 6px; }
 .contador-linea { font-family: var(--f-serif); font-style: italic; font-size: 1.15rem; color: var(--txt); margin: 0; }
 .contador-linea b { font-family: var(--f-ui); font-style: normal; font-weight: 800; color: var(--amarillo); }
 .acciones { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .acciones .mini { color: var(--txt-2); font-size: .85rem; }
-.play-grande { width: 60px; height: 60px; border-radius: 50%; border: 0; background: var(--verde-play); color: #121212; display: grid; place-items: center; flex: none; transition: transform .15s var(--ease); box-shadow: 0 8px 20px rgba(52, 165, 111, .35); }
+.play-grande { width: 58px; height: 58px; margin-left: 8px; border-radius: 50%; border: 0; background: var(--verde-play); color: #121212; display: grid; place-items: center; flex: none; transition: transform .15s var(--ease); box-shadow: 0 8px 20px rgba(52, 165, 111, .35); }
 .play-grande:hover { transform: scale(1.05); }
 .play-grande:active { transform: scale(.96); }
 .tracklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
-.tracklist button { width: 100%; min-height: 60px; display: grid; grid-template-columns: 24px 1fr auto; gap: 14px; align-items: center; background: none; border: 0; border-radius: 8px; padding: 8px 8px; text-align: left; transition: background-color .2s; }
+.tracklist button { width: 100%; min-height: 62px; display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; background: none; border: 0; border-radius: 8px; padding: 8px 8px; text-align: left; transition: background-color .2s; }
 .tracklist button:hover { background: var(--app-2); }
 .tracklist .i { color: var(--txt-2); text-align: right; font-variant-numeric: tabular-nums; }
-.tracklist .nom { font-weight: 600; line-height: 1.2; display: block; }
+.tracklist .nom { font-weight: 500; font-size: 1.05rem; line-height: 1.25; display: block; }
+.tracklist .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 11px; margin-right: 6px; }
+.tracklist .eq i { width: 3px; background: var(--verde-play); border-radius: 1px; animation: eq 1s ease-in-out infinite; }
+.tracklist .eq i:nth-child(2) { animation-delay: -.4s; } .tracklist .eq i:nth-child(3) { animation-delay: -.7s; }
+@keyframes eq { 0%, 100% { height: 3px; } 50% { height: 11px; } }
 .tracklist .sub { color: var(--txt-2); font-size: .82rem; display: block; }
 .tracklist .on .nom { color: var(--verde-play); }
 .hoy { display: flex; flex-direction: column; gap: 14px; }
@@ -109,11 +122,11 @@ a { color: inherit; }
 .hoy-filas { display: flex; flex-direction: column; }
 .hoy-linea { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 10px 2px; border-top: 1px solid var(--app-3); font-size: .92rem; color: var(--txt-2); }
 .hoy-linea b { color: var(--txt); font-size: 1rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.tracklist .cerrada { width: 100%; min-height: 60px; display: grid; grid-template-columns: 24px 1fr auto; gap: 14px; align-items: center; padding: 8px; color: var(--txt-2); }
+.tracklist .cerrada { width: 100%; min-height: 62px; display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; padding: 8px; color: var(--txt-2); }
 .tracklist .cerrada .i { display: grid; place-items: center; }
 .nuevo { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: var(--verde-play); color: #121212; font-size: .68rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
 .sub-lado { font-family: var(--f-ui); font-weight: 500; font-size: .82rem; color: var(--txt-2); letter-spacing: 0; margin-left: 6px; }
-.seccion-t { margin: 8px 0 0; font-family: var(--f-display); font-weight: 700; font-size: 1.1rem; letter-spacing: -.01em; }
+.seccion-t { margin: 14px 0 0; font-family: var(--f-ui); font-weight: 800; font-size: 1.35rem; letter-spacing: -.01em; }
 .nota-papel { background: var(--app-2); border-radius: 12px; padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 10px; }
 .nota-papel ol { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 8px; font-size: .92rem; color: var(--txt-2); }
 .nota-papel h3 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; }
@@ -1164,6 +1177,7 @@ function vistaInicio() {
   const el = document.createElement("section");
   el.className = "vista inicio";
   el.setAttribute("aria-label", "Portada del álbum");
+  const nCanciones = TRACKS.filter(t => !t.desde).length;
   el.innerHTML = `<div class="pad">
     <div class="portada-arte" role="img" aria-label="Portada del álbum Nosotros">
       <span class="c1"></span><span class="c2"></span><span class="c3"></span>
@@ -1174,20 +1188,28 @@ function vistaInicio() {
     <div class="disco-info">
       <h1>Nosotros</h1>
       <div class="artista"><span class="av">E&amp;L</span>${ELLA} &amp; ${EL}</div>
-      <div class="meta">Álbum · 2019 — hoy · ${TRACKS.filter(t => !t.desde).length} canciones + Lado B</div>
+      <div class="meta">Álbum • 13 dic 2019</div>
     </div>
-    <section class="hoy" data-hoy aria-label="Hoy"></section>
     <div class="acciones">
-      <span class="mini">${TRACKS.filter(t => !t.desde).length} canciones · ${Math.round(TRACKS.filter(t => !t.desde).reduce((a, t) => a + t.total, 0) / 60000)} min</span>
-      <button class="play-grande" data-play-album aria-label="Reproducir la historia desde el principio">
-        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="currentColor"/></svg>
-      </button>
+      <div class="izq">
+        <button class="accion" data-ir-guia aria-label="Cómo se escucha este disco"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 11 V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.2" fill="currentColor"/></svg></button>
+        <button class="accion" data-instalar hidden aria-label="Instalar como app"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7 V15 M8.5 11.5 L12 15 L15.5 11.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="accion" data-ir-cartera aria-label="Tu cartera de vales"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6.5" width="18" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M15 12.5 H21" stroke="currentColor" stroke-width="1.8"/><circle cx="16.8" cy="12.5" r="1.1" fill="currentColor"/></svg></button>
+      </div>
+      <div class="der">
+        <button class="accion" data-aleatorio aria-label="Escuchar una canción al azar"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7 H7 C10 7 11 9 12 12 C13 15 14 17 17 17 H21 M18 14 L21 17 L18 20 M3 17 H7 C8.6 17 9.6 16.4 10.3 15.4 M13.7 8.6 C14.4 7.6 15.4 7 17 7 H21 M18 4 L21 7 L18 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="play-grande" data-play-album aria-label="Reproducir la historia">
+          <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="currentColor"/></svg>
+        </button>
+      </div>
     </div>
     <ol class="tracklist" data-lista="a"></ol>
     <h2 class="seccion-t">Lado B <span class="sub-lado">se va abriendo con el tiempo</span></h2>
     <ol class="tracklist" data-lista="b"></ol>
+    <h2 class="seccion-t">Hoy</h2>
+    <section class="hoy" data-hoy aria-label="Hoy"></section>
     <section class="cartera" data-cartera aria-label="Tu cartera de vales"></section>
-    <div class="nota-papel">
+    <div class="nota-papel" data-guia>
       <h3>Cómo se escucha este disco</h3>
       <ol>
         <li>Cada canción es un capítulo. La letra es nuestra historia y va apareciendo sola.</li>
@@ -1198,6 +1220,11 @@ function vistaInicio() {
         <li>Vuelve cuando quieras: cada día hay una razón nueva, y el Lado B se va abriendo con las fechas. Si lo agregas a tu pantalla de inicio, queda como una app.</li>
       </ol>
     </div>
+    <footer class="pie-disco">
+      <p>13 de diciembre de 2019</p>
+      <p>${nCanciones} canciones, ${Math.round(TRACKS.filter(t => !t.desde).reduce((a, t) => a + t.total, 0) / 60000)} min</p>
+      <p class="copy">© 2019–${new Date().getFullYear()} Edith &amp; Luis</p>
+    </footer>
   </div>`;
   $v.appendChild(el);
   vistas.push({ el, tipo: "inicio" });
@@ -1310,6 +1337,7 @@ function irTrack(k) {
   if (!abierta(TRACKS[k])) return;
   pausar();
   trackActual = k;
+  mem.set("ultima", k);
   mostrar(k + 1);
   $player.hidden = false;
   const t = TRACKS[k];
@@ -1473,13 +1501,15 @@ function ganarSello(i) {
   mem.set("sellos", [...sellos]);
 }
 
+let avisoInstalar = null;
 /* ---------- lista de canciones ---------- */
 const candado = `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11 V8 a4 4 0 0 1 8 0 V11" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>`;
 function pintarLista() {
   const fila = (t, k) => {
-    if (!abierta(t)) return `<li><div class="cerrada"><span class="i">${candado}</span><span style="min-width:0"><span class="nom">${t.titulo}</span><span class="sub">Se abre el ${fechaCorta(t.desde)} · faltan ${diasPara(t.desde)} días</span></span><span></span></div></li>`;
+    if (!abierta(t)) return `<li><div class="cerrada"><span style="min-width:0"><span class="nom">${t.titulo}</span><span class="sub">Se abre el ${fechaCorta(t.desde)} · faltan ${diasPara(t.desde)} días</span></span><span class="i">${candado}</span></div></li>`;
     const nuevo = t.desde && !visto[k];
-    return `<li><button data-track="${k}"><span class="i">${k + 1}</span><span style="min-width:0"><span class="nom">${t.titulo}${nuevo ? ' <span class="nuevo">Nuevo</span>' : ""}</span><span class="sub">Edith &amp; Luis · ${t.cuando}</span></span><span class="dur">${fmt(t.total)}</span></button></li>`;
+    const ultima = mem.get("ultima", -1) === k;
+    return `<li><button data-track="${k}" class="${ultima ? "on" : ""}"><span style="min-width:0"><span class="nom">${t.titulo}${nuevo ? ' <span class="nuevo">Nuevo</span>' : ""}</span><span class="sub">${ultima ? '<span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>' : ""}Edith &amp; Luis</span></span><span class="dur">${fmt(t.total)}</span></button></li>`;
   };
   document.querySelector('[data-lista="a"]').innerHTML = TRACKS.map((t, k) => t.tipo === "ladob" ? "" : fila(t, k)).join("");
   document.querySelector('[data-lista="b"]').innerHTML = TRACKS.map((t, k) => t.tipo === "ladob" ? fila(t, k) : "").join("");
@@ -1592,6 +1622,14 @@ document.addEventListener("click", e => {
   const tr = e.target.closest("[data-track]");
   if (tr) { irTrack(+tr.dataset.track); return; }
   if (e.target.closest("[data-inicio]")) { irInicio(); return; }
+  if (e.target.closest("[data-aleatorio]")) {
+    const op = TRACKS.map((t, j) => j).filter(j => abierta(TRACKS[j]) && TRACKS[j].tipo === "cap");
+    irTrack(op[Math.floor(Math.random() * op.length)]);
+    return;
+  }
+  if (e.target.closest("[data-ir-guia]")) { document.querySelector("[data-guia]").scrollIntoView({ behavior: suave(), block: "start" }); return; }
+  if (e.target.closest("[data-ir-cartera]")) { document.querySelector("[data-cartera]").scrollIntoView({ behavior: suave(), block: "start" }); return; }
+  if (e.target.closest("[data-instalar]") && avisoInstalar) { avisoInstalar.prompt(); avisoInstalar = null; e.target.closest("[data-instalar]").hidden = true; return; }
   if (e.target.closest("[data-play-album]")) {
     const k = TRACKS.findIndex((t, j) => abierta(t) && (visto[j] || 0) < t.versos.length);
     irTrack(k < 0 ? 0 : k);
@@ -1864,6 +1902,7 @@ document.getElementById("copiar").onclick = () => {
 
 mem.set("visitas", mem.get("visitas", 0) + 1);
 /* como app instalable (solo cuando está publicado en internet) */
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); avisoInstalar = e; const b = document.querySelector("[data-instalar]"); if (b) b.hidden = false; });
 if ("serviceWorker" in navigator && location.protocol === "https:" && /github\.io|netlify\.app/.test(location.hostname)) {
   navigator.serviceWorker.register("sw.js").catch(() => {});
 }
