@@ -138,6 +138,7 @@ a { color: inherit; }
 .f-amarillo { fill: var(--amarillo); } .f-verde { fill: var(--verde); } .f-cafe { fill: var(--cafe); }
 .t-marker { font-family: var(--f-display); font-weight: 800; }
 .t-script { font-family: var(--f-serif); font-style: italic; }
+.t-maq { font-family: var(--f-maquina); font-weight: 700; }
 
 .flip, .cajabtn, .nubebtn { border: 0; background: none; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; align-self: center; width: 100%; max-width: 280px; }
 .pista { font-family: var(--f-maquina); font-size: .85rem; color: var(--tinta-2); display: inline-flex; align-items: center; gap: 8px; }
@@ -458,11 +459,14 @@ const CAPITULOS = [
         "Nos regalamos de todo. Algunas cosas todavía existen. Otras viven nada más en la memoria."
       ]},
       { bloque: "inventario" },
-      { t: "Te cantaba", p: [
-        "Y yo te cantaba canciones que nos gustaban a los dos.",
+      { t: "Nuestras canciones", p: [
+        "Yo te cantaba canciones que nos gustaban a los dos.",
+        "Y tú me dedicaste una: <em>«La magia»</em>, de Little Jesus.",
+        "Desde entonces es una de mis bandas favoritas. Bueno, de las nuestras.",
         "Fueron como seis meses. <span class='script'>Cortos en el calendario, enormes en todo lo demás.</span>"
       ]}
     ],
+    cancion: { lbl: "Me la dedicaste", tit: "Little Jesus · La magia", url: "https://open.spotify.com/track/6Z8JXcW9fQuNRXznoBMfgp" },
     nota: "Técnicamente seguimos casados por la kermés, ¿no?",
     quiz: { q: "¿Cómo eran nuestros anillos de la boda en la kermés?", ops: ["De oro, obvio", "De metal, como de aluminio", "De plástico, de los de dulce"], ok: 1, bien: "Exacto. Los de aluminio." }
   },
@@ -499,16 +503,11 @@ const CAPITULOS = [
         "Con una conexión que, la verdad, no he encontrado con nadie más.",
         "Y tenemos fotos de todo para comprobarlo."
       ]},
-      { t: "La magia", p: [
-        "Un día me dedicaste <em>«La magia»</em>, de Little Jesus.",
-        "Desde entonces es una de mis bandas favoritas. Bueno, de las nuestras."
-      ]},
       { t: "Mi abuelita", p: [
         "Y cuando falleció mi abuelita, estuviste ahí.",
         "Hay cosas que no se olvidan. Esa es una de ellas. Gracias."
       ]}
     ],
-    cancion: { lbl: "Me la dedicaste", tit: "Little Jesus · La magia", url: "https://open.spotify.com/track/6Z8JXcW9fQuNRXznoBMfgp" },
     nota: "Le debemos una a mi mejor amigo. Una grande.",
     quiz: { q: "¿Quién nos volvió a juntar?", ops: ["Tu amiga de la prepa", "Facebook, con sus recuerdos", "Mi mejor amigo, una noche de Minecraft"], ok: 2, bien: "Él. Y le vamos a deber eso para siempre." }
   },
@@ -731,21 +730,19 @@ const DIBUJOS = {
     </g>
     ${estrella(30, 30, .8)} ${estrella(120, 20, .6)} ${estrella(206, 80, .7)} ${corazon(30, 120, 1.1, "f-azul")}`,
   boleto: `
-    <g class="w">
-      <g transform="rotate(-8 100 80)">
-        <path class="k f-naranja" d="M24 46 H176 V66 A10 10 0 0 0 176 86 V106 H24 V86 A10 10 0 0 0 24 66 Z"/>
-        <path class="f-none" stroke="var(--ink)" stroke-width="2.5" stroke-dasharray="5 6" d="M140 50 V102"/>
-        <text x="82" y="76" text-anchor="middle" class="t-marker" font-size="15" fill="var(--paper)">LITTLE JESUS</text>
-        <text x="82" y="96" text-anchor="middle" class="t-script" font-size="16" fill="var(--ink)">Auditorio Explanada</text>
-        <text x="158" y="82" text-anchor="middle" class="t-script" font-size="18" fill="var(--ink)">x2</text>
-      </g>
-      <circle class="k f-amarillo" cx="140" cy="134" r="15"/>
-      <circle class="k f-paper" cx="140" cy="134" r="5"/>
-      <path class="k f-none" stroke-width="4" d="M155 134 H204 M194 134 V145 M203 134 V142"/>
-      <path class="k f-azul-claro" d="M96 124 L120 124 L120 150 L96 150 Z" transform="rotate(-10 108 137)"/>
-      <text x="108" y="142" text-anchor="middle" class="t-script" font-size="12" fill="var(--ink)" transform="rotate(-10 108 137)">casa</text>
+    <g transform="rotate(9 118 84)">
+      <path class="k f-amarillo" d="M40 46 H196 V70 A11 11 0 0 0 196 92 V118 H40 V92 A11 11 0 0 0 40 70 Z"/>
+      <path class="f-none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 5" d="M164 50 V114"/>
     </g>
-    ${estrella(24, 140, .9)} ${estrella(206, 36, 1)}`,
+    <g transform="rotate(-6 104 92)">
+      <path class="k f-naranja" d="M18 56 H182 V80 A11 11 0 0 0 182 102 V128 H18 V102 A11 11 0 0 0 18 80 Z"/>
+      <path class="f-none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 5" d="M146 60 V124"/>
+      <text x="30" y="80" class="t-maq" font-size="8" fill="var(--ink)" textLength="104" lengthAdjust="spacingAndGlyphs">EN VIVO · PACHUCA</text>
+      <text x="30" y="102" class="t-marker" font-size="17" fill="var(--paper)" textLength="104" lengthAdjust="spacingAndGlyphs">LITTLE JESUS</text>
+      <text x="30" y="118" class="t-script" font-size="12" fill="var(--ink)" textLength="104" lengthAdjust="spacingAndGlyphs">Auditorio Explanada</text>
+      <text x="164" y="98" text-anchor="middle" class="t-marker" font-size="16" fill="var(--ink)">x2</text>
+    </g>
+    ${nota(196, 34, "f-ink")} ${nota(24, 160, "f-azul")} ${estrella(110, 22, .9)} ${estrella(206, 150, .8, "f-verde")}`,
   casa: `
     <g class="w">
       <path class="k f-paper" d="M74 74 L110 44 L146 74 V136 H74 Z"/>
