@@ -5,14 +5,14 @@ Pon aquí las fotos de cada capítulo con estos nombres (jpg, cuadradas se ven m
 | Archivo | Capítulo |
 |---|---|
 | `portada.jpg` | Portada del disco |
-| `cap-01.jpg` | I · Me gusta tu sudadera |
-| `cap-02.jpg` | II · Afuera de tu salón |
-| `cap-03.jpg` | III · El plan de la caja de pizza |
-| `cap-04.jpg` | IV · Seis meses |
-| `cap-06.jpg` | VI · Una noche de Minecraft |
-| `cap-07.jpg` | VII · Pachuca |
-| `cap-08.jpg` | VIII · Verte crecer |
-| `cap-09.jpg` | IX · Lo que tenemos |
-| `cap-10.jpg` | X · Esta vez |
+| `cap-01.jpg` | I · Efectos secundarios |
+| `cap-02.jpg` | II · Misma hora, mismo lugar |
+| `cap-03.jpg` | III · Plan B |
+| `cap-04.jpg` | IV · Aluminio |
+| `cap-06.jpg` | VI · Medianoche |
+| `cap-07.jpg` | VII · Explanada |
+| `cap-08.jpg` | VIII · Todas tus versiones |
+| `cap-09.jpg` | IX · Alternativos |
+| `cap-10.jpg` | X · Ahora sí |
 
 Si una foto no existe, el capítulo sólo muestra el dibujo. El V (Intermedio) va sin foto a propósito.
