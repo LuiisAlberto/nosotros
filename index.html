@@ -91,27 +91,32 @@ a { color: inherit; }
 .tracklist .nom { font-weight: 600; line-height: 1.2; display: block; }
 .tracklist .sub { color: var(--txt-2); font-size: .82rem; display: block; }
 .tracklist .on .nom { color: var(--verde-play); }
-.hoy { background: var(--papel); color: var(--tinta); padding: 22px 18px 18px; position: relative; transform: rotate(-.8deg); box-shadow: 0 12px 26px rgba(0, 0, 0, .35); display: flex; flex-direction: column; gap: 8px; }
-.hoy::before { content: ""; position: absolute; width: 90px; height: 22px; background: var(--cinta); top: -11px; right: 28px; transform: rotate(4deg); }
-.hoy-lbl { font-family: var(--f-maquina); font-weight: 700; font-size: .85rem; color: var(--naranja-os); }
-.hoy-especial { margin: 0; background: var(--amarillo); padding: 8px 12px; font-weight: 800; font-size: .95rem; }
-.hoy-razon { margin: 4px 0 0; font-family: var(--f-serif); font-style: italic; font-size: 1.45rem; line-height: 1.2; }
-.hoy-pie { margin: 0; font-family: var(--f-maquina); font-size: .75rem; color: var(--tinta-2); }
-.hoy-datos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
-.hoy-datos div { background: var(--papel-2); border-radius: 8px; padding: 8px 4px 6px; text-align: center; display: flex; flex-direction: column; }
-.hoy-datos b { font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; line-height: 1; font-variant-numeric: tabular-nums; }
-.hoy-datos span { font-family: var(--f-maquina); font-size: .72rem; color: var(--tinta-2); }
-.hoy-linea { margin: 0; font-size: .92rem; }
-.hoy-linea b { font-variant-numeric: tabular-nums; }
+.hoy { display: flex; flex-direction: column; gap: 14px; }
+.hoy-cab { display: flex; align-items: center; gap: 12px; }
+.hoy-cab .mini-arte { width: 52px; height: 52px; flex: none; border-radius: 6px; background: linear-gradient(135deg, var(--naranja) 0 50%, var(--azul) 50%); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: .72rem; color: #121212; letter-spacing: -.02em; box-shadow: 0 6px 14px rgba(0, 0, 0, .35); }
+.hoy-cab b { display: block; font-size: 1.05rem; font-weight: 800; line-height: 1.2; }
+.hoy-cab span { display: block; font-size: .82rem; color: var(--txt-2); }
+.hoy-letra { border-radius: 12px; padding: 18px 18px 20px; background: var(--c, #D9572B); color: #fff; display: flex; flex-direction: column; gap: 10px; }
+.hoy-letra .lbl { font-size: .78rem; font-weight: 800; letter-spacing: .02em; opacity: .85; }
+.hoy-letra p { margin: 0; font-weight: 800; font-size: clamp(1.3rem, 6vw, 1.55rem); line-height: 1.25; letter-spacing: -.015em; }
+.hoy-especial { margin: 0; display: flex; align-items: center; gap: 10px; background: var(--app-2); border-radius: 10px; padding: 10px 12px; font-weight: 700; font-size: .92rem; }
+.hoy-especial::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--verde-play); flex: none; }
+.hoy-datos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.hoy-datos div { background: var(--app-2); border-radius: 10px; padding: 12px 6px 10px; text-align: center; display: flex; flex-direction: column; gap: 2px; }
+.hoy-datos b { font-family: var(--f-display); font-weight: 800; font-size: 1.6rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.hoy-datos span { font-size: .75rem; color: var(--txt-2); }
+.hoy-pie { margin: -6px 0 0; font-size: .78rem; color: var(--txt-2); text-align: center; }
+.hoy-filas { display: flex; flex-direction: column; }
+.hoy-linea { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 10px 2px; border-top: 1px solid var(--app-3); font-size: .92rem; color: var(--txt-2); }
+.hoy-linea b { color: var(--txt); font-size: 1rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .tracklist .cerrada { width: 100%; min-height: 60px; display: grid; grid-template-columns: 24px 1fr auto; gap: 14px; align-items: center; padding: 8px; color: var(--txt-2); }
 .tracklist .cerrada .i { display: grid; place-items: center; }
 .nuevo { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: var(--verde-play); color: #121212; font-size: .68rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
 .sub-lado { font-family: var(--f-ui); font-weight: 500; font-size: .82rem; color: var(--txt-2); letter-spacing: 0; margin-left: 6px; }
 .seccion-t { margin: 8px 0 0; font-family: var(--f-display); font-weight: 700; font-size: 1.1rem; letter-spacing: -.01em; }
-.nota-papel { background: var(--papel); color: var(--tinta); padding: 18px 18px 16px; transform: rotate(-1deg); position: relative; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 8px 18px rgba(0, 0, 0, .35); }
-.nota-papel::before { content: ""; position: absolute; width: 80px; height: 22px; background: var(--cinta); top: -10px; left: 24px; transform: rotate(-4deg); }
-.nota-papel ol { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; font-size: .95rem; }
-.nota-papel h3 { margin: 0; font-family: var(--f-maquina); font-weight: 700; font-size: .95rem; }
+.nota-papel { background: var(--app-2); border-radius: 12px; padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 10px; }
+.nota-papel ol { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 8px; font-size: .92rem; color: var(--txt-2); }
+.nota-papel h3 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; }
 
 /* ---------- track (capítulo) ---------- */
 .track { background: var(--bg); color: var(--tt); }
@@ -1183,7 +1188,7 @@ function vistaInicio() {
     <ol class="tracklist" data-lista="b"></ol>
     <section class="cartera" data-cartera aria-label="Tu cartera de vales"></section>
     <div class="nota-papel">
-      <h3>cómo se escucha este disco</h3>
+      <h3>Cómo se escucha este disco</h3>
       <ol>
         <li>Cada canción es un capítulo. La letra es nuestra historia y va apareciendo sola.</li>
         <li>Si lees más rápido que la música, toca la letra. Si quieres pausa, abajo está el botón.</li>
@@ -1491,17 +1496,21 @@ function pintarHoy() {
   else if (hoy.getDate() === 13) especial = `Hoy es 13. Otro mes desde aquella servilleta.`;
   const prox = TRACKS.filter(x => x.desde && !abierta(x)).sort((a, b) => a.desde - b.desde)[0];
   const faltanNSQK = diasPara(NSQK);
+  const COLORES_DIA = ["#D9572B", "#2F5FB8", "#2E8B57", "#C4473E", "#23807A", "#5E6472"];
+  const color = COLORES_DIA[((nDia % COLORES_DIA.length) + COLORES_DIA.length) % COLORES_DIA.length];
+  const fecha = hoy.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" });
   el.innerHTML = `
-    <div class="hoy-cab"><span class="hoy-lbl">hoy, ${hoy.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" })}</span></div>
+    <div class="hoy-cab"><span class="mini-arte" aria-hidden="true">HOY</span><div><b>Hecho para Edith</b><span>${fecha.charAt(0).toUpperCase() + fecha.slice(1)} · cambia cada día</span></div></div>
     ${especial ? `<p class="hoy-especial">${especial}</p>` : ""}
-    <p class="hoy-razon">${razon}</p>
-    <p class="hoy-pie">Razón del día · mañana hay otra</p>
+    <div class="hoy-letra" style="--c:${color}"><span class="lbl">Razón del día</span><p>${razon}</p></div>
     <div class="hoy-datos">
       <div><b>${t.meses}</b><span>meses</span></div><div><b>${t.semanas}</b><span>semanas</span></div><div><b>${t.dias}</b><span>días</span></div>
     </div>
-    <p class="hoy-pie" style="margin-top:2px">desde aquella servilleta</p>
-    ${faltanNSQK > 0 ? `<p class="hoy-linea">Faltan <b>${faltanNSQK}</b> días para NSQK.</p>` : ""}
-    ${prox ? `<p class="hoy-linea">La próxima canción del Lado B se abre en <b>${diasPara(prox.desde)}</b> días.</p>` : ""}`;
+    <p class="hoy-pie">desde aquella servilleta</p>
+    <div class="hoy-filas">
+      ${faltanNSQK > 0 ? `<p class="hoy-linea"><span>Para NSQK juntos</span><b>${faltanNSQK} días</b></p>` : ""}
+      ${prox ? `<p class="hoy-linea"><span>Próxima del Lado B: ${prox.titulo}</span><b>${diasPara(prox.desde)} días</b></p>` : ""}
+    </div>`;
 }
 
 /* ---------- raspaditos ---------- */
