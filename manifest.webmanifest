@@ -1,0 +1,15 @@
+{
+  "name": "Nosotros · Edith y Luis",
+  "short_name": "Nosotros",
+  "description": "Nuestra historia, contada canción por canción.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#1B2F5C",
+  "lang": "es-MX",
+  "icons": [
+    { "src": "icono-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

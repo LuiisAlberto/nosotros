@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nosotros · Edith y Luis</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1B2F5C">
+<link rel="icon" href="icono-192.png">
+<link rel="apple-touch-icon" href="icono-192.png">
+<meta name="apple-mobile-web-app-title" content="Nosotros">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Figtree:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,500&family=Unbounded:wght@600;700;800&display=swap">
@@ -86,6 +91,22 @@ a { color: inherit; }
 .tracklist .nom { font-weight: 600; line-height: 1.2; display: block; }
 .tracklist .sub { color: var(--txt-2); font-size: .82rem; display: block; }
 .tracklist .on .nom { color: var(--verde-play); }
+.hoy { background: var(--papel); color: var(--tinta); padding: 22px 18px 18px; position: relative; transform: rotate(-.8deg); box-shadow: 0 12px 26px rgba(0, 0, 0, .35); display: flex; flex-direction: column; gap: 8px; }
+.hoy::before { content: ""; position: absolute; width: 90px; height: 22px; background: var(--cinta); top: -11px; right: 28px; transform: rotate(4deg); }
+.hoy-lbl { font-family: var(--f-maquina); font-weight: 700; font-size: .85rem; color: var(--naranja-os); }
+.hoy-especial { margin: 0; background: var(--amarillo); padding: 8px 12px; font-weight: 800; font-size: .95rem; }
+.hoy-razon { margin: 4px 0 0; font-family: var(--f-serif); font-style: italic; font-size: 1.45rem; line-height: 1.2; }
+.hoy-pie { margin: 0; font-family: var(--f-maquina); font-size: .75rem; color: var(--tinta-2); }
+.hoy-datos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
+.hoy-datos div { background: var(--papel-2); border-radius: 8px; padding: 8px 4px 6px; text-align: center; display: flex; flex-direction: column; }
+.hoy-datos b { font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.hoy-datos span { font-family: var(--f-maquina); font-size: .72rem; color: var(--tinta-2); }
+.hoy-linea { margin: 0; font-size: .92rem; }
+.hoy-linea b { font-variant-numeric: tabular-nums; }
+.tracklist .cerrada { width: 100%; min-height: 60px; display: grid; grid-template-columns: 24px 1fr auto; gap: 14px; align-items: center; padding: 8px; color: var(--txt-2); }
+.tracklist .cerrada .i { display: grid; place-items: center; }
+.nuevo { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: var(--verde-play); color: #121212; font-size: .68rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.sub-lado { font-family: var(--f-ui); font-weight: 500; font-size: .82rem; color: var(--txt-2); letter-spacing: 0; margin-left: 6px; }
 .seccion-t { margin: 8px 0 0; font-family: var(--f-display); font-weight: 700; font-size: 1.1rem; letter-spacing: -.01em; }
 .nota-papel { background: var(--papel); color: var(--tinta); padding: 18px 18px 16px; transform: rotate(-1deg); position: relative; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 8px 18px rgba(0, 0, 0, .35); }
 .nota-papel::before { content: ""; position: absolute; width: 80px; height: 22px; background: var(--cinta); top: -10px; left: 24px; transform: rotate(-4deg); }
@@ -1060,6 +1081,58 @@ TRACKS.push({
     { b: "editor" }
   ]
 });
+/* ---------- Lado B: canciones que se desbloquean en su fecha ---------- */
+TRACKS.push({
+  tipo: "ladob", desde: new Date(2026, 11, 13), titulo: "Siete años", cuando: "13 de diciembre", bg: "#2F5FB8", tt: "#FFFFFF", arte: "caja",
+  versos: [
+    { t: "Hoy hace siete años te pregunté en una servilleta si querías ser mi novia.", sec: "Lado B" },
+    { t: "Dijiste que sí, con todo y risa." },
+    { t: "Siete años después, con caja y con servilleta, dijiste que sí otra vez." },
+    { t: "Y yo sigo pensando lo mismo que en ese pasillo de la prepa:" },
+    { t: "<span class='script'>que eres lo más bonito que me ha pasado.</span>" },
+    { t: "Feliz 13 de diciembre." }
+  ]
+});
+TRACKS.push({
+  tipo: "ladob", desde: new Date(2027, 0, 23), titulo: "NSQK, por fin", cuando: "23 de enero de 2027", bg: "#C4473E", tt: "#FFFFFF", arte: "familia",
+  versos: [
+    { t: "Hoy es el día que contamos desde octubre.", sec: "Lado B" },
+    { t: "Hoy vamos a ver juntos a nuestro artista favorito." },
+    { t: "Canta todas. Yo voy a cantar las mías mirándote a ti." },
+    { t: "<span class='script'>Gracias por una primera vez más.</span>" }
+  ]
+});
+const abierta = t => !t.desde || new Date() >= t.desde;
+const diasPara = d => Math.max(0, Math.ceil((new Date(d.getFullYear(), d.getMonth(), d.getDate()) - new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())) / 864e5));
+const fechaCorta = d => d.toLocaleDateString("es-MX", { day: "numeric", month: "long" });
+
+/* una razón distinta cada día (agrega todas las que quieras) */
+const RAZONES = [
+  "Porque me dijiste «me gusta tu sudadera» y me cambiaste el día.",
+  "Porque me escribiste primero, aunque tu amiga hizo la mitad del trabajo.",
+  "Porque contigo cualquier camino se siente corto.",
+  "Porque te reíste de mi servilleta y aun así dijiste que sí.",
+  "Porque me dedicaste «La magia» y ahora es nuestra.",
+  "Porque estuviste cuando se fue mi abuelita.",
+  "Porque eres muy valiente, aunque a veces no lo notes.",
+  "Porque tratas bonito a todos, hasta a los perritos más loquitos.",
+  "Porque disfrutas las cosas pequeñas.",
+  "Porque cantamos todas en Pachuca.",
+  "Porque tenemos el mismo humor.",
+  "Porque nuestra música se parece tanto que ya no sé cuál canción es tuya y cuál es mía.",
+  "Porque sientes muchísimo.",
+  "Porque siempre sales adelante.",
+  "Porque contigo las primeras veces se sienten importantes.",
+  "Porque volviste.",
+  "Porque eres mi Hernán Cortés.",
+  "Porque quieres mucho, y se nota.",
+  "Porque eres muy capaz.",
+  "Porque hablar contigo de lo que sea se siente como estar en paz.",
+  "Porque nos imaginamos la misma casa, con Rayo incluido.",
+  "Porque después de todo este tiempo me sigues gustando igual.",
+  "Porque eres tú. Y con eso basta."
+];
+
 const IDX_FINAL = TRACKS.findIndex(t => t.tipo === "final");
 /* duración de cada línea: lo que tarda en leerse con calma */
 const durVerso = v => v.b ? 8000 : Math.min(8500, 2000 + v.t.replace(/<[^>]+>/g, "").length * 45);
@@ -1096,18 +1169,18 @@ function vistaInicio() {
     <div class="disco-info">
       <h1>Nosotros</h1>
       <div class="artista"><span class="av">E&amp;L</span>${ELLA} &amp; ${EL}</div>
-      <div class="meta">Álbum · 2019 — hoy · ${TRACKS.length} canciones</div>
+      <div class="meta">Álbum · 2019 — hoy · ${TRACKS.filter(t => !t.desde).length} canciones + Lado B</div>
     </div>
-    <p class="contador-linea"><span data-msd-largo>—</span> desde aquella servilleta.</p>
+    <section class="hoy" data-hoy aria-label="Hoy"></section>
     <div class="acciones">
-      <span class="mini">${TRACKS.length} canciones · ${Math.round(TRACKS.reduce((a, t) => a + t.total, 0) / 60000)} min</span>
+      <span class="mini">${TRACKS.filter(t => !t.desde).length} canciones · ${Math.round(TRACKS.filter(t => !t.desde).reduce((a, t) => a + t.total, 0) / 60000)} min</span>
       <button class="play-grande" data-play-album aria-label="Reproducir la historia desde el principio">
         <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="currentColor"/></svg>
       </button>
     </div>
-    <ol class="tracklist">
-      ${TRACKS.map((t, k) => `<li><button data-track="${k}"><span class="i">${k + 1}</span><span style="min-width:0"><span class="nom">${t.titulo}</span><span class="sub">${t.tipo === "cap" ? "Edith &amp; Luis · " + t.cuando : "Edith &amp; Luis · " + t.cuando}</span></span><span class="dur">${fmt(t.total)}</span></button></li>`).join("")}
-    </ol>
+    <ol class="tracklist" data-lista="a"></ol>
+    <h2 class="seccion-t">Lado B <span class="sub-lado">se va abriendo con el tiempo</span></h2>
+    <ol class="tracklist" data-lista="b"></ol>
     <section class="cartera" data-cartera aria-label="Tu cartera de vales"></section>
     <div class="nota-papel">
       <h3>cómo se escucha este disco</h3>
@@ -1117,6 +1190,7 @@ function vistaInicio() {
         <li>Todo lo que esté pegado como papel se toca: se voltea, se abre o trae algo adentro.</li>
         <li>Al final de cada canción hay una pregunta sobre nosotros. Si aciertas, te ganas un vale de verdad: lo raspas, se guarda en tu cartera y me lo cobras cuando quieras.</li>
         <li>Cada canción tiene un espacio para <i>tu versión</i>. Al final me la mandas y la guardo con todo lo demás.</li>
+        <li>Vuelve cuando quieras: cada día hay una razón nueva, y el Lado B se va abriendo con las fechas. Si lo agregas a tu pantalla de inicio, queda como una app.</li>
       </ol>
     </div>
   </div>`;
@@ -1170,7 +1244,7 @@ function vistaTrack(t, k) {
       <p class="aviso" id="avisoCopiar" role="status"></p>
     </div>`;
   }
-  const sig = k + 1 < TRACKS.length ? `<button class="boton" data-track="${k + 1}" style="align-self:center">Siguiente: ${TRACKS[k + 1].titulo}</button>` : `<button class="boton borde" data-inicio style="align-self:center">Volver a la portada</button>`;
+  const sig = k + 1 < TRACKS.length && abierta(TRACKS[k + 1]) ? `<button class="boton" data-track="${k + 1}" style="align-self:center">Siguiente: ${TRACKS[k + 1].titulo}</button>` : `<button class="boton borde" data-inicio style="align-self:center">Volver a la portada</button>`;
   el.innerHTML = `<div class="pad">
     <div class="t-head">
       <button class="icono" data-inicio aria-label="Volver al álbum"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9 L12 16 L19 9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -1226,8 +1300,9 @@ function mostrar(idx) {
   v.el.style.animation = "none"; void v.el.offsetWidth; v.el.style.animation = "";
 }
 function guardar() { mem.set("revelado", visto); mem.set("pos", pos); }
-function irInicio() { pausar(); trackActual = -1; $player.hidden = true; mostrar(0); pintarCartera(); }
+function irInicio() { pausar(); trackActual = -1; $player.hidden = true; mostrar(0); pintarCartera(); pintarLista(); pintarHoy(); }
 function irTrack(k) {
+  if (!abierta(TRACKS[k])) return;
   pausar();
   trackActual = k;
   mostrar(k + 1);
@@ -1236,7 +1311,7 @@ function irTrack(k) {
   $pTitulo.textContent = t.titulo;
   $pSub.textContent = `· ${ELLA} & ${EL}`;
   $pPrevT.disabled = k === 0;
-  $pNextT.disabled = k === TRACKS.length - 1;
+  $pNextT.disabled = k === TRACKS.length - 1 || !abierta(TRACKS[k + 1]);
   const total = t.versos.length;
   if (!visto[k]) { visto[k] = 1; pos[k] = 0; guardar(); }
   if (pos[k] === undefined || pos[k] >= visto[k]) pos[k] = visto[k] - 1;
@@ -1350,7 +1425,7 @@ $pPlay.onclick = () => sonando ? pausar() : reproducir();
 $pNext.onclick = () => siguienteLinea();
 $pPrev.onclick = () => anteriorLinea();
 $pPrevT.onclick = () => { if (trackActual > 0) irTrack(trackActual - 1); };
-$pNextT.onclick = () => { if (trackActual < TRACKS.length - 1) irTrack(trackActual + 1); };
+$pNextT.onclick = () => { if (trackActual < TRACKS.length - 1 && abierta(TRACKS[trackActual + 1])) irTrack(trackActual + 1); };
 
 /* barra: tocar o arrastrar para moverse por la canción */
 function buscar(clientX) {
@@ -1391,6 +1466,42 @@ function ganarSello(i) {
   if (sellos.has(i)) return;
   sellos.add(i);
   mem.set("sellos", [...sellos]);
+}
+
+/* ---------- lista de canciones ---------- */
+const candado = `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11 V8 a4 4 0 0 1 8 0 V11" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>`;
+function pintarLista() {
+  const fila = (t, k) => {
+    if (!abierta(t)) return `<li><div class="cerrada"><span class="i">${candado}</span><span style="min-width:0"><span class="nom">${t.titulo}</span><span class="sub">Se abre el ${fechaCorta(t.desde)} · faltan ${diasPara(t.desde)} días</span></span><span></span></div></li>`;
+    const nuevo = t.desde && !visto[k];
+    return `<li><button data-track="${k}"><span class="i">${k + 1}</span><span style="min-width:0"><span class="nom">${t.titulo}${nuevo ? ' <span class="nuevo">Nuevo</span>' : ""}</span><span class="sub">Edith &amp; Luis · ${t.cuando}</span></span><span class="dur">${fmt(t.total)}</span></button></li>`;
+  };
+  document.querySelector('[data-lista="a"]').innerHTML = TRACKS.map((t, k) => t.tipo === "ladob" ? "" : fila(t, k)).join("");
+  document.querySelector('[data-lista="b"]').innerHTML = TRACKS.map((t, k) => t.tipo === "ladob" ? fila(t, k) : "").join("");
+}
+function pintarHoy() {
+  const el = document.querySelector("[data-hoy]");
+  if (!el) return;
+  const hoy = new Date();
+  const nDia = Math.floor(new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) / 864e5);
+  const razon = RAZONES[((nDia % RAZONES.length) + RAZONES.length) % RAZONES.length];
+  const t = mesesSemanasDias(PRIMER_SI, hoy);
+  let especial = "";
+  if (hoy.getDate() === 13 && hoy.getMonth() === 11) especial = `Hoy es 13 de diciembre: ${hoy.getFullYear() - 2019} años de aquella servilleta.`;
+  else if (hoy.getDate() === 13) especial = `Hoy es 13. Otro mes desde aquella servilleta.`;
+  const prox = TRACKS.filter(x => x.desde && !abierta(x)).sort((a, b) => a.desde - b.desde)[0];
+  const faltanNSQK = diasPara(NSQK);
+  el.innerHTML = `
+    <div class="hoy-cab"><span class="hoy-lbl">hoy, ${hoy.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" })}</span></div>
+    ${especial ? `<p class="hoy-especial">${especial}</p>` : ""}
+    <p class="hoy-razon">${razon}</p>
+    <p class="hoy-pie">Razón del día · mañana hay otra</p>
+    <div class="hoy-datos">
+      <div><b>${t.meses}</b><span>meses</span></div><div><b>${t.semanas}</b><span>semanas</span></div><div><b>${t.dias}</b><span>días</span></div>
+    </div>
+    <p class="hoy-pie" style="margin-top:2px">desde aquella servilleta</p>
+    ${faltanNSQK > 0 ? `<p class="hoy-linea">Faltan <b>${faltanNSQK}</b> días para NSQK.</p>` : ""}
+    ${prox ? `<p class="hoy-linea">La próxima canción del Lado B se abre en <b>${diasPara(prox.desde)}</b> días.</p>` : ""}`;
 }
 
 /* ---------- raspaditos ---------- */
@@ -1473,7 +1584,7 @@ document.addEventListener("click", e => {
   if (tr) { irTrack(+tr.dataset.track); return; }
   if (e.target.closest("[data-inicio]")) { irInicio(); return; }
   if (e.target.closest("[data-play-album]")) {
-    const k = TRACKS.findIndex((t, j) => (visto[j] || 0) < t.versos.length);
+    const k = TRACKS.findIndex((t, j) => abierta(t) && (visto[j] || 0) < t.versos.length);
     irTrack(k < 0 ? 0 : k);
     return;
   }
@@ -1742,7 +1853,14 @@ document.getElementById("copiar").onclick = () => {
   try { navigator.clipboard.writeText(txt).then(() => av.textContent = "Copiado.", fallback); } catch (err) { fallback(); }
 };
 
+mem.set("visitas", mem.get("visitas", 0) + 1);
+/* como app instalable (solo cuando está publicado en internet) */
+if ("serviceWorker" in navigator && location.protocol === "https:" && /github\.io|netlify\.app/.test(location.hostname)) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
 pintarCartera();
+pintarLista();
+pintarHoy();
 armarResumen();
 mostrar(0);
 </script>
