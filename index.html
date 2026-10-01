@@ -249,9 +249,28 @@ input[type="text"]:focus, textarea:focus { outline: 2px solid var(--azul); outli
 .quiz .op:disabled { cursor: default; }
 .quiz .op.mal { color: var(--gris); text-decoration: line-through; }
 .quiz .op.bien { background: #DDF1E5; border-color: var(--verde); }
-.secreto { background: var(--amarillo); color: var(--tinta); padding: 14px 16px; transform: rotate(1deg); box-shadow: 0 6px 14px rgba(0, 0, 0, .15); animation: sale .5s var(--ease); }
-.secreto .s-lbl { font-family: var(--f-maquina); font-size: .8rem; }
-.secreto p { margin: 4px 0 0; font-family: var(--f-serif); font-style: italic; font-size: 1.3rem; line-height: 1.25; }
+.rasca-wrap { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.rasca-lbl { color: var(--naranja-os); }
+.rasca { position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 16px rgba(0, 0, 0, .18); }
+.rasca canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; transition: opacity .7s var(--ease); }
+.rasca.hecho canvas { opacity: 0; pointer-events: none; }
+.rasca-alt { align-self: center; background: none; border: 0; font-family: var(--f-maquina); font-size: .8rem; color: var(--tinta-2); text-decoration: underline; min-height: 40px; }
+.rasca.hecho + .rasca-alt { display: none; }
+.vale { display: grid; grid-template-columns: auto 1fr; background: var(--amarillo); color: var(--tinta); min-height: 132px; border-radius: 12px; overflow: hidden; }
+.vale .talon { writing-mode: vertical-rl; transform: rotate(180deg); background: var(--tinta); color: var(--amarillo); font-family: var(--f-maquina); font-weight: 700; font-size: .8rem; letter-spacing: .18em; padding: 12px 9px; text-align: center; }
+.vale .cuerpo-v { padding: 14px 16px; display: flex; flex-direction: column; justify-content: center; gap: 8px; border-left: 2px dashed rgba(36, 33, 29, .35); min-width: 0; }
+.vale .v-txt { margin: 0; font-family: var(--f-serif); font-style: italic; font-size: 1.3rem; line-height: 1.2; }
+.vale .v-pie { margin: 0; font-family: var(--f-maquina); font-size: .72rem; color: var(--tinta-2); }
+.vale.mayor { background: var(--verde-play); }
+.vale.mayor .talon { color: var(--verde-play); }
+.cartera { display: flex; flex-direction: column; gap: 12px; }
+.cartera .cab { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.cartera .cuenta { color: var(--txt-2); font-size: .9rem; font-variant-numeric: tabular-nums; }
+.cartera .item { display: flex; flex-direction: column; gap: 8px; }
+.cartera .canjear { align-self: flex-end; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 16px; border-radius: 999px; background: var(--verde-play); color: #121212; font-weight: 800; font-size: .9rem; text-decoration: none; }
+.bloqueados { display: flex; flex-wrap: wrap; gap: 8px; }
+.bloqueados span { width: 52px; height: 40px; border: 2px dashed #3A3A3A; border-radius: 8px; display: grid; place-items: center; font-family: var(--f-maquina); font-weight: 700; color: var(--txt-2); }
+.cartera .vacia { color: var(--txt-2); margin: 0; font-size: .95rem; }
 .quiz .res { margin: 0; min-height: 1.3em; font-family: var(--f-serif); font-style: italic; font-size: 1.2rem; }
 details.version { background: rgba(0, 0, 0, .22); border-radius: 12px; padding: 4px 14px; }
 details.version[open] { padding-bottom: 14px; }
@@ -392,7 +411,6 @@ const CAPITULOS = [
       ]}
     ],
     cancion: { lbl: "El disco de la sudadera", tit: "Morat · Sobre el amor y sus efectos secundarios", url: "https://open.spotify.com/album/7tPz6T5lFv998HZc0O0Wh2" },
-    nota: "La sudadera todavía la tengo. Lo que nunca supe es si te gustó ella o el que la traía puesta.",
     quiz: { q: "¿Cómo te tenía guardada en mi celular?", ops: ["Tenochtitlán", "Hernán Cortés", "Adancilla"], ok: 1, bien: "Exacto. La conquistadora." }
   },
   {
@@ -414,7 +432,6 @@ const CAPITULOS = [
         "<span class='script'>Como yo lo veo, eres el amor de mi vida.</span>"
       ]}
     ],
-    nota: "Si alguien de tu salón se preguntaba por qué siempre había un tipo esperando afuera: era yo, y era por ti.",
     quiz: { q: "¿Dónde te esperaba en los recesos?", ops: ["En la cafetería", "Afuera de tu salón", "En la biblioteca"], ok: 1, bien: "Ahí mismito, todos los días." }
   },
   {
@@ -439,7 +456,6 @@ const CAPITULOS = [
         "Era el <em>13 de diciembre de 2019</em>. Nadie guardó esa servilleta, pero yo me la sé de memoria."
       ]}
     ],
-    nota: "El plan falló. La servilleta no.",
     quiz: { q: "¿Qué día me dijiste que sí la primera vez?", ops: ["14 de febrero de 2020", "13 de noviembre de 2019", "13 de diciembre de 2019"], ok: 2, bien: "13/12/2019. Fecha oficial." }
   },
   {
@@ -467,7 +483,6 @@ const CAPITULOS = [
       ]}
     ],
     cancion: { lbl: "Me la dedicaste", tit: "Little Jesus · La magia", url: "https://open.spotify.com/track/6Z8JXcW9fQuNRXznoBMfgp" },
-    nota: "Técnicamente seguimos casados por la kermés, ¿no?",
     quiz: { q: "¿Cómo eran nuestros anillos de la boda en la kermés?", ops: ["De oro, obvio", "De metal, como de aluminio", "De plástico, de los de dulce"], ok: 1, bien: "Exacto. Los de aluminio." }
   },
   {
@@ -508,7 +523,6 @@ const CAPITULOS = [
         "Hay cosas que no se olvidan. Esa es una de ellas. Gracias."
       ]}
     ],
-    nota: "Le debemos una a mi mejor amigo. Una grande.",
     quiz: { q: "¿Quién nos volvió a juntar?", ops: ["Tu amiga de la prepa", "Facebook, con sus recuerdos", "Mi mejor amigo, una noche de Minecraft"], ok: 2, bien: "Él. Y le vamos a deber eso para siempre." }
   },
   {
@@ -537,7 +551,6 @@ const CAPITULOS = [
       ]}
     ],
     cancion: { lbl: "Lo que cantamos esa noche", tit: "Little Jesus", url: "https://open.spotify.com/artist/5p1ARDx76hnOXoeigLIKit" },
-    nota: "La pregunta que no te hice en Pachuca la traje guardada hasta hoy. Ya casi llegamos a ella.",
     quiz: { q: "¿Qué cenamos en el Airbnb?", ops: ["Taquitos", "Pizza", "Sushi"], ok: 0, bien: "Taquitos. Cena de campeones." }
   },
   {
@@ -565,7 +578,6 @@ const CAPITULOS = [
       { bloque: "frasco" }
     ],
     recuerdo: "Para Omali, que se fue en junio. En esta historia se queda para siempre.",
-    nota: "Rayo y yo tenemos algo en común: los dos nos emocionamos de más cada vez que te vemos.",
     quiz: { q: "¿Cómo es Rayo?", ops: ["Negro y muy tranquilo", "Café con blanco y medio loquito", "Gris y dormilón"], ok: 1, bien: "Hiperactivo y perfecto." }
   },
   {
@@ -591,7 +603,6 @@ const CAPITULOS = [
       ]},
       { bloque: "familia" }
     ],
-    nota: "Ya estoy practicando las canciones para el 23 de enero. No prometo afinar, pero sí cantarlas todas contigo.",
     quiz: { q: "¿Cuándo vamos a ver a NSQK?", ops: ["31 de diciembre de 2026", "23 de enero de 2027", "14 de febrero de 2027"], ok: 1, bien: "23/01/2027. Ya estamos contando." }
   },
   {
@@ -613,10 +624,25 @@ const CAPITULOS = [
         "Falta muchísimo por contar. Por eso este disco no se acaba aquí."
       ]}
     ],
-    nota: "Esta vez no improvisé con una servilleta. Esta vez lo preparé todo. Sigue a la siguiente canción.",
     quiz: { q: "¿Desde qué año nos conocemos?", ops: ["2018", "2019", "2020"], ok: 1, bien: "2019. Y contando." }
   }
 ];
+
+/* vales: el premio de cada canción (se revelan con un raspadito y se canjean por WhatsApp) */
+const TELEFONO = "";   /* tu número con lada de país, sin + ni espacios, ej. "5215512345678". Vacío = ella elige el chat */
+const VALES = [
+  "Vale por usar mi sudadera de Morat un día entero. Con firmas falsas y todo.",
+  "Vale por una caminata larga, sin destino, hablando de todo como en los recesos.",
+  "Vale por una cita en Domino's. Esta vez, con caja.",
+  "Vale por un concierto privado: yo canto, tú eliges la canción.",
+  "Vale por una llamada larga, de las de antes, a la hora que quieras.",
+  "Vale por una noche de videojuegos juntos. Tú eliges el juego.",
+  "Vale por taquitos y maratón de pelis, como en Pachuca.",
+  "Vale por un día de paseo con Rayo, con todo y su energía.",
+  "Vale por hacer juntos la playlist oficial para el 23 de enero.",
+  "Vale por una cita sorpresa planeada completita por mí."
+];
+const PREMIO_MAYOR = "Juntaste los 10 vales. Tu premio mayor es una sorpresa que ya tengo preparada. Pídemela.";
 
 const PAPELITOS = [
   ["Eres de las personas más valientes que conozco.", "var(--naranja)"],
@@ -736,11 +762,12 @@ const DIBUJOS = {
     </g>
     <g transform="rotate(-6 104 92)">
       <path class="k f-naranja" d="M18 56 H182 V80 A11 11 0 0 0 182 102 V128 H18 V102 A11 11 0 0 0 18 80 Z"/>
-      <path class="f-none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 5" d="M146 60 V124"/>
+      <path class="f-none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 5" d="M140 60 V124"/>
       <text x="30" y="80" class="t-maq" font-size="8" fill="var(--ink)" textLength="104" lengthAdjust="spacingAndGlyphs">EN VIVO · PACHUCA</text>
       <text x="30" y="102" class="t-marker" font-size="17" fill="var(--paper)" textLength="104" lengthAdjust="spacingAndGlyphs">LITTLE JESUS</text>
       <text x="30" y="118" class="t-script" font-size="12" fill="var(--ink)" textLength="104" lengthAdjust="spacingAndGlyphs">Auditorio Explanada</text>
-      <text x="164" y="98" text-anchor="middle" class="t-marker" font-size="16" fill="var(--ink)">x2</text>
+      <circle cx="158" cy="78" r="12" class="k f-paper" stroke-width="2"/>
+      <text x="158" y="83" text-anchor="middle" class="t-marker" font-size="12" fill="var(--ink)">x2</text>
     </g>
     ${nota(196, 34, "f-ink")} ${nota(24, 160, "f-azul")} ${estrella(110, 22, .9)} ${estrella(206, 150, .8, "f-verde")}`,
   casa: `
@@ -1040,6 +1067,17 @@ TRACKS.forEach(t => { t.durs = t.versos.map(durVerso); t.acum = t.durs.reduce((a
 const fmt = ms => { const s = Math.floor(ms / 1000); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
 const IDX_EPILOGO = TRACKS.findIndex(t => t.tipo === "epilogo");
 
+/* ---------- vales ---------- */
+let vales = new Set(mem.get("vales", []));
+const numVale = i => "VALE N°" + String(i + 1).padStart(2, "0");
+const valeHTML = (i, extra = "") => `<div class="vale${extra}"><div class="talon">${i < 0 ? "PREMIO MAYOR" : numVale(i)}</div><div class="cuerpo-v"><p class="v-txt">${i < 0 ? PREMIO_MAYOR : VALES[i]}</p><p class="v-pie">no caduca · firma: Ruicito</p></div></div>`;
+const rascaHTML = (i, oculto) => `<div class="rasca-wrap" data-rasca-wrap="${i}" ${oculto ? "hidden" : ""}>
+    <span class="mono rasca-lbl">tu premio: ráscalo con el dedo</span>
+    <div class="rasca" data-rasca="${i}">${valeHTML(i)}<canvas aria-hidden="true"></canvas></div>
+    <button class="rasca-alt" data-rasca-alt="${i}">¿no puedes rascar? tócalo aquí</button>
+  </div>`;
+const waLink = txt => (TELEFONO ? `https://wa.me/${TELEFONO}` : "https://wa.me/") + "?text=" + encodeURIComponent(txt);
+
 /* ---------- vistas ---------- */
 const $v = document.getElementById("vistas");
 const vistas = [];
@@ -1070,13 +1108,14 @@ function vistaInicio() {
     <ol class="tracklist">
       ${TRACKS.map((t, k) => `<li><button data-track="${k}"><span class="i">${k + 1}</span><span style="min-width:0"><span class="nom">${t.titulo}</span><span class="sub">${t.tipo === "cap" ? "Edith &amp; Luis · " + t.cuando : "Edith &amp; Luis · " + t.cuando}</span></span><span class="dur">${fmt(t.total)}</span></button></li>`).join("")}
     </ol>
+    <section class="cartera" data-cartera aria-label="Tu cartera de vales"></section>
     <div class="nota-papel">
       <h3>cómo se escucha este disco</h3>
       <ol>
         <li>Cada canción es un capítulo. La letra es nuestra historia y va apareciendo sola.</li>
         <li>Si lees más rápido que la música, toca la letra. Si quieres pausa, abajo está el botón.</li>
         <li>Todo lo que esté pegado como papel se toca: se voltea, se abre o trae algo adentro.</li>
-        <li>Al final de cada canción hay una pregunta sobre nosotros. Si aciertas, te cuento un secreto.</li>
+        <li>Al final de cada canción hay una pregunta sobre nosotros. Si aciertas, te ganas un vale de verdad: lo raspas, se guarda en tu cartera y me lo cobras cuando quieras.</li>
         <li>Cada canción tiene un espacio para <i>tu versión</i>. Al final me la mandas y la guardo con todo lo demás.</li>
       </ol>
     </div>
@@ -1106,12 +1145,12 @@ function vistaTrack(t, k) {
       ${c.cancion ? `<a class="cancion" href="${c.cancion.url}" target="_blank" rel="noopener">${disco(["amarillo","naranja","verde","azul-claro"][i % 4], "ink")}<span class="info"><span class="lbl">${c.cancion.lbl}</span><span class="tit">${c.cancion.tit}</span></span><span class="ir" aria-label="Escuchar en Spotify">${flechaIr}</span></a>` : ""}
       ${c.recuerdo ? `<p class="recuerdo"><svg width="40" height="40" viewBox="-20 -20 40 40" aria-hidden="true"><path d="M-10 4 L-9 -14 L-2 -6 Z M10 4 L9 -14 L2 -6 Z" fill="#D5DAE3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cy="4" r="11" fill="#D5DAE3" stroke="currentColor" stroke-width="2"/><path d="M0 -20 L1.5 -16 L5 -15 L1.5 -14 L0 -10 L-1.5 -14 L-5 -15 L-1.5 -16 Z" fill="#FFC93D"/></svg><span>${c.recuerdo}</span></p>` : ""}
       ${c.quiz ? `<div class="quiz" data-quiz="${i}">
-        <span class="q-lbl">¿te acuerdas? si aciertas, te cuento un secreto</span>
+        <span class="q-lbl">¿te acuerdas? si aciertas, ganas un vale de verdad</span>
         <p class="q">${c.quiz.q}</p>
         <div class="ops">${c.quiz.ops.map((o, j) => `<button class="op" data-op="${j}">${o}</button>`).join("")}</div>
         <p class="res" role="status"></p>
-        ${c.nota ? `<div class="secreto" hidden><span class="s-lbl">el secreto</span><p>${c.nota}</p></div>` : ""}
-      </div>` : ""}
+        ${rascaHTML(i, true)}
+      </div>` : `<div class="quiz">${rascaHTML(i, false).replace("tu premio: ráscalo con el dedo", "por llegar hasta aquí: ráscalo con el dedo")}</div>`}
       <details class="version">
         <summary>¿Y tú cómo lo recuerdas?</summary>
         <p>Escribe tu versión de esta canción. Lo que yo olvidé, lo que tú viste diferente, lo que quieras.</p>
@@ -1187,7 +1226,7 @@ function mostrar(idx) {
   v.el.style.animation = "none"; void v.el.offsetWidth; v.el.style.animation = "";
 }
 function guardar() { mem.set("revelado", visto); mem.set("pos", pos); }
-function irInicio() { pausar(); trackActual = -1; $player.hidden = true; mostrar(0); pintarOros(); }
+function irInicio() { pausar(); trackActual = -1; $player.hidden = true; mostrar(0); pintarCartera(); }
 function irTrack(k) {
   pausar();
   trackActual = k;
@@ -1217,6 +1256,7 @@ function pintarTrack(k, desplazar) {
   });
   const completo = n >= total;
   el.querySelector("[data-outro]").hidden = !completo;
+  if (completo) requestAnimationFrame(() => prepararRascas(el));
   el.querySelector("[data-siguele]").hidden = completo && p === total - 1;
   $pPrev.disabled = p === 0;
   if (desplazar) {
@@ -1347,12 +1387,81 @@ document.addEventListener("keydown", e => {
 });
 
 /* ---------- discos de oro ---------- */
-function pintarOros() {
-}
 function ganarSello(i) {
   if (sellos.has(i)) return;
   sellos.add(i);
   mem.set("sellos", [...sellos]);
+}
+
+/* ---------- raspaditos ---------- */
+function prepararRascas(raiz) {
+  raiz.querySelectorAll("[data-rasca]").forEach(r => {
+    const i = +r.dataset.rasca;
+    if (vales.has(i)) { r.classList.add("hecho"); return; }
+    if (r.dataset.listo || !r.offsetWidth) return;
+    pintarRasca(r, i);
+  });
+}
+function pintarRasca(r, i) {
+  const cv = r.querySelector("canvas"), dpr = devicePixelRatio || 1;
+  const w = r.offsetWidth, h = r.offsetHeight;
+  cv.width = w * dpr; cv.height = h * dpr;
+  const ctx = cv.getContext("2d", { willReadFrequently: true });
+  ctx.scale(dpr, dpr);
+  const g = ctx.createLinearGradient(0, 0, w, h);
+  g.addColorStop(0, "#B9BEC9"); g.addColorStop(.45, "#EEF0F4"); g.addColorStop(.55, "#D7DAE1"); g.addColorStop(1, "#A9AFBB");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = "rgba(255,255,255,.55)";
+  for (let k = 0; k < 70; k++) { ctx.beginPath(); ctx.arc(Math.random() * w, Math.random() * h, Math.random() * 1.6 + .4, 0, 7); ctx.fill(); }
+  ctx.fillStyle = "#7D8392"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.font = "800 22px Unbounded, 'Arial Black', sans-serif";
+  ctx.fillText("RASCA AQUÍ", w / 2, h / 2 - 8);
+  ctx.font = "700 12px 'Courier Prime', monospace";
+  ctx.fillText(numVale(i) + " · premio de verdad", w / 2, h / 2 + 18);
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = 46;
+  let raspando = false, ult = null, n = 0;
+  const punto = e => { const b = cv.getBoundingClientRect(); return [e.clientX - b.left, e.clientY - b.top]; };
+  const limpio = () => {
+    const d = ctx.getImageData(0, 0, cv.width, cv.height).data;
+    let vacios = 0, total = 0;
+    for (let k = 3; k < d.length; k += 64) { total++; if (d[k] === 0) vacios++; }
+    return vacios / total;
+  };
+  const raspar = p => {
+    ctx.beginPath();
+    if (ult) { ctx.moveTo(ult[0], ult[1]); ctx.lineTo(p[0], p[1]); ctx.stroke(); }
+    ctx.beginPath(); ctx.arc(p[0], p[1], 23, 0, 7); ctx.fill();
+    ult = p;
+    if (++n % 6 === 0 && limpio() > .5) revelar(i);
+  };
+  cv.addEventListener("pointerdown", e => { raspando = true; ult = null; cv.setPointerCapture(e.pointerId); raspar(punto(e)); });
+  cv.addEventListener("pointermove", e => { if (raspando) raspar(punto(e)); });
+  const fin = () => { raspando = false; ult = null; if (limpio() > .5) revelar(i); };
+  cv.addEventListener("pointerup", fin);
+  cv.addEventListener("pointercancel", fin);
+  r.dataset.listo = "1";
+}
+function revelar(i) {
+  if (vales.has(i)) return;
+  vales.add(i);
+  mem.set("vales", [...vales]);
+  document.querySelectorAll(`[data-rasca="${i}"]`).forEach(r => r.classList.add("hecho"));
+  confeti();
+  pintarCartera();
+}
+function pintarCartera() {
+  const el = document.querySelector("[data-cartera]");
+  if (!el) return;
+  const total = VALES.length, n = vales.size;
+  const ganados = [...vales].sort((a, b) => a - b);
+  const canjear = txt => `<a class="canjear" href="${waLink(txt)}" target="_blank" rel="noopener">Canjear</a>`;
+  let html = `<div class="cab"><h2 class="seccion-t" style="margin:0">Tu cartera de vales</h2><span class="cuenta">${n} de ${total}</span></div>`;
+  if (n === total) html += `<div class="item">${valeHTML(-1, " mayor")}${canjear("Ruicito, junté los 10 vales. Quiero mi premio mayor.")}</div>`;
+  html += ganados.map(i => `<div class="item">${valeHTML(i)}${canjear(`Ruicito, quiero canjear mi vale: «${VALES[i]}»`)}</div>`).join("");
+  if (n < total) html += `<div class="bloqueados">${VALES.map((_, i) => vales.has(i) ? "" : `<span title="${CAPITULOS[i].titulo}">${String(i + 1).padStart(2, "0")}</span>`).join("")}</div>
+    <p class="vacia" style="font-size:.85rem">${n ? "Los que faltan" : "Los vales"} se ganan contestando la pregunta al final de cada canción.</p>`;
+  el.innerHTML = html;
 }
 
 /* ---------- toques ---------- */
@@ -1390,7 +1499,6 @@ document.addEventListener("click", e => {
     nb.classList.add("despejada");
     nb.querySelector(".pista").hidden = true;
     nb.parentElement.querySelector("[data-nube-txt]").hidden = false;
-    ganarSello(CAPITULOS.findIndex(c => c.pausa));
     return;
   }
   const an = e.target.closest("[data-anillos]");
@@ -1420,6 +1528,8 @@ document.addEventListener("click", e => {
     fr.textContent = papelitosQuedan.length ? "Saca otro" : "Ya los sacaste todos. ¿Otra vez?";
     return;
   }
+  const alt = e.target.closest("[data-rasca-alt]");
+  if (alt) { revelar(+alt.dataset.rascaAlt); return; }
   const op = e.target.closest(".op");
   if (op) {
     const qz = op.closest("[data-quiz]");
@@ -1430,9 +1540,10 @@ document.addEventListener("click", e => {
       qz.querySelectorAll(".op").forEach(b => b.disabled = true);
       op.classList.add("bien");
       res.textContent = q.bien;
-      const sec = qz.querySelector(".secreto"); if (sec) sec.hidden = false;
       res.style.color = "#1F7A4C";
       ganarSello(i);
+      const w = qz.querySelector("[data-rasca-wrap]");
+      if (w) { w.hidden = false; requestAnimationFrame(() => { prepararRascas(w); w.scrollIntoView({ behavior: suave(), block: "center" }); }); }
     } else {
       op.classList.add("mal"); op.disabled = true;
       res.textContent = ["Casi. Intenta otra vez.", "Mmm, no. Piénsale.", "Esa no. Te queda una."][qz.querySelectorAll(".op.mal").length - 1] || "Inténtalo otra vez.";
@@ -1456,7 +1567,7 @@ CAPITULOS.forEach((c, i) => {
   qz.querySelectorAll(".op").forEach(b => b.disabled = true);
   qz.querySelector(`[data-op="${c.quiz.ok}"]`).classList.add("bien");
   qz.querySelector(".res").textContent = c.quiz.bien;
-  const sec = qz.querySelector(".secreto"); if (sec) sec.hidden = false;
+  const w = qz.querySelector("[data-rasca-wrap]"); if (w) w.hidden = false;
 });
 
 /* tu versión + gato: se guardan solos */
@@ -1605,7 +1716,8 @@ if (ep && ep.t) { $ta.value = ep.t; mostrarFirmado(ep.t, ep.fecha); }
 function armarResumen() {
   const v = mem.get("versiones", {});
   const lineas = ["Disco «Nosotros» — lo que escribí yo, " + ELLA, ""];
-  lineas.push(`Preguntas acertadas: ${sellos.size} de ${CAPITULOS.filter(c => c.quiz).length}`);
+  lineas.push(`Vales ganados: ${vales.size} de ${VALES.length}`);
+  [...vales].sort((a, b) => a - b).forEach(i => lineas.push("  · " + VALES[i]));
   if (mem.get("si", null)) lineas.push("Respuesta en la servilleta: SÍ");
   const g = mem.get("gato", "");
   if (g) lineas.push("El gato se va a llamar: " + g);
@@ -1630,7 +1742,7 @@ document.getElementById("copiar").onclick = () => {
   try { navigator.clipboard.writeText(txt).then(() => av.textContent = "Copiado.", fallback); } catch (err) { fallback(); }
 };
 
-pintarOros();
+pintarCartera();
 armarResumen();
 mostrar(0);
 </script>
