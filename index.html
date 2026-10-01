@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&family=Permanent+Marker&display=swap">
 <style>
-/* Layout: un libro de una sola pantalla; cada capítulo es una hoja que se pasa (swipe / flechas). Look único de papel, sin modo oscuro. */
+/* Layout: un libro de una sola pantalla; cada capítulo es una hoja que se pasa (swipe / flechas) y se lee hacia abajo por escenas. Look único de papel, sin modo oscuro. */
 :root {
   color-scheme: light;
   --desk: #D9E0EA;        /* gris de ella, hacia el azul */
@@ -19,18 +19,20 @@
   --azul: #2F6BD8;        /* el color de los dos */
   --azul-claro: #AFC9F4;
   --naranja: #F2892B;     /* de ella */
-  --naranja-os: #D2601A;
+  --naranja-os: #C9581A;
   --naranja-claro: #F7B777;
   --gris: #8C96A8;        /* de ella */
   --gris-claro: #D5DAE3;
   --amarillo: #FFCB3D;    /* de él */
   --verde: #34A56F;       /* de él */
+  --cafe: #9A6A44;
+  --blanco: #FFFFFF;
 
   --f-marker: "Permanent Marker", "Comic Sans MS", "Chalkboard SE", cursive;
   --f-script: "Caveat", "Segoe Print", "Bradley Hand", cursive;
   --f-body: "Patrick Hand", "Segoe Print", "Chalkboard SE", system-ui, sans-serif;
 
-  --page-max: 540px;
+  --page-max: 560px;
   --ease: cubic-bezier(.2, .7, .2, 1);
 }
 * { box-sizing: border-box; }
@@ -46,7 +48,9 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 button { font: inherit; color: inherit; cursor: pointer; }
+a { color: var(--azul); }
 :focus-visible { outline: 3px dashed var(--azul); outline-offset: 3px; border-radius: 6px; }
+[hidden] { display: none !important; }
 
 /* ---------- libro ---------- */
 .libro {
@@ -67,8 +71,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   position: absolute; inset: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 28px 22px 36px;
-  display: flex; flex-direction: column; gap: 18px;
+  padding: 28px 22px 48px;
+  display: flex; flex-direction: column; gap: 20px;
   transition: transform .5s var(--ease), opacity .5s var(--ease);
   transform: translateX(0) rotate(0);
   opacity: 1;
@@ -78,6 +82,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .hoja > * { flex-shrink: 0; }
 
 /* ---------- tipografía ---------- */
+.cabeza { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .eyebrow {
   font-family: var(--f-script); font-weight: 700; font-size: 1.5rem; line-height: 1;
   color: var(--naranja-os);
@@ -91,22 +96,31 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 h1, h2 { margin: 0; font-family: var(--f-marker); font-weight: 400; text-wrap: balance; line-height: 1.05; }
 h2 { font-size: clamp(1.9rem, 8vw, 2.5rem); }
+h3 {
+  margin: 0; font-family: var(--f-script); font-weight: 700; font-size: 1.65rem; line-height: 1.1;
+  color: var(--azul); display: flex; align-items: center; gap: 8px;
+}
+h3::before { content: ""; width: 18px; height: 3px; background: currentColor; border-radius: 3px; transform: rotate(-6deg); }
 .resalta {
   background: linear-gradient(transparent 58%, var(--hl, var(--amarillo)) 58%, var(--hl, var(--amarillo)) 90%, transparent 90%);
   padding: 0 .1em;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
-.texto { display: flex; flex-direction: column; gap: 12px; max-width: 34em; }
-.texto p { margin: 0; }
+.escena { display: flex; flex-direction: column; gap: 10px; max-width: 34em; }
+.escena p { margin: 0; }
 .script { font-family: var(--f-script); font-weight: 700; font-size: 1.35em; line-height: 1.1; color: var(--azul); }
+em { font-style: normal; color: var(--naranja-os); }
+.chico { font-size: .95rem; color: var(--ink-soft); margin: 0; }
+.centro { text-align: center; align-self: center; }
 
 /* ---------- dibujos ---------- */
 .doodle { width: 100%; max-width: 300px; height: auto; align-self: center; overflow: visible; }
-.doodle .k { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.doodle .k, .mini .k { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .doodle .w { filter: url(#wobble); }
 .f-none { fill: none; }
 .f-ink { fill: var(--ink); }
 .f-paper { fill: var(--paper); }
+.f-blanco { fill: var(--blanco); }
 .f-azul { fill: var(--azul); }
 .f-azul-claro { fill: var(--azul-claro); }
 .f-naranja { fill: var(--naranja); }
@@ -116,14 +130,15 @@ h2 { font-size: clamp(1.9rem, 8vw, 2.5rem); }
 .f-gris-claro { fill: var(--gris-claro); }
 .f-amarillo { fill: var(--amarillo); }
 .f-verde { fill: var(--verde); }
+.f-cafe { fill: var(--cafe); }
 .t-marker { font-family: var(--f-marker); }
 .t-script { font-family: var(--f-script); font-weight: 700; }
 
 /* ---------- polaroid (aparece sólo si existe la foto) ---------- */
 .polaroid {
-  align-self: center;
+  align-self: center; margin: 0;
   width: min(78%, 280px);
-  background: #fff;
+  background: var(--blanco);
   padding: 10px 10px 34px;
   box-shadow: 0 6px 18px rgba(30, 41, 64, .18);
   transform: rotate(var(--rot, -2deg));
@@ -136,7 +151,7 @@ h2 { font-size: clamp(1.9rem, 8vw, 2.5rem); }
   background: color-mix(in srgb, var(--amarillo) 55%, transparent);
 }
 
-/* ---------- nota escondida ---------- */
+/* ---------- piezas comunes ---------- */
 .nota {
   align-self: flex-start;
   max-width: 290px;
@@ -155,8 +170,39 @@ h2 { font-size: clamp(1.9rem, 8vw, 2.5rem); }
 .nota[aria-expanded="false"] .dentro { display: none; }
 .nota[aria-expanded="true"] .tapa { display: none; }
 
+.cancion {
+  display: flex; align-items: center; gap: 12px; align-self: stretch;
+  border: 2px solid var(--ink); border-radius: 14px 18px 12px 20px;
+  padding: 10px 14px; background: var(--blanco);
+  text-decoration: none; color: var(--ink);
+  transition: background-color .2s;
+  min-height: 56px;
+}
+.cancion:hover { background: color-mix(in srgb, var(--azul-claro) 35%, var(--blanco)); }
+.cancion .disco { flex: none; }
+.cancion .info { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.cancion .lbl { font-family: var(--f-script); font-weight: 700; font-size: 1.1rem; color: var(--naranja-os); }
+.cancion .tit { font-size: 1.05rem; }
+.cancion .ir { margin-left: auto; font-family: var(--f-script); font-weight: 700; font-size: 1.2rem; color: var(--azul); white-space: nowrap; }
+
+.boton {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 8px 24px;
+  font-family: var(--f-marker); font-size: 1.1rem;
+  background: var(--azul); color: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 255px 18px 225px 18px / 18px 225px 18px 255px;
+  box-shadow: 3px 4px 0 var(--ink);
+  transition: transform .15s var(--ease), box-shadow .15s var(--ease);
+  text-decoration: none;
+}
+.boton:hover { transform: translate(-1px, -1px); box-shadow: 4px 5px 0 var(--ink); }
+.boton:active { transform: translate(2px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+.boton.sec { background: var(--paper); color: var(--ink); }
+.boton.ama { background: var(--amarillo); color: var(--ink); }
+
 .recuerdo {
-  display: flex; gap: 12px; align-items: center;
+  display: flex; gap: 12px; align-items: center; margin: 0;
   font-family: var(--f-script); font-size: 1.35rem; line-height: 1.15; color: var(--ink-soft);
   border-top: 2px dashed var(--gris-claro); padding-top: 14px;
 }
@@ -166,44 +212,213 @@ h2 { font-size: clamp(1.9rem, 8vw, 2.5rem); }
 .lista li { display: flex; align-items: center; gap: 12px; }
 .lista svg { flex: none; }
 
-/* ---------- capítulo en pausa ---------- */
+/* ---------- sellos + quiz ---------- */
+.sello {
+  flex: none; width: 64px; height: 64px; border-radius: 50%;
+  display: grid; place-items: center; text-align: center;
+  border: 3px double var(--naranja-os); color: var(--naranja-os);
+  font-family: var(--f-marker); font-size: 1rem; line-height: 1;
+  transform: rotate(-14deg);
+  background: color-mix(in srgb, var(--naranja-claro) 25%, transparent);
+}
+.sello small { display: block; font-family: var(--f-script); font-size: .85rem; }
+.sello.vacio { border-color: var(--gris-claro); color: var(--gris); background: none; border-style: dashed; }
+.sello.nuevo { animation: estampa .5s var(--ease); }
+@keyframes estampa { from { transform: rotate(-30deg) scale(2.2); opacity: 0; } to { transform: rotate(-14deg) scale(1); opacity: 1; } }
+
+.quiz {
+  border: 2px dashed var(--ink-soft); border-radius: 16px 20px 14px 22px;
+  padding: 16px; display: flex; flex-direction: column; gap: 10px;
+  background: color-mix(in srgb, var(--azul-claro) 18%, transparent);
+}
+.quiz .q-lbl { font-family: var(--f-script); font-weight: 700; font-size: 1.2rem; color: var(--naranja-os); line-height: 1; }
+.quiz .q { margin: 0; font-size: 1.15rem; }
+.quiz .ops { display: flex; flex-direction: column; gap: 8px; }
+.quiz .op {
+  min-height: 48px; text-align: left; padding: 8px 14px;
+  background: var(--paper); border: 2px solid var(--ink);
+  border-radius: 12px 16px 10px 18px;
+  transition: background-color .2s, transform .2s;
+}
+.quiz .op:hover { background: color-mix(in srgb, var(--amarillo) 35%, var(--paper)); }
+.quiz .op.mal { background: var(--gris-claro); text-decoration: line-through; color: var(--ink-soft); }
+.quiz .op.bien { background: color-mix(in srgb, var(--verde) 25%, var(--paper)); border-color: var(--verde); }
+.quiz .res { margin: 0; min-height: 1.4em; font-family: var(--f-script); font-weight: 700; font-size: 1.35rem; line-height: 1.1; }
+
+/* ---------- tu versión ---------- */
+details.version { border-top: 2px dashed var(--gris-claro); padding-top: 12px; }
+details.version summary {
+  cursor: pointer; list-style: none; min-height: 44px; display: flex; align-items: center; gap: 10px;
+  font-family: var(--f-script); font-weight: 700; font-size: 1.45rem; color: var(--azul); line-height: 1.1;
+}
+details.version summary::-webkit-details-marker { display: none; }
+details.version summary::before { content: "+"; font-family: var(--f-marker); width: 28px; height: 28px; display: grid; place-items: center; border: 2px solid currentColor; border-radius: 50%; font-size: 1rem; flex: none; }
+details.version[open] summary::before { content: "–"; }
+details.version p { margin: 6px 0 10px; }
+
+textarea, input[type="text"] {
+  width: 100%;
+  font-family: var(--f-script); font-weight: 700; font-size: 1.55rem; line-height: 1.25;
+  color: var(--ink);
+  background: repeating-linear-gradient(0deg, transparent 0 31px, var(--azul-claro) 31px 32px), var(--blanco);
+  border: 2px solid var(--ink-soft); border-radius: 10px 14px 8px 16px;
+  padding: 4px 12px;
+}
+textarea { min-height: 110px; resize: vertical; }
+input[type="text"] { min-height: 48px; background: var(--blanco); }
+label.lbl { font-family: var(--f-script); font-weight: 700; font-size: 1.4rem; line-height: 1; }
+.guardado { font-size: .9rem; color: var(--verde); min-height: 1.3em; margin: 0; }
+
+/* ---------- cap I: celulares + sudadera ---------- */
+.celus { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.celu {
+  border: 3px solid var(--ink); border-radius: 22px; background: var(--blanco);
+  padding: 10px 10px 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0;
+  box-shadow: 3px 4px 0 rgba(30, 41, 64, .15);
+}
+.celu:nth-child(1) { transform: rotate(-2deg); }
+.celu:nth-child(2) { transform: rotate(2deg); }
+.celu .notch { width: 40%; height: 6px; border-radius: 6px; background: var(--ink); align-self: center; }
+.celu .de { font-family: var(--f-script); font-weight: 700; font-size: 1.1rem; color: var(--naranja-os); line-height: 1; }
+.celu .contacto { display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--gris-claro); padding-top: 8px; min-width: 0; }
+.celu .avatar { flex: none; width: 28px; height: 28px; font-size: .9rem; border-radius: 50%; display: grid; place-items: center; font-family: var(--f-marker); color: var(--paper); }
+.celu .nom { font-size: .92rem; line-height: 1.1; min-width: 0; }
+.flip { border: 0; background: none; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; align-self: center; width: 100%; max-width: 300px; }
+.flip .pista { font-family: var(--f-script); font-weight: 700; font-size: 1.2rem; color: var(--ink-soft); }
+
+/* ---------- cap III: la caja ---------- */
+.cajabtn { border: 0; background: none; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; align-self: center; width: 100%; max-width: 300px; }
+.cajabtn .pista { font-family: var(--f-script); font-weight: 700; font-size: 1.3rem; color: var(--naranja-os); }
+.servilletita {
+  align-self: center; background: var(--blanco); padding: 18px 22px; transform: rotate(-3deg);
+  box-shadow: 0 6px 16px rgba(30, 41, 64, .16);
+  font-family: var(--f-script); font-weight: 700; font-size: 2rem; line-height: 1.1; text-align: center;
+  background-image: linear-gradient(135deg, transparent 49.6%, rgba(30, 41, 64, .07) 50%, transparent 50.4%);
+}
+
+/* ---------- cap IV: acta + inventario ---------- */
+.acta {
+  border: 3px double var(--ink); padding: 18px 18px 16px; background: var(--blanco);
+  transform: rotate(-1deg); display: flex; flex-direction: column; gap: 6px;
+  box-shadow: 0 6px 16px rgba(30, 41, 64, .12);
+}
+.acta .titulo-acta { font-family: var(--f-marker); font-size: 1.25rem; text-align: center; letter-spacing: .04em; }
+.acta .sub { text-align: center; font-size: .95rem; color: var(--ink-soft); margin: 0 0 6px; }
+.acta dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; }
+.acta dt { font-size: .85rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); padding-top: 4px; }
+.acta dd { margin: 0; font-family: var(--f-script); font-weight: 700; font-size: 1.35rem; line-height: 1.15; border-bottom: 1px solid var(--gris-claro); min-width: 0; }
+.acta .firmas { display: flex; justify-content: space-around; gap: 12px; margin-top: 10px; font-family: var(--f-script); font-weight: 700; font-size: 1.5rem; color: var(--azul); }
+.inventario { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.inventario > div { min-width: 0; }
+.inventario h4 { margin: 0 0 6px; font-family: var(--f-script); font-weight: 700; font-size: 1.35rem; color: var(--naranja-os); line-height: 1; }
+.inventario ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; font-size: 1rem; }
+
+/* ---------- cap V: la nube ---------- */
 .hoja.pausa { background: var(--paper-2); color: var(--ink-soft); }
 .hoja.pausa h2 { color: var(--gris); }
 .hoja.pausa .eyebrow { color: var(--gris); }
+.nubebtn { border: 0; background: none; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; align-self: center; width: 100%; max-width: 300px; }
+.nubebtn .nube-g, .nubebtn .sol-g { transition: transform 1.2s var(--ease), opacity 1.2s var(--ease); transform-box: fill-box; transform-origin: center; }
+.nubebtn .sol-g { opacity: 0; transform: scale(.4); }
+.nubebtn.despejada .nube-g { transform: translateX(120%); opacity: 0; }
+.nubebtn.despejada .sol-g { opacity: 1; transform: scale(1); }
+.nubebtn .pista { font-family: var(--f-script); font-weight: 700; font-size: 1.3rem; color: var(--gris); }
+.revelado { font-family: var(--f-marker); font-size: 1.4rem; color: var(--azul); text-align: center; margin: 0; }
 
-/* ---------- portada ---------- */
+/* ---------- cap VII: cuaderno ---------- */
+.cuaderno {
+  align-self: center; width: min(100%, 300px); min-height: 220px;
+  border: 3px solid var(--ink); border-radius: 6px 14px 14px 6px;
+  background: var(--azul); color: var(--paper);
+  padding: 22px 20px 22px 36px; position: relative; text-align: left;
+  box-shadow: 4px 6px 0 rgba(30, 41, 64, .2);
+  display: flex; flex-direction: column; justify-content: center; gap: 8px;
+  transition: background-color .3s;
+}
+.cuaderno::before { content: ""; position: absolute; left: 12px; top: 10px; bottom: 10px; border-left: 3px dotted var(--paper); }
+.cuaderno .c-tit { font-family: var(--f-marker); font-size: 1.45rem; line-height: 1.1; }
+.cuaderno .c-sub { font-family: var(--f-script); font-weight: 700; font-size: 1.3rem; line-height: 1; color: var(--amarillo); }
+.cuaderno .c-pista { font-family: var(--f-script); font-size: 1.1rem; opacity: .9; }
+.cuaderno.abierto {
+  background: repeating-linear-gradient(0deg, transparent 0 29px, var(--azul-claro) 29px 30px), var(--blanco);
+  color: var(--ink);
+}
+.cuaderno.abierto::before { border-left: 2px solid var(--naranja); }
+.cuaderno .pagina-c { font-family: var(--f-script); font-weight: 700; font-size: 1.6rem; line-height: 1.2; }
+.cuaderno .pagina-c b { color: var(--naranja-os); font-weight: 700; }
+
+/* ---------- cap VIII: frasco ---------- */
+.frasco-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.papelito {
+  align-self: center; max-width: 320px; background: var(--blanco); padding: 14px 18px;
+  font-family: var(--f-script); font-weight: 700; font-size: 1.55rem; line-height: 1.15; text-align: center;
+  box-shadow: 0 5px 14px rgba(30, 41, 64, .15);
+  transform: rotate(var(--r, 2deg));
+  border-top: 6px solid var(--c, var(--naranja));
+}
+.papelito.sale { animation: sale .45s var(--ease); }
+@keyframes sale { from { transform: translateY(40px) rotate(0) scale(.6); opacity: 0; } }
+
+/* ---------- cap IX: música, boleto, futuro ---------- */
+.discos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.discos a {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: var(--ink);
+  font-size: .95rem; text-align: center; line-height: 1.1; min-width: 0; padding: 6px 2px; border-radius: 12px;
+  transition: background-color .2s;
+}
+.discos a:hover { background: color-mix(in srgb, var(--amarillo) 30%, transparent); }
+.boleto {
+  display: grid; grid-template-columns: 1fr auto; border: 3px solid var(--ink); background: var(--amarillo);
+  border-radius: 10px; overflow: hidden; transform: rotate(-1.5deg);
+  box-shadow: 3px 4px 0 rgba(30, 41, 64, .18);
+}
+.boleto .b-main { padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.boleto .b-art { font-family: var(--f-marker); font-size: 1.8rem; line-height: 1; }
+.boleto .b-fecha { font-size: 1rem; }
+.boleto .b-stub { border-left: 3px dashed var(--ink); padding: 10px 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--paper); text-align: center; }
+.boleto .b-num { font-family: var(--f-marker); font-size: 1.9rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.boleto .b-lbl { font-family: var(--f-script); font-weight: 700; font-size: 1.05rem; line-height: 1; }
+
+/* ---------- interludio: el tiempo ---------- */
+.reloj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.reloj-grid div {
+  border: 2px solid var(--ink); border-radius: 14px 18px 12px 20px; background: var(--blanco);
+  padding: 10px 6px; text-align: center; display: flex; flex-direction: column; gap: 2px; min-width: 0;
+}
+.reloj-grid b { font-family: var(--f-marker); font-weight: 400; font-size: clamp(1.6rem, 8vw, 2.2rem); line-height: 1; font-variant-numeric: tabular-nums; color: var(--azul); }
+.reloj-grid span { font-family: var(--f-script); font-weight: 700; font-size: 1.15rem; line-height: 1; color: var(--ink-soft); }
+.reloj-grid div:nth-child(2) b { color: var(--naranja-os); }
+.reloj-grid div:nth-child(4) b, .reloj-grid div:nth-child(5) b, .reloj-grid div:nth-child(6) b { font-size: clamp(1.3rem, 6vw, 1.7rem); }
+.dato { display: flex; gap: 12px; align-items: baseline; border-bottom: 2px dashed var(--gris-claro); padding-bottom: 8px; }
+.dato b { font-family: var(--f-marker); font-weight: 400; font-size: 1.6rem; color: var(--verde); font-variant-numeric: tabular-nums; flex: none; }
+
+/* ---------- portada / índice ---------- */
 .portada { justify-content: center; align-items: center; text-align: center; gap: 14px; }
 .portada h1 { font-size: clamp(3.2rem, 17vw, 5rem); letter-spacing: .02em; display: flex; align-items: center; justify-content: center; }
 .portada h1 svg { width: .85em; height: .85em; margin: 0 .02em; }
 .nombres { font-family: var(--f-script); font-weight: 700; font-size: clamp(2.1rem, 10vw, 2.8rem); line-height: 1; color: var(--azul); }
 .apodos { font-family: var(--f-script); font-size: 1.4rem; color: var(--naranja-os); line-height: 1.1; }
 .subt { color: var(--ink-soft); margin: 0; }
-.boton {
-  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  min-height: 48px; padding: 8px 24px;
-  font-family: var(--f-marker); font-size: 1.15rem;
-  background: var(--azul); color: var(--paper);
-  border: 3px solid var(--ink);
-  border-radius: 255px 18px 225px 18px / 18px 225px 18px 255px;
-  box-shadow: 3px 4px 0 var(--ink);
-  transition: transform .15s var(--ease), box-shadow .15s var(--ease);
-}
-.boton:hover { transform: translate(-1px, -1px); box-shadow: 4px 5px 0 var(--ink); }
-.boton:active { transform: translate(2px, 3px); box-shadow: 1px 1px 0 var(--ink); }
-.boton.sec { background: var(--paper); color: var(--ink); }
-
-/* ---------- índice ---------- */
+.contador-mini { font-family: var(--f-script); font-weight: 700; font-size: 1.35rem; line-height: 1.1; color: var(--ink); margin: 0; }
+.contador-mini b { font-family: var(--f-marker); font-weight: 400; color: var(--azul); font-variant-numeric: tabular-nums; }
+.pasos { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.pasos li { display: grid; grid-template-columns: 54px 1fr; gap: 12px; align-items: center; }
+.pasos .ic { width: 54px; height: 54px; display: grid; place-items: center; }
 .indice { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .indice button {
-  width: 100%; min-height: 48px;
-  display: grid; grid-template-columns: 2.4em 1fr; align-items: baseline; gap: 8px;
+  width: 100%; min-height: 50px;
+  display: grid; grid-template-columns: 2.4em 1fr auto; align-items: center; gap: 8px;
   background: none; border: 0; border-bottom: 2px dashed var(--gris-claro);
   padding: 8px 4px; text-align: left;
   transition: background-color .2s;
 }
 .indice button:hover { background: color-mix(in srgb, var(--amarillo) 30%, transparent); }
 .indice .num { font-family: var(--f-script); font-weight: 700; font-size: 1.5rem; color: var(--naranja-os); line-height: 1; }
-.indice .tit { font-size: 1.1rem; min-width: 0; }
+.indice .tit { font-size: 1.1rem; min-width: 0; line-height: 1.2; }
+.indice .mini-sello { width: 26px; height: 26px; border-radius: 50%; border: 2px dashed var(--gris-claro); }
+.indice .mini-sello.si { border: 2px solid var(--naranja-os); background: var(--naranja-claro); }
+.sellos-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.sellos-row .sello { width: 44px; height: 44px; font-size: .8rem; border-width: 2px; }
 
 /* ---------- final: la servilleta ---------- */
 .servilleta {
@@ -212,7 +427,7 @@ h2 { font-size: clamp(1.9rem, 8vw, 2.5rem); }
   width: min(100%, 340px);
   background:
     repeating-linear-gradient(0deg, transparent 0 22px, rgba(47, 107, 216, .06) 22px 23px),
-    #fff;
+    var(--blanco);
   padding: 26px 24px 24px;
   box-shadow: 0 10px 26px rgba(30, 41, 64, .2);
   transform: rotate(-2deg);
@@ -226,7 +441,7 @@ h2 { font-size: clamp(1.9rem, 8vw, 2.5rem); }
 .servilleta .para { font-family: var(--f-script); font-weight: 700; font-size: 1.7rem; line-height: 1; color: var(--ink-soft); }
 .servilleta .pregunta { font-family: var(--f-script); font-weight: 700; font-size: clamp(2.3rem, 11vw, 2.9rem); line-height: 1; color: var(--ink); margin: 8px 0 4px; text-wrap: balance; }
 .servilleta .otra { font-family: var(--f-script); font-size: 1.6rem; color: var(--naranja-os); line-height: 1; }
-.opciones { display: flex; gap: 28px; margin-top: 22px; align-items: center; flex-wrap: wrap; }
+.opciones { display: flex; gap: 28px; margin-top: 22px; align-items: center; flex-wrap: wrap; position: relative; z-index: 1; }
 .check {
   display: inline-flex; align-items: center; gap: 10px;
   min-height: 48px; min-width: 48px;
@@ -241,7 +456,7 @@ h2 { font-size: clamp(1.9rem, 8vw, 2.5rem); }
 .check.marcado .palomita { stroke-dashoffset: 0; }
 #btnNo.huye { position: fixed; z-index: 30; transition: left .25s var(--ease), top .25s var(--ease), transform .25s; background: var(--paper); border-radius: 12px; box-shadow: 0 4px 14px rgba(30, 41, 64, .18); }
 .respuesta { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.respuesta .grande { font-family: var(--f-marker); font-size: clamp(1.8rem, 8vw, 2.3rem); line-height: 1.1; text-wrap: balance; }
+.respuesta .grande { font-family: var(--f-marker); font-size: clamp(1.8rem, 8vw, 2.3rem); line-height: 1.1; text-wrap: balance; margin: 0; }
 
 /* ---------- epílogo ---------- */
 .ideas { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -253,22 +468,19 @@ h2 { font-size: clamp(1.9rem, 8vw, 2.5rem); }
   transition: background-color .2s, border-color .2s;
 }
 .idea:hover { background: color-mix(in srgb, var(--azul-claro) 45%, transparent); border-color: var(--azul); }
-label.lbl { font-family: var(--f-script); font-weight: 700; font-size: 1.5rem; line-height: 1; }
-textarea {
-  width: 100%; min-height: 120px; resize: vertical;
-  font-family: var(--f-script); font-weight: 700; font-size: 1.7rem; line-height: 1.2;
-  color: var(--ink);
-  background: repeating-linear-gradient(0deg, transparent 0 33px, var(--azul-claro) 33px 34px), var(--paper);
-  border: 2px solid var(--ink-soft); border-radius: 10px 14px 8px 16px;
-  padding: 6px 12px;
-}
 .firmado {
   font-family: var(--f-script); font-weight: 700; font-size: clamp(2rem, 9vw, 2.6rem); line-height: 1.1;
   color: var(--azul); text-align: center; text-wrap: balance; margin: 0;
 }
 .firma { text-align: center; font-family: var(--f-script); font-size: 1.4rem; color: var(--ink-soft); margin: 0; }
 .fila { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.col { display: flex; flex-direction: column; gap: 12px; }
 .aviso { font-size: .95rem; color: var(--ink-soft); margin: 0; min-height: 1.5em; }
+.resumen {
+  white-space: pre-wrap; font-size: .95rem; line-height: 1.45; margin: 0;
+  background: var(--blanco); border: 2px dashed var(--gris-claro); border-radius: 12px; padding: 12px 14px;
+  max-height: 220px; overflow: auto;
+}
 
 /* ---------- barra: el camino ---------- */
 .camino {
@@ -277,6 +489,7 @@ textarea {
   border-top: 2px dashed var(--gris-claro);
   background: var(--paper);
 }
+.camino > div { min-width: 0; }
 .flecha {
   width: 48px; height: 48px; border: 0; background: none; border-radius: 50%;
   display: grid; place-items: center;
@@ -294,14 +507,13 @@ textarea {
 
 canvas#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 40; }
 
-[hidden] { display: none !important; }
-.col { display: flex; flex-direction: column; gap: 12px; }
-.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
+@media (max-width: 380px) {
+  .inventario { grid-template-columns: 1fr; }
+}
 @media (min-width: 600px) {
   body { padding-block: 24px; }
   .libro { border-radius: 6px 14px 14px 6px; }
-  .hoja { padding: 36px 40px 40px; }
+  .hoja { padding: 36px 40px 52px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
@@ -320,7 +532,7 @@ canvas#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-e
 </svg>
 
 <main class="libro" id="libro">
-  <div class="hojas" id="hojas" aria-live="polite"></div>
+  <div class="hojas" id="hojas"></div>
   <nav class="camino" aria-label="Páginas del libro">
     <button class="flecha" id="atras" aria-label="Página anterior">
       <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M18 5 Q10 12 8 14 Q12 18 18 23" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -332,7 +544,7 @@ canvas#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-e
         <g id="paradas"></g>
         <g id="marcador"><path d="M0 5 C -9 -3 -7 -11 0 -6 C 7 -11 9 -3 0 5 Z" fill="var(--naranja)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/></g>
       </svg>
-      <div class="pagina" id="pagina"></div>
+      <div class="pagina" id="pagina" aria-live="polite"></div>
     </div>
     <button class="flecha" id="adelante" aria-label="Página siguiente">
       <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M10 5 Q18 12 20 14 Q16 18 10 23" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -343,108 +555,245 @@ canvas#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-e
 
 <script>
 /* =========================================================
-   LA HISTORIA — edita aquí los textos.
+   DATOS — edita aquí.
    Fotos: pon archivos en /fotos con el nombre de "foto"
    (ej. fotos/cap-01.jpg). Si no existe, sólo se ve el dibujo.
    ========================================================= */
 const ELLA = "Edith";
 const EL = "Luis";
+const PRIMER_SI = new Date(2019, 11, 13, 14, 0);   // 13 dic 2019, la servilleta
+const NSQK = new Date(2027, 0, 23, 21, 0);          // 23 ene 2027
+
+const spotify = q => "https://open.spotify.com/search/" + encodeURIComponent(q);
 
 const CAPITULOS = [
   {
-    titulo: "Me gusta tu sudadera", cuando: "2019 · la prepa", dibujo: "sudadera", foto: "fotos/cap-01.jpg",
-    texto: [
-      "Yo iba en segundo, tú en tercero, tu último año. Yo estaba afuera de un baño con mi sudadera de Morat.",
-      "Pasaste con tu amiga, me dijiste <span class='script'>«me gusta tu sudadera»</span> y te fuiste.",
-      "Luego tu amiga te dijo que me pidieras mi Facebook. Lo sé porque casi lo gritó. No te animaste, así que me lo pidió ella y te lo pasó.",
-      "Al poco tiempo empezamos a hablar. Todo empezó por una sudadera."
+    titulo: "Me gusta tu sudadera", cuando: "2019 · la prepa", dibujo: null, foto: "fotos/cap-01.jpg",
+    escenas: [
+      { t: "El pasillo", p: [
+        "Era 2019. Yo iba en segundo y tú en tercero, tu último año en la prepa.",
+        "Yo estaba afuera de un baño, sin hacer nada especial, con mi sudadera de Morat: la del disco <em>Sobre el amor y sus efectos secundarios</em>, con todo y sus firmas. Falsas, pero firmas.",
+        "Pasaste con tu amiga, me viste y dijiste: <span class='script'>«Me gusta tu sudadera».</span> Y te fuiste. Así, nada más."
+      ]},
+      { bloque: "sudaderaFlip" },
+      { t: "Tu amiga", p: [
+        "Lo que no sabías es que alcancé a escuchar lo que siguió. Tu amiga te dijo que me pidieras mi Facebook, y lo dijo tan fuerte que casi lo gritó.",
+        "No te animaste. Así que ella vino, me lo pidió y te lo pasó.",
+        "Me escribiste tú primero. No me acuerdo qué decía ese mensaje, pero sí me acuerdo de lo que pensé de ti: que eras una chica muy linda y muy interesante."
+      ]},
+      { t: "Tenochtitlán", p: [
+        "Al poco tiempo nos pasamos nuestros números y nació nuestro primer chiste local:"
+      ]},
+      { bloque: "celulares" },
+      { p: [
+        "Tú me guardaste como Tenochtitlán y yo a ti como Hernán Cortés. Porque tú venías a conquistarme.",
+        "<span class='script'>Y lo lograste.</span>"
+      ]}
     ],
-    nota: "Todavía no sé si te gustó la sudadera o el que la traía puesta."
+    cancion: { lbl: "Suena", tit: "Morat · Sobre el amor y sus efectos secundarios", q: "Morat Sobre el amor y sus efectos secundarios" },
+    nota: "Dato: la sudadera todavía la tengo. Y todavía no sé si te gustó ella o el que la traía puesta.",
+    quiz: { q: "¿Cómo te tenía guardada en mi celular?", ops: ["Tenochtitlán", "Hernán Cortés", "Adancilla"], ok: 1, bien: "Exacto. La conquistadora." }
   },
   {
-    titulo: "Nos vemos en el receso", cuando: "2019 · la prepa", dibujo: "reloj", foto: "fotos/cap-02.jpg",
-    texto: [
-      "Después de eso, el receso se volvió la mejor parte del día.",
-      "Nos veíamos diario. Mismo lugar, las mismas ganas de verte, y siempre se nos hacía corto.",
-      "Así estuvimos un tiempo, hasta que tocó salir de la escuela juntos."
+    titulo: "Afuera de tu salón", cuando: "2019 · los recesos", dibujo: "reloj", foto: "fotos/cap-02.jpg",
+    escenas: [
+      { t: "La mejor parte del día", p: [
+        "Después de eso, el receso se volvió la mejor parte del día.",
+        "Te iba a buscar afuera de tu salón. Casi siempre ahí, casi siempre a la misma hora, siempre con ganas de verte."
+      ]},
+      { t: "Caminar y hablar", p: [
+        "No me acuerdo qué comíamos. Sí me acuerdo de que caminábamos muchísimo y hablábamos de todo: de cómo te había ido en el día, de cómo estaban las cosas con tus papás, de lo que fuera.",
+        "Ya pasaron muchos años, pero esa sensación de caminar a tu lado sin prisa no se me olvida."
+      ]},
+      { t: "Desde ahí", p: [
+        "Creo que desde que te conocí supe que me gustabas de verdad.",
+        "Ese sentimiento nunca se fue. Y no creo que se vaya, porque como yo lo veo, <span class='script'>tú eres el amor de mi vida.</span>"
+      ]}
+    ],
+    quiz: { q: "¿Dónde te esperaba en los recesos?", ops: ["En la cafetería", "Afuera de tu salón", "En la biblioteca"], ok: 1, bien: "Ahí mismito, todos los días." }
+  },
+  {
+    titulo: "El plan de la caja de pizza", cuando: "13 dic 2019", dibujo: null, foto: "fotos/cap-03.jpg",
+    escenas: [
+      { t: "La primera cita", p: [
+        "Después de tantos recesos, por fin tuvimos una cita de verdad, fuera de la escuela. Fuimos a Domino's. Creo que pedimos una de pepperoni.",
+        "Yo llevaba un súper plan: pedirles a los de Domino's que me ayudaran a escribir en la caja si querías ser mi novia, para que lo vieras al abrirla."
+      ]},
+      { bloque: "cajaPizza" },
+      { t: "La servilleta", p: [
+        "Así que improvisé. Agarré una servilleta y escribí, tal cual:"
+      ]},
+      { bloque: "servilletita" },
+      { p: [
+        "Te dio muchísima risa cómo lo hice. Y dijiste que sí.",
+        "Fue el <em>13 de diciembre de 2019</em>. Nadie guardó la servilleta, pero yo me acuerdo perfecto de ella."
+      ]}
+    ],
+    nota: "El plan falló. La servilleta no.",
+    quiz: { q: "¿Qué día me dijiste que sí la primera vez?", ops: ["14 de febrero de 2020", "13 de noviembre de 2019", "13 de diciembre de 2019"], ok: 2, bien: "13/12/2019. Fecha oficial." }
+  },
+  {
+    titulo: "Seis meses", cuando: "dic 2019 – 2020", dibujo: "kermes", foto: "fotos/cap-04.jpg",
+    escenas: [
+      { t: "El camino a tu casa", p: [
+        "Vivías muy cerquita de la prepa, así que te acompañaba caminando. Era poquito camino, pero siempre nos alcanzaba para hablar de todo."
+      ]},
+      { t: "La boda", p: [
+        "Y nos casamos. En una kermés, pero nos casamos. Firmamos papeles, creo que hasta costó dinero, y nos dieron unos anillos muy, muy sencillos, de metal, como de aluminio.",
+        "Creo que tú todavía tienes esos papeles. O por lo menos los tuviste."
+      ]},
+      { bloque: "acta" },
+      { t: "Todo lo que nos dimos", p: [
+        "Nos regalamos de todo. Algunas cosas todavía existen; otras sólo en la memoria."
+      ]},
+      { bloque: "inventario" },
+      { t: "Te cantaba", p: [
+        "Te cantaba canciones que nos gustaban a los dos. Pero sobre todo una: <em>«Eres tú mi todo»</em>, de Escandalosos."
+      ]}
+    ],
+    cancion: { lbl: "Te la cantaba", tit: "Escandalosos · Eres tú mi todo", q: "Escandalosos Eres tú mi todo" },
+    nota: "Técnicamente seguimos casados por la kermés, ¿no?",
+    quiz: { q: "¿Qué canción te cantaba?", ops: ["La magia · Little Jesus", "Eres tú mi todo · Escandalosos", "Cómo te atreves · Morat"], ok: 1, bien: "Esa. Y te la sigo cantando si me dejas." }
+  },
+  {
+    titulo: "Intermedio", cuando: "2020", dibujo: null, pausa: true,
+    escenas: [
+      { p: [
+        "Luego llegó la pandemia, y con ella el estrés de entrar a la uni.",
+        "Sentías que no tenías el tiempo que yo merecía. Y por eso terminamos."
+      ]},
+      { t: "Lo que extrañé", p: [
+        "Extrañaba hacer llamada contigo. Hablar de lo que fuera. La paz que sentía pasando mi tiempo contigo.",
+        "La verdad, te extrañé a ti. Completa."
+      ]},
+      { p: ["Esta página se queda gris porque así se sintió ese tiempo."] },
+      { bloque: "nube" }
     ]
   },
   {
-    titulo: "El plan de la caja de pizza", cuando: "nuestra primera cita", dibujo: "pizza", foto: "fotos/cap-03.jpg",
-    texto: [
-      "Nuestra primera cita de verdad fue en una pizzería.",
-      "Yo tenía un súper plan: pedirle a los de Domino's que escribieran en la caja si querías ser mi novia, para que lo vieras al abrirla.",
-      "Nunca nos llevaron caja.",
-      "Así que te lo escribí en una servilleta. <span class='script'>Y dijiste que sí.</span>"
+    titulo: "Una noche de Minecraft", cuando: "casi al final de la pandemia", dibujo: "minecraft", foto: "fotos/cap-06.jpg",
+    escenas: [
+      { t: "La llamada", p: [
+        "Una noche, cuando la pandemia ya se estaba terminando (aunque todavía no lo sabíamos), yo estaba jugando Minecraft con mi mejor amigo.",
+        "Él nos conocía muy bien a los dos y sabía toda la historia. Estando en llamada conmigo, te mandó mensaje para ver si querías volver a hablar conmigo.",
+        "Y así, entre bloques y una llamada a medianoche, <span class='script'>él nos volvió a juntar.</span>"
+      ]},
+      { t: "Siempre amigos", p: [
+        "Desde ahí volvimos a hablar y, con los años, vivimos de todo.",
+        "Aparte de haber sido novios, siempre fuimos amigos. Muy unidos, con una conexión que yo diría que es única. Y tenemos fotos de todo para comprobarlo."
+      ]},
+      { t: "La magia", p: [
+        "Un día me dedicaste <em>«La magia»</em>, de Little Jesus. Desde entonces es una de mis bandas favoritas. Bueno, de las nuestras."
+      ]},
+      { t: "Mi abuelita", p: [
+        "Y cuando falleció mi abuelita, tú estuviste. Eso no se me va a olvidar nunca. Gracias."
+      ]}
     ],
-    nota: "El plan falló. La servilleta no."
+    cancion: { lbl: "Me la dedicaste", tit: "Little Jesus · La magia", q: "Little Jesus La magia" },
+    nota: "Le debemos una a mi mejor amigo. Una grande.",
+    quiz: { q: "¿Quién nos volvió a juntar?", ops: ["Tu amiga de la prepa", "Facebook, con sus recuerdos", "Mi mejor amigo, una noche de Minecraft"], ok: 2, bien: "Él. Y le vamos a deber eso para siempre." }
   },
   {
-    titulo: "Seis meses", cuando: "novios, la primera vez", dibujo: "kermes", foto: "fotos/cap-04.jpg",
-    texto: [
-      "Fueron como seis meses, pero cupieron un montón de cosas.",
-      "Te acompañaba a tu casa. Nos casamos en una kermés. Me diste varios regalos y yo a ti.",
-      "Y yo te cantaba canciones."
+    titulo: "Pachuca", cuando: "Little Jesus en vivo", dibujo: "boleto", foto: "fotos/cap-07.jpg",
+    escenas: [
+      { t: "El concierto", p: [
+        "Contigo vi a Little Jesus en vivo por primera vez. Fue en Pachuca, en el auditorio de la plaza, el Auditorio Explanada.",
+        "Cantamos todas. Obvio. Somos súper fans."
+      ]},
+      { t: "El Airbnb", p: [
+        "También contigo me quedé en un Airbnb por primera vez. Compré taquitos para que cenáramos y te llevé un montón de peluches."
+      ]},
+      { t: "El cuaderno", p: [
+        "Y llevaba el cuaderno. Lo tenía para después, pero no aguanté y te lo di antes del concierto."
+      ]},
+      { bloque: "cuaderno" },
+      { t: "Lo que no dije", p: [
+        "Ese día quería pedirte que fueras mi novia. No se dio la ocasión.",
+        "Después del concierto vimos pelis y nos dormimos juntos. Y ya.",
+        "Me quedé con la pregunta guardada. <span class='script'>Spoiler: aquí la traigo.</span>"
+      ]},
+      { p: ["Todavía tenemos muchas primeras veces pendientes. Ya quiero tacharlas contigo."] }
     ],
-    nota: "Técnicamente seguimos casados por la kermés, ¿no?"
-  },
-  {
-    titulo: "Intermedio", cuando: "2020", dibujo: "nube", pausa: true,
-    texto: [
-      "Luego llegó la pandemia y todo se detuvo. Nosotros también.",
-      "La relación terminó y perdimos contacto un buen tiempo.",
-      "Esta página se queda un poco gris, porque así se sintió."
-    ]
-  },
-  {
-    titulo: "Siempre amigos", cuando: "los años después", dibujo: "cassette", foto: "fotos/cap-06.jpg",
-    texto: [
-      "Pero nunca nos fuimos del todo. Volvimos a hablar y con los años vivimos de todo.",
-      "Un día me dedicaste una canción de Little Jesus, y se volvió una de mis bandas favoritas.",
-      "Aparte de haber sido novios, siempre fuimos amigos. Muy unidos, con una conexión que yo diría que es única.",
-      "Y tenemos fotos de todo para comprobarlo."
-    ],
-    nota: "Little Jesus ya está en las dos playlists: la tuya y la mía."
-  },
-  {
-    titulo: "Primeras veces", cuando: "contigo", dibujo: "boleto", foto: "fotos/cap-07.jpg",
-    texto: [
-      "Contigo vi a Little Jesus en vivo por primera vez.",
-      "Contigo me quedé en un Airbnb por primera vez.",
-      "Hay cosas que uno sólo quiere estrenar con una persona."
-    ]
+    cancion: { lbl: "Esa noche", tit: "Little Jesus · en vivo", q: "Little Jesus" },
+    quiz: { q: "¿Qué cenamos en el Airbnb?", ops: ["Taquitos", "Pizza", "Sushi"], ok: 0, bien: "Taquitos. Cena de campeones." }
   },
   {
     titulo: "Verte crecer", cuando: "de 2019 a hoy", dibujo: "casa", foto: "fotos/cap-08.jpg",
-    texto: [
-      "Te vi independizarte.",
-      "Conocí a Omali, tu gatita. Estuve cuando te regalaron a Rayo. Ya conozco tu casa.",
-      "Te he visto convertirte en quien eres, y cada versión tuya me ha gustado más."
+    escenas: [
+      { t: "Tu casa", p: [
+        "Te he visto crecer. Te vi independizarte.",
+        "Conocí a Omali, tu gatita: entre gris muy clarito y blanca, muy tierna y experta en escaparse.",
+        "Estuve cuando llegó Rayo: café con blanco, medio loquito e hiperactivo.",
+        "Ya conozco tu casa."
+      ]},
+      { t: "Lo que admiro de ti", p: [
+        "Eres una mujer muy capaz y muy valiente. Siempre estás ahí para los demás. Tratas lindo a las personas y a los animales.",
+        "Sientes mucho, aunque te cueste demostrarlo y aunque eso a veces te dé miedo. Y siempre, siempre sales adelante.",
+        "Disfrutas las cosas pequeñas de la vida. Duermes mucho. Y quieres mucho.",
+        "<span class='script'>La verdad, yo amo todo de ti.</span>"
+      ]},
+      { t: "Mi frasco para ti", p: [
+        "Una vez tú me diste un frasco lleno de papelitos con cupones y cosas que te gustaban de mí. Este es el mío."
+      ]},
+      { bloque: "frasco" }
     ],
-    recuerdo: "Para Omali, que se fue en junio. En este libro se queda para siempre."
+    recuerdo: "Para Omali, que se fue en junio. En este libro se queda para siempre.",
+    quiz: { q: "¿Cómo es Rayo?", ops: ["Negro y muy tranquilo", "Café con blanco y medio loquito", "Gris y dormilón"], ok: 1, bien: "Hiperactivo y perfecto." }
   },
   {
-    titulo: "Lo que tenemos", cuando: "hoy", dibujo: "audifonos", foto: "fotos/cap-09.jpg",
-    texto: [
-      "Por una razón o por otra nunca regresamos. Pero nunca dejamos de gustarnos."
+    titulo: "Lo que tenemos", cuando: "hoy", dibujo: null, foto: "fotos/cap-09.jpg",
+    escenas: [
+      { t: "Nuestra música", p: [
+        "En música somos bien alternativos. Toca uno para escucharlo:"
+      ]},
+      { bloque: "discos" },
+      { t: "Lo que ya es nuestro", p: [] },
+      { bloque: "lista" },
+      { t: "Lo que viene", p: [
+        "NSQK. Creo que es nuestro artista favorito de los dos. Y ya tenemos fecha:"
+      ]},
+      { bloque: "boleto" },
+      { t: "Cuando vivamos juntos", p: [
+        "Nos imaginamos una familia: dos hijos, un gato y un perro (o sea, Rayo). Muy de película gringa, pero muy nuestro."
+      ]},
+      { bloque: "familia" }
     ],
-    lista: [
-      ["Casi la misma música", true],
-      ["El mismo humor", true],
-      ["Las mismas ganas de vivir juntos", true],
-      ["Tu familia ya me conoce", true],
-      ["Conciertos por delante", false]
-    ]
+    quiz: { q: "¿Cuándo vamos a ver a NSQK?", ops: ["31 de diciembre de 2026", "23 de enero de 2027", "14 de febrero de 2027"], ok: 1, bien: "23/01/2027. Ya estamos contando." }
   },
   {
-    titulo: "Esta vez", cuando: "ahora", dibujo: "letrero", foto: "fotos/cap-10.jpg",
-    texto: [
-      "Nos conocemos desde 2019. Hemos sido novios, amigos y casi todo lo que hay en medio.",
-      "Y esta vez lo estamos intentando de verdad.",
-      "<span class='script'>Quiero que esta vez funcione.</span>",
-      "Falta muchísimo por contar. Por eso este libro no se acaba aquí."
-    ]
+    titulo: "Esta vez", cuando: "septiembre 2026", dibujo: "letrero", foto: "fotos/cap-10.jpg",
+    escenas: [
+      { t: "Nunca dejamos de gustarnos", p: [
+        "Por una razón u otra, en todos estos años nunca regresamos. Pero tampoco dejamos de gustarnos."
+      ]},
+      { t: "Hace dos semanas", p: [
+        "Hace un par de semanas volviste. Hablamos. Al día siguiente salimos y dejamos todo claro: los dos queremos esto.",
+        "Tu familia ya me conoce. Tenemos conciertos por delante. Tenemos ganas de vivir juntos."
+      ]},
+      { t: "Lo que quiero", p: [
+        "Te conozco desde 2019. He sido tu novio, tu amigo y tu Tenochtitlán.",
+        "<span class='script'>Esta vez quiero que funcione. De verdad.</span>",
+        "Y quiero hacerlo bien, como debió ser desde el principio: con caja y con servilleta.",
+        "Falta muchísimo por contar. Por eso este libro no se acaba aquí."
+      ]}
+    ],
+    quiz: { q: "¿Desde qué año nos conocemos?", ops: ["2018", "2019", "2020"], ok: 1, bien: "2019. Y contando." }
   }
+];
+
+const PAPELITOS = [
+  ["Eres de las personas más valientes que conozco.", "var(--naranja)"],
+  ["Vale por una llamada para hablar de lo que sea, como antes.", "var(--azul)"],
+  ["Me encanta cómo disfrutas las cosas pequeñas.", "var(--verde)"],
+  ["Vale por taquitos y una peli. Tú eliges la peli.", "var(--amarillo)"],
+  ["Tratas bonito a todos. A las personas, a los animales y a mí.", "var(--naranja)"],
+  ["Vale por una canción cantada por mí. Sí, otra vez Escandalosos.", "var(--azul)"],
+  ["Siempre sales adelante. Siempre.", "var(--verde)"],
+  ["Vale por dejarte dormir todo lo que quieras, sin quejarme.", "var(--gris)"],
+  ["Sientes mucho. Conmigo no tienes que tener miedo de demostrarlo.", "var(--naranja)"],
+  ["Vale por un paseo con Rayo (si se deja).", "var(--amarillo)"],
+  ["Eres muy capaz. Te lo digo por si se te olvida.", "var(--azul)"],
+  ["Vale por un abrazo largo, sin razón.", "var(--verde)"]
 ];
 
 /* ---------- dibujos (SVG hechos a mano) ---------- */
@@ -466,6 +815,15 @@ const DIBUJOS = {
       <text x="110" y="106" text-anchor="middle" class="t-marker" font-size="19" fill="var(--paper)">MORAT</text>
     </g>
     ${estrella(22, 30, 1.1)} ${estrella(200, 150, .8, "f-verde")} ${corazon(200, 26, 1.2)}`,
+  sudaderaAtras: `
+    <g class="w">
+      <path class="k f-azul" d="M74 36 Q110 20 146 36 L180 50 L198 140 L176 146 L156 94 L156 152 L64 152 L64 94 L44 146 L22 140 L40 50 Z"/>
+      <path class="k f-azul" d="M80 38 Q110 8 140 38 Q110 50 80 38 Z"/>
+      <path class="k f-none" d="M24 130 L46 136 M196 130 L174 136"/>
+      <path class="f-none" stroke="var(--paper)" stroke-width="2.6" stroke-linecap="round" d="M76 70 q6 -10 10 0 t10 0 q4 -8 8 2 M118 66 c4 -8 10 8 14 -2 s8 -6 12 4 M80 98 q10 -12 16 2 q4 6 10 -6 M120 96 c6 -10 8 6 14 -4 q4 -4 8 6 M92 124 q6 -8 12 0 t12 -2 t10 2"/>
+      <text x="110" y="148" text-anchor="middle" class="t-script" font-size="15" fill="var(--paper)">firmas (falsas)</text>
+    </g>
+    ${estrella(22, 30, 1.1)} ${corazon(200, 26, 1.2)}`,
   reloj: `
     <g class="w">
       <path class="k f-none" d="M78 136 L66 154 M142 136 L154 154"/>
@@ -479,24 +837,21 @@ const DIBUJOS = {
       <text x="110" y="118" text-anchor="middle" class="t-script" font-size="15" fill="var(--naranja-os)">receso</text>
     </g>
     ${corazon(28, 70, 1)} ${corazon(194, 110, .9, "f-azul")} ${estrella(196, 40, .9)}`,
-  pizza: `
+  cajaCerrada: `
     <g class="w">
-      <path class="k f-amarillo" d="M26 44 Q72 22 120 36 L76 154 Z"/>
-      <path class="k f-naranja" d="M26 44 Q72 22 120 36 L116 50 Q72 38 32 57 Z"/>
-      <circle class="k f-naranja-os" cx="70" cy="70" r="8"/>
-      <circle class="k f-naranja-os" cx="92" cy="72" r="6"/>
-      <circle class="k f-naranja-os" cx="78" cy="104" r="7"/>
-      <circle class="k f-naranja-os" cx="62" cy="88" r="5"/>
-      <g transform="rotate(9 162 100)">
-        <path class="k f-paper" d="M124 56 L200 58 L198 140 L126 138 Z"/>
-        <path class="f-none" stroke="var(--gris-claro)" stroke-width="2" d="M124 56 L198 140"/>
-        <text x="162" y="94" text-anchor="middle" class="t-script" font-size="20" fill="var(--ink)">¿novia?</text>
-        <rect x="140" y="106" width="12" height="12" class="k f-none" stroke-width="2"/>
-        <path class="f-none" stroke="var(--azul)" stroke-width="3" stroke-linecap="round" d="M141 112 L146 117 L156 102"/>
-        <text x="170" y="118" text-anchor="middle" class="t-script" font-size="15" fill="var(--ink)">sí</text>
-      </g>
+      <path class="k f-paper" d="M30 64 L110 44 L190 64 L110 86 Z"/>
+      <path class="k f-paper" d="M30 64 L110 86 L110 146 L30 122 Z"/>
+      <path class="k f-paper" d="M190 64 L110 86 L110 146 L190 122 Z"/>
+      <path class="k f-azul" d="M86 58 L110 52 L134 58 L110 64 Z"/>
+      <text x="68" y="110" text-anchor="middle" class="t-marker" font-size="14" fill="var(--azul)" transform="rotate(16 68 106)">PIZZA</text>
     </g>
-    ${estrella(206, 30, .9)} ${corazon(22, 140, 1.1)}`,
+    ${estrella(30, 30, .9)} ${corazon(196, 34, 1.1)}`,
+  cajaAbierta: `
+    <g class="w">
+      <path class="f-none" stroke="var(--gris)" stroke-width="3" stroke-dasharray="8 8" stroke-linecap="round" d="M30 64 L110 44 L190 64 L110 86 Z M30 64 L110 86 L110 146 L30 122 Z M190 64 L110 86 L110 146 L190 122 Z"/>
+      <text x="110" y="112" text-anchor="middle" class="t-script" font-size="26" fill="var(--gris)">¿y la caja?</text>
+    </g>
+    <path class="k f-none" stroke="var(--gris)" stroke-width="2" d="M40 150 q8 -6 16 0 M164 150 q8 -6 16 0"/>`,
   kermes: `
     <g class="w">
       <path class="k f-none" d="M6 26 Q110 64 214 26"/>
@@ -506,44 +861,50 @@ const DIBUJOS = {
       <path class="k f-verde" d="M116 49 L136 47 L126 72 Z"/>
       <path class="k f-gris" d="M148 46 L168 41 L160 68 Z"/>
       <path class="k f-azul" d="M178 38 L198 32 L190 60 Z"/>
-      <circle class="f-none" cx="110" cy="122" r="30" stroke="var(--amarillo)" stroke-width="10"/>
-      <circle class="k f-none" cx="110" cy="122" r="35"/>
-      <circle class="k f-none" cx="110" cy="122" r="25"/>
-      <path class="k f-azul-claro" d="M96 86 L110 72 L124 86 L110 100 Z"/>
-      <path class="k f-none" stroke-width="2" d="M96 86 H124"/>
+      <circle class="f-none" cx="92" cy="122" r="26" stroke="var(--gris-claro)" stroke-width="9"/>
+      <circle class="k f-none" cx="92" cy="122" r="31"/>
+      <circle class="k f-none" cx="92" cy="122" r="21"/>
+      <circle class="f-none" cx="134" cy="122" r="26" stroke="var(--gris-claro)" stroke-width="9"/>
+      <circle class="k f-none" cx="134" cy="122" r="31"/>
+      <circle class="k f-none" cx="134" cy="122" r="21"/>
     </g>
-    ${estrella(186, 110, 1.1)} ${estrella(36, 130, .8, "f-verde")} ${corazon(170, 150, 1)}`,
+    ${estrella(196, 110, 1.1)} ${estrella(30, 130, .8, "f-verde")} ${corazon(113, 88, 1.2)}`,
   nube: `
-    <g class="w">
+    <g class="sol-g">
+      <circle class="k f-amarillo" cx="110" cy="80" r="30"/>
+      <path class="k f-none" d="M110 34 V22 M110 126 V138 M64 80 H52 M156 80 H168 M78 48 L70 40 M142 48 L150 40 M78 112 L70 120 M142 112 L150 120"/>
+    </g>
+    <g class="nube-g">
       <path class="k f-gris-claro" d="M52 96 Q46 66 78 66 Q86 40 116 48 Q142 34 158 60 Q186 58 184 86 Q188 108 160 108 L72 108 Q50 108 52 96 Z"/>
       <path class="k f-none" stroke="var(--gris)" d="M84 122 L78 138 M112 122 L106 138 M140 122 L134 138"/>
-      <path class="f-none" stroke="var(--gris)" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 10" d="M20 152 H200"/>
     </g>`,
-  cassette: `
-    <g class="w">
-      <rect class="k f-verde" x="36" y="38" width="148" height="96" rx="10"/>
-      <rect class="k f-paper" x="52" y="50" width="116" height="36" rx="4"/>
-      <text x="110" y="76" text-anchor="middle" class="t-script" font-size="22" fill="var(--ink)">para ti</text>
-      <rect class="k f-gris-claro" x="70" y="94" width="80" height="26" rx="10"/>
-      <circle class="k f-paper" cx="86" cy="107" r="9"/>
-      <circle class="k f-paper" cx="134" cy="107" r="9"/>
-      <path class="k f-none" d="M62 134 L72 122 H148 L158 134"/>
+  minecraft: `
+    <g>
+      <rect x="150" y="18" width="34" height="34" class="f-paper" stroke="var(--ink)" stroke-width="3"/>
+      <rect x="158" y="26" width="8" height="8" class="f-gris-claro"/><rect x="170" y="36" width="6" height="6" class="f-gris-claro"/>
+      <g transform="translate(46 64)">
+        <path d="M0 22 L56 0 L112 22 L56 44 Z" class="f-verde" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M0 22 L56 44 L56 104 L0 82 Z" class="f-cafe" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M112 22 L56 44 L56 104 L112 82 Z" class="f-naranja-os" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M0 22 L56 44 L56 56 L42 50 L42 58 L28 52 L28 46 L14 40 L14 48 L0 42 Z" class="f-verde" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M112 22 L56 44 L56 56 L70 50 L70 58 L84 52 L84 46 L98 40 L98 48 L112 42 Z" class="f-verde" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+        <rect x="18" y="64" width="8" height="8" class="f-ink" opacity=".35"/><rect x="84" y="70" width="8" height="8" class="f-ink" opacity=".35"/>
+      </g>
     </g>
-    ${nota(198, 44)} ${nota(18, 150, "f-azul")} ${corazon(204, 120, 1)}`,
+    ${estrella(30, 30, .8)} ${estrella(120, 20, .6)} ${estrella(206, 80, .7)} ${corazon(30, 120, 1.1, "f-azul")}`,
   boleto: `
     <g class="w">
       <g transform="rotate(-8 100 80)">
         <path class="k f-naranja" d="M24 46 H176 V66 A10 10 0 0 0 176 86 V106 H24 V86 A10 10 0 0 0 24 66 Z"/>
         <path class="f-none" stroke="var(--ink)" stroke-width="2.5" stroke-dasharray="5 6" d="M140 50 V102"/>
         <text x="82" y="76" text-anchor="middle" class="t-marker" font-size="15" fill="var(--paper)">LITTLE JESUS</text>
-        <text x="82" y="96" text-anchor="middle" class="t-script" font-size="17" fill="var(--ink)">en vivo · la primera</text>
+        <text x="82" y="96" text-anchor="middle" class="t-script" font-size="16" fill="var(--ink)">Auditorio Explanada</text>
         <text x="158" y="82" text-anchor="middle" class="t-script" font-size="18" fill="var(--ink)">x2</text>
       </g>
       <circle class="k f-amarillo" cx="140" cy="134" r="15"/>
       <circle class="k f-paper" cx="140" cy="134" r="5"/>
       <path class="k f-none" stroke-width="4" d="M155 134 H204 M194 134 V145 M203 134 V142"/>
       <path class="k f-azul-claro" d="M96 124 L120 124 L120 150 L96 150 Z" transform="rotate(-10 108 137)"/>
-      <path class="k f-none" stroke-width="2" d="M120 130 L126 132"/>
       <text x="108" y="142" text-anchor="middle" class="t-script" font-size="12" fill="var(--ink)" transform="rotate(-10 108 137)">casa</text>
     </g>
     ${estrella(24, 140, .9)} ${estrella(206, 36, 1)}`,
@@ -555,28 +916,64 @@ const DIBUJOS = {
       <rect class="k f-azul-claro" x="84" y="84" width="16" height="14"/>
       <rect class="k f-azul-claro" x="120" y="84" width="16" height="14"/>
       <path class="k f-none" d="M40 136 H182"/>
-      <!-- Omali -->
-      <path class="k f-gris" d="M28 116 L30 96 L42 108 Z M58 116 L56 96 L44 108 Z"/>
-      <circle class="k f-gris" cx="43" cy="120" r="17"/>
+      <!-- Omali: gris clarito y blanca -->
+      <path class="k f-gris-claro" d="M28 116 L30 96 L42 108 Z M58 116 L56 96 L44 108 Z"/>
+      <circle class="k f-gris-claro" cx="43" cy="120" r="17"/>
+      <path class="f-blanco" d="M33 126 Q43 112 53 126 Q43 136 33 126 Z"/>
       <circle class="f-ink" cx="37" cy="118" r="2.4"/><circle class="f-ink" cx="49" cy="118" r="2.4"/>
       <path class="k f-none" stroke-width="2" d="M40 126 Q43 129 46 126"/>
-      <!-- Rayo -->
-      <circle class="k f-naranja-claro" cx="180" cy="118" r="19"/>
-      <path class="k f-naranja-os" d="M164 104 Q152 112 158 132 Q166 126 168 112 Z"/>
-      <path class="k f-naranja-os" d="M196 104 Q208 112 202 132 Q194 126 192 112 Z"/>
-      <circle class="f-ink" cx="174" cy="116" r="2.4"/><circle class="f-ink" cx="186" cy="116" r="2.4"/>
-      <ellipse class="f-ink" cx="180" cy="124" rx="4" ry="3"/>
+      <!-- Rayo: café con blanco -->
+      <circle class="k f-blanco" cx="180" cy="118" r="19"/>
+      <path class="f-cafe" d="M168 106 Q180 98 190 110 Q182 118 172 116 Z"/>
+      <path class="k f-cafe" d="M164 104 Q152 112 158 132 Q166 126 168 112 Z"/>
+      <path class="k f-cafe" d="M196 104 Q208 112 202 132 Q194 126 192 112 Z"/>
+      <circle class="f-ink" cx="174" cy="118" r="2.4"/><circle class="f-ink" cx="186" cy="118" r="2.4"/>
+      <ellipse class="f-ink" cx="180" cy="126" rx="4" ry="3"/>
       <path class="k f-amarillo" stroke-width="2" d="M182 138 L175 150 H181 L177 160 L188 146 H182 L186 138 Z"/>
     </g>
     ${estrella(43, 80, 1)} ${corazon(110, 18, 1)}`,
-  audifonos: `
+  frasco: `
     <g class="w">
-      <path class="f-none" stroke="var(--ink)" stroke-width="14" stroke-linecap="round" d="M58 112 Q56 38 110 38 Q164 38 162 112"/>
-      <path class="f-none" stroke="var(--amarillo)" stroke-width="8" stroke-linecap="round" d="M58 112 Q56 38 110 38 Q164 38 162 112"/>
-      <rect class="k f-azul" x="40" y="98" width="34" height="50" rx="12"/>
-      <rect class="k f-verde" x="146" y="98" width="34" height="50" rx="12"/>
+      <rect class="k f-azul" x="78" y="20" width="64" height="18" rx="4"/>
+      <path class="k f-blanco" d="M80 38 H140 Q160 50 160 76 V140 Q160 156 144 156 H76 Q60 156 60 140 V76 Q60 50 80 38 Z"/>
+      <rect x="74" y="100" width="22" height="14" rx="2" class="k f-amarillo" stroke-width="2" transform="rotate(-14 85 107)"/>
+      <rect x="100" y="112" width="22" height="14" rx="2" class="k f-naranja" stroke-width="2" transform="rotate(10 111 119)"/>
+      <rect x="124" y="98" width="22" height="14" rx="2" class="k f-verde" stroke-width="2" transform="rotate(-6 135 105)"/>
+      <rect x="84" y="128" width="22" height="14" rx="2" class="k f-azul-claro" stroke-width="2" transform="rotate(8 95 135)"/>
+      <rect x="114" y="132" width="22" height="14" rx="2" class="k f-gris-claro" stroke-width="2" transform="rotate(-12 125 139)"/>
+      <rect x="96" y="84" width="22" height="14" rx="2" class="k f-naranja-claro" stroke-width="2" transform="rotate(4 107 91)"/>
+      <path class="f-none" stroke="var(--azul-claro)" stroke-width="4" stroke-linecap="round" d="M70 70 V96"/>
     </g>
-    ${corazon(110, 104, 1.6)} ${nota(24, 60, "f-naranja-os")} ${nota(204, 70, "f-azul")} ${estrella(110, 150, .8)}`,
+    ${corazon(36, 60, 1.2)} ${estrella(186, 50, 1)} ${estrella(184, 140, .7, "f-verde")}`,
+  familia: `
+    <g class="w">
+      <path class="k f-none" d="M14 152 H206"/>
+      <!-- ella -->
+      <circle class="k f-naranja-claro" cx="62" cy="58" r="15"/>
+      <path class="k f-ink" d="M47 56 Q48 36 64 40 Q78 42 77 60 Q76 46 64 46 Q52 48 47 62 Z"/>
+      <path class="k f-naranja" d="M50 76 H74 L82 124 H42 Z"/>
+      <path class="k f-none" d="M56 124 V150 M68 124 V150"/>
+      <!-- él -->
+      <circle class="k f-naranja-claro" cx="104" cy="54" r="15"/>
+      <path class="k f-ink" d="M89 50 Q96 34 112 40 Q120 44 119 52 Q104 44 89 50 Z"/>
+      <rect class="k f-azul" x="92" y="72" width="24" height="46" rx="6"/>
+      <path class="k f-none" d="M98 118 V150 M110 118 V150"/>
+      <path class="k f-none" d="M74 90 Q84 98 92 90"/>
+      <!-- hijos -->
+      <circle class="k f-naranja-claro" cx="136" cy="96" r="10"/>
+      <path class="k f-verde" d="M128 108 H144 L148 134 H124 Z"/>
+      <path class="k f-none" d="M132 134 V150 M140 134 V150"/>
+      <circle class="k f-naranja-claro" cx="28" cy="102" r="9"/>
+      <path class="k f-amarillo" d="M21 113 H35 L38 136 H18 Z"/>
+      <path class="k f-none" d="M25 136 V150 M31 136 V150"/>
+      <!-- gato -->
+      <path class="k f-gris" d="M162 138 L164 128 L170 134 Z M178 138 L176 128 L170 134 Z"/>
+      <ellipse class="k f-gris" cx="170" cy="142" rx="10" ry="8"/>
+      <!-- Rayo -->
+      <ellipse class="k f-blanco" cx="196" cy="140" rx="12" ry="10"/>
+      <path class="k f-cafe" stroke-width="2" d="M186 134 Q182 140 186 146 Z M206 134 Q210 140 206 146 Z"/>
+    </g>
+    ${corazon(84, 22, 1.2)} ${estrella(160, 40, .8)} ${estrella(16, 40, .7, "f-verde")}`,
   letrero: `
     <g class="w">
       <path class="f-none" stroke="var(--gris-claro)" stroke-width="26" stroke-linecap="round" d="M-4 150 Q70 124 120 144 T226 126"/>
@@ -598,13 +995,105 @@ const DIBUJOS = {
     </g>
     ${corazon(110, 30, 1.4)} ${estrella(28, 38, .9)} ${estrella(196, 40, .9, "f-verde")}`
 };
-const svg = (nombre, label) =>
-  `<svg class="doodle" viewBox="0 0 220 170" role="img" aria-label="${label}">${DIBUJOS[nombre]}</svg>`;
+const svg = (nombre, label, extra = "") =>
+  `<svg class="doodle" viewBox="0 0 220 170" role="img" aria-label="${label}" ${extra}>${DIBUJOS[nombre]}</svg>`;
+const disco = (c1, c2, s = 44) => `<svg class="disco" width="${s}" height="${s}" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" fill="var(--ink)"/><circle cx="22" cy="22" r="14" fill="none" stroke="var(--ink-soft)" stroke-width="1.5"/><circle cx="22" cy="22" r="8" fill="var(--${c1})"/><circle cx="22" cy="22" r="2.5" fill="var(--${c2})"/></svg>`;
+const palomita = (ok) => `<svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+  <rect x="3" y="3" width="24" height="24" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+  ${ok ? `<path d="M7 15 L13 21 L25 6" fill="none" stroke="var(--verde)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>` : ""}
+</svg>`;
+
+/* ---------- memoria local (sólo en este celular) ---------- */
+const mem = {
+  get(k, d) { try { const v = localStorage.getItem("nosotros:" + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("nosotros:" + k, JSON.stringify(v)); } catch (e) {} }
+};
+let sellos = new Set(mem.get("sellos", []));
+
+/* ---------- bloques interactivos ---------- */
+const BLOQUES = {
+  sudaderaFlip: () => `<button class="flip" data-flip aria-label="Voltear la sudadera">
+      <span class="cara">${svg("sudadera", "La sudadera de Morat, de frente")}</span>
+      <span class="cara" hidden>${svg("sudaderaAtras", "La sudadera por atrás, con firmas falsas")}</span>
+      <span class="pista">tócala para voltearla</span>
+    </button>`,
+  celulares: () => `<div class="celus">
+      <div class="celu"><div class="notch"></div><div class="de">en tu cel</div>
+        <div class="contacto"><span class="avatar" style="background:var(--verde)">T</span><span class="nom">Tenochtitlán</span></div></div>
+      <div class="celu"><div class="notch"></div><div class="de">en el mío</div>
+        <div class="contacto"><span class="avatar" style="background:var(--naranja-os)">H</span><span class="nom">Hernán Cortés</span></div></div>
+    </div>`,
+  cajaPizza: () => `<button class="cajabtn" data-caja aria-label="Abrir la caja de pizza">
+      <span class="cara">${svg("cajaCerrada", "Una caja de pizza cerrada")}</span>
+      <span class="cara" hidden>${svg("cajaAbierta", "No había caja")}</span>
+      <span class="pista">ábrela</span>
+    </button>
+    <p class="chico centro" data-caja-txt hidden>…no había caja. Nunca nos la llevaron.</p>`,
+  servilletita: () => `<div class="servilletita">¿Quieres ser mi novia? ♡</div>`,
+  acta: () => `<div class="acta" role="group" aria-label="Acta de matrimonio de kermés">
+      <div class="titulo-acta">ACTA DE MATRIMONIO</div>
+      <p class="sub">Registro Civil de la Kermés · Preparatoria · ciclo 2019–2020</p>
+      <dl>
+        <dt>Ella</dt><dd>Edith Adán Paredes</dd>
+        <dt>Él</dt><dd>Luis Alberto Ruíz Gutiérrez</dd>
+        <dt>Anillos</dt><dd>de metal, como de aluminio</dd>
+        <dt>Costo</dt><dd>unas monedas, creo</dd>
+        <dt>Vigencia</dt><dd>hasta que la kermés nos separe</dd>
+      </dl>
+      <div class="firmas"><span>Adancilla</span><span>Ruicito</span></div>
+    </div>`,
+  inventario: () => `<div class="inventario">
+      <div><h4>Yo a ti</h4><ul>
+        <li>Muchos peluches (que todavía tienes)</li><li>Cartas</li><li>Detalles de todo tipo</li>
+        <li>Collares y aretes</li><li>Una foto mía para la funda de tu cel</li></ul></div>
+      <div><h4>Tú a mí</h4><ul>
+        <li>Un frasco de papelitos con cupones y cosas que te gustaban de mí</li><li>Una foto tuya para la funda de mi cel</li>
+        <li>Cartas</li><li>Dibujos</li><li>Llaveros</li></ul></div>
+    </div>`,
+  nube: () => `<button class="nubebtn" data-nube aria-label="Quitar la nube">
+      ${svg("nube", "Una nube gris tapando el sol")}
+      <span class="pista">toca la nube</span>
+    </button>
+    <p class="revelado" data-nube-txt hidden>Pero esta historia no se acabó aquí.</p>`,
+  cuaderno: () => `<button class="cuaderno" data-cuaderno aria-label="Abrir el cuaderno">
+      <span class="tapa-c col" style="gap:6px">
+        <span class="c-tit">200 razones para quedarme</span>
+        <span class="c-sub">y 1 para irme</span>
+        <span class="c-pista">ábrelo en la última página</span>
+      </span>
+      <span class="pagina-c" hidden><b>Razón para irme:</b><br>ninguna.<br>Yo elijo quedarme contigo. Siempre.</span>
+    </button>`,
+  frasco: () => `<div class="frasco-wrap">
+      ${svg("frasco", "Un frasco lleno de papelitos de colores")}
+      <button class="boton ama" data-frasco>Saca un papelito</button>
+      <div class="papelito" data-papelito hidden></div>
+    </div>`,
+  discos: () => `<div class="discos">
+      <a href="${spotify("NSQK")}" target="_blank" rel="noopener">${disco("amarillo", "ink", 64)}<span>NSQK</span></a>
+      <a href="${spotify("Latin Mafia")}" target="_blank" rel="noopener">${disco("naranja", "ink", 64)}<span>Latin Mafia</span></a>
+      <a href="${spotify("Little Jesus")}" target="_blank" rel="noopener">${disco("verde", "ink", 64)}<span>Little Jesus</span></a>
+    </div>`,
+  lista: () => `<ul class="lista">${[
+      ["Casi la misma música", true], ["El mismo humor", true], ["Las mismas ganas de vivir juntos", true],
+      ["Tu familia ya me conoce", true], ["Conciertos por delante", false]
+    ].map(([t, ok]) => `<li>${palomita(ok)}<span>${t}${ok ? "" : " <span class='script' style='font-size:1.1em'>(los que vienen)</span>"}</span></li>`).join("")}</ul>`,
+  boleto: () => `<div class="boleto" role="group" aria-label="Boleto NSQK, 23 de enero de 2027">
+      <div class="b-main"><span class="b-art">NSQK</span><span class="b-fecha">23 de enero de 2027</span><span class="script" style="font-size:1.2rem">admite: a los dos</span></div>
+      <div class="b-stub"><span class="b-num" data-faltan>—</span><span class="b-lbl">días</span></div>
+    </div>`,
+  familia: () => `${svg("familia", "Dibujo de una familia: ella, él, dos hijos, un gato y Rayo")}
+    <div class="col" style="gap:6px">
+      <label class="lbl" for="gato">¿Cómo se va a llamar el gato?</label>
+      <input type="text" id="gato" maxlength="40" placeholder="Tú decides" autocomplete="off">
+      <p class="guardado" data-gato-ok></p>
+    </div>`
+};
 
 /* ---------- construir hojas ---------- */
 const hojas = [];
 const $h = document.getElementById("hojas");
 const romanos = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
+const TOTAL_SELLOS = CAPITULOS.length;
 
 function hoja(html, clase = "", etiqueta = "") {
   const el = document.createElement("section");
@@ -615,45 +1104,90 @@ function hoja(html, clase = "", etiqueta = "") {
   hojas.push({ el, etiqueta });
   return el;
 }
-
 const heart = `<svg viewBox="-12 -14 24 22" aria-hidden="true"><path d="M0 6 C -11 -4 -8 -13 0 -7 C 8 -13 11 -4 0 6 Z" fill="var(--naranja)" stroke="var(--ink)" stroke-width="2.2" stroke-linejoin="round"/></svg>`;
+const selloHTML = (i, nuevo) => `<div class="sello${nuevo ? " nuevo" : ""}" aria-label="Sello del capítulo ${romanos[i]}">${romanos[i]}<small>sellado</small></div>`;
+const selloVacio = i => `<div class="sello vacio" aria-label="Sello pendiente">${romanos[i]}</div>`;
 
+/* portada */
 hoja(`
   <p class="subt">un libro en ${CAPITULOS.length + 1} capítulos</p>
   <h1 aria-label="Nosotros">NOS${heart}TROS</h1>
   <div class="nombres">${ELLA} &amp; ${EL}</div>
   <div class="apodos">Adancilla &amp; Ruicito</div>
   ${svg("sudadera", "Una sudadera azul de Morat")}
-  <p class="subt">2019 — y lo que falta</p>
+  <p class="contador-mini"><b data-dias-total>—</b> días desde aquella servilleta</p>
   <button class="boton" data-ir="1">Abrir el libro</button>
 `, "portada", "Portada");
 
+/* cómo leer */
+hoja(`
+  <div class="eyebrow">Antes de empezar</div>
+  <h2>Cómo leer <span class="resalta">este libro</span></h2>
+  <ul class="pasos">
+    <li><span class="ic"><svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true"><path d="M8 23 H38 M28 13 L38 23 L28 33" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span>Desliza o usa las flechas de abajo para pasar de hoja. Cada capítulo se lee bajando.</span></li>
+    <li><span class="ic"><svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true"><path d="M23 6 L27 18 L40 19 L30 27 L33 40 L23 33 L13 40 L16 27 L6 19 L19 18 Z" fill="var(--amarillo)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/></svg></span>
+      <span>Hay cosas que se tocan: sudaderas, cajas, cuadernos, un frasco. Tócalo todo.</span></li>
+    <li><span class="ic"><div class="sello" style="width:46px;height:46px;font-size:.8rem;border-width:2px">I</div></span>
+      <span>Al final de cada capítulo hay una pregunta sobre nosotros. Si la contestas bien, ganas su sello. Son ${TOTAL_SELLOS}.</span></li>
+    <li><span class="ic"><svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true"><path d="M10 36 L12 28 L32 8 L38 14 L18 34 Z" fill="var(--azul-claro)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><path d="M28 12 L34 18" stroke="var(--ink)" stroke-width="2.5"/></svg></span>
+      <span>Este libro lo escribí yo, pero cada capítulo tiene un espacio para <em>tu versión</em>. Al final me la puedes mandar.</span></li>
+  </ul>
+  <button class="boton" data-ir="2" style="align-self:center">Ver el índice</button>
+`, "", "Cómo leer este libro");
+
+/* índice */
+const IDX_CAP0 = 3;
+const IDX_TIEMPO = IDX_CAP0 + CAPITULOS.length;
+const IDX_FINAL = IDX_TIEMPO + 1;
+const IDX_EPILOGO = IDX_FINAL + 1;
 hoja(`
   <div class="eyebrow">Índice</div>
   <h2>Lo que hay en <span class="resalta">este libro</span></h2>
   <ol class="indice">
-    ${CAPITULOS.map((c, i) => `<li><button data-ir="${i + 2}"><span class="num">${romanos[i]}</span><span class="tit">${c.titulo}</span></button></li>`).join("")}
-    <li><button data-ir="${CAPITULOS.length + 2}"><span class="num">${romanos[CAPITULOS.length]}</span><span class="tit">La servilleta, otra vez</span></button></li>
-    <li><button data-ir="${CAPITULOS.length + 3}"><span class="num">~</span><span class="tit">Epílogo (lo escribimos juntos)</span></button></li>
+    ${CAPITULOS.map((c, i) => `<li><button data-ir="${IDX_CAP0 + i}"><span class="num">${romanos[i]}</span><span class="tit">${c.titulo}</span><span class="mini-sello" data-mini="${i}" aria-hidden="true"></span></button></li>`).join("")}
+    <li><button data-ir="${IDX_TIEMPO}"><span class="num">~</span><span class="tit">Interludio: el tiempo</span><span></span></button></li>
+    <li><button data-ir="${IDX_FINAL}"><span class="num">${romanos[CAPITULOS.length]}</span><span class="tit">La servilleta, otra vez</span><span></span></button></li>
+    <li><button data-ir="${IDX_EPILOGO}"><span class="num">~</span><span class="tit">Epílogo (lo escribimos juntos)</span><span></span></button></li>
   </ol>
+  <p class="chico">Sellos: <b data-cuenta-sellos>0</b> de ${TOTAL_SELLOS}</p>
 `, "", "Índice");
 
+/* capítulos */
 const tonos = ["var(--amarillo)", "var(--azul-claro)", "var(--naranja-claro)"];
-const palomita = (ok) => `<svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
-  <rect x="3" y="3" width="24" height="24" rx="3" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
-  ${ok ? `<path d="M7 15 L13 21 L25 6" fill="none" stroke="var(--verde)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>` : ""}
-</svg>`;
-
 CAPITULOS.forEach((c, i) => {
+  const escenas = c.escenas.map(e => {
+    if (e.bloque) return BLOQUES[e.bloque]();
+    return `<div class="escena">${e.t ? `<h3>${e.t}</h3>` : ""}${(e.p || []).map(t => `<p>${t}</p>`).join("")}</div>`;
+  }).join("");
+  const quiz = c.quiz ? `<div class="quiz" data-quiz="${i}">
+      <span class="q-lbl">Pregunta para ganar el sello</span>
+      <p class="q">${c.quiz.q}</p>
+      <div class="ops">${c.quiz.ops.map((o, j) => `<button class="op" data-op="${j}">${o}</button>`).join("")}</div>
+      <p class="res" role="status"></p>
+    </div>` : "";
   const el = hoja(`
-    <div class="eyebrow">Capítulo ${romanos[i]} <span class="cuando">${c.cuando}</span></div>
-    <h2><span class="resalta" style="--hl:${c.pausa ? "var(--gris-claro)" : tonos[i % 3]}">${c.titulo}</span></h2>
-    ${svg(c.dibujo, "Dibujo del capítulo " + c.titulo)}
+    <div class="cabeza">
+      <div class="col" style="gap:10px;min-width:0">
+        <div class="eyebrow">Capítulo ${romanos[i]} <span class="cuando">${c.cuando}</span></div>
+        <h2><span class="resalta" style="--hl:${c.pausa ? "var(--gris-claro)" : tonos[i % 3]}">${c.titulo}</span></h2>
+      </div>
+      <div data-sello-slot="${i}">${sellos.has(i) ? selloHTML(i) : selloVacio(i)}</div>
+    </div>
+    ${c.dibujo ? svg(c.dibujo, "Dibujo del capítulo " + c.titulo) : ""}
     ${c.foto ? `<figure class="polaroid" hidden style="--rot:${i % 2 ? 2 : -2}deg"><img alt="Foto: ${c.titulo}" loading="lazy"></figure>` : ""}
-    <div class="texto">${c.texto.map(t => `<p>${t}</p>`).join("")}</div>
-    ${c.lista ? `<ul class="lista">${c.lista.map(([t, ok]) => `<li>${palomita(ok)}<span>${t}${ok ? "" : " <span class='script' style='font-size:1.1em'>(los que vienen)</span>"}</span></li>`).join("")}</ul>` : ""}
+    ${escenas}
+    ${c.cancion ? `<a class="cancion" href="${spotify(c.cancion.q)}" target="_blank" rel="noopener">${disco(["amarillo","naranja","verde","azul-claro"][i % 4], "ink")}<span class="info"><span class="lbl">${c.cancion.lbl}</span><span class="tit">${c.cancion.tit}</span></span><span class="ir">escuchar</span></a>` : ""}
     ${c.nota ? `<button class="nota" aria-expanded="false"><span class="tapa">tócame</span><span class="dentro">${c.nota}</span></button>` : ""}
-    ${c.recuerdo ? `<p class="recuerdo"><svg width="40" height="40" viewBox="-20 -20 40 40" aria-hidden="true"><path d="M-10 4 L-9 -14 L-2 -6 Z M10 4 L9 -14 L2 -6 Z" fill="var(--gris)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/><circle cy="4" r="11" fill="var(--gris)" stroke="var(--ink)" stroke-width="2"/><path d="M0 -20 L1.5 -16 L5 -15 L1.5 -14 L0 -10 L-1.5 -14 L-5 -15 L-1.5 -16 Z" fill="var(--amarillo)"/></svg><span>${c.recuerdo}</span></p>` : ""}
+    ${c.recuerdo ? `<p class="recuerdo"><svg width="40" height="40" viewBox="-20 -20 40 40" aria-hidden="true"><path d="M-10 4 L-9 -14 L-2 -6 Z M10 4 L9 -14 L2 -6 Z" fill="var(--gris-claro)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/><circle cy="4" r="11" fill="var(--gris-claro)" stroke="var(--ink)" stroke-width="2"/><path d="M0 -20 L1.5 -16 L5 -15 L1.5 -14 L0 -10 L-1.5 -14 L-5 -15 L-1.5 -16 Z" fill="var(--amarillo)"/></svg><span>${c.recuerdo}</span></p>` : ""}
+    ${quiz}
+    <details class="version">
+      <summary>¿Y tú cómo lo recuerdas?</summary>
+      <p class="chico">Escribe tu versión de este capítulo. Lo que yo olvidé, lo que tú viste diferente, lo que quieras.</p>
+      <label class="sr" for="ver-${i}" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Tu versión del capítulo ${romanos[i]}</label>
+      <textarea id="ver-${i}" data-version="${i}" maxlength="1200" placeholder="Yo me acuerdo de que…"></textarea>
+      <p class="guardado" data-ver-ok="${i}"></p>
+    </details>
   `, c.pausa ? "pausa" : "", "Capítulo " + romanos[i] + ": " + c.titulo);
 
   if (c.foto) {
@@ -664,15 +1198,40 @@ CAPITULOS.forEach((c, i) => {
   }
 });
 
-const caja = `<svg class="caja" viewBox="0 0 34 34" aria-hidden="true"><path d="M4 5 L30 4 L29 30 L5 29 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><path class="palomita" d="M8 17 L15 25 L32 2" fill="none" stroke="var(--azul)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+/* interludio: el tiempo */
+hoja(`
+  <div class="eyebrow">Interludio <span class="cuando">en vivo</span></div>
+  <h2>El <span class="resalta" style="--hl:var(--azul-claro)">tiempo</span></h2>
+  <p class="subt" style="margin:0">Desde aquella servilleta, el 13 de diciembre de 2019, han pasado:</p>
+  <div class="reloj-grid" aria-live="off">
+    <div><b data-t="y">—</b><span>años</span></div>
+    <div><b data-t="m">—</b><span>meses</span></div>
+    <div><b data-t="d">—</b><span>días</span></div>
+    <div><b data-t="h">—</b><span>horas</span></div>
+    <div><b data-t="min">—</b><span>minutos</span></div>
+    <div><b data-t="s">—</b><span>segundos</span></div>
+  </div>
+  <div class="col">
+    <div class="dato"><b data-dias-total>—</b><span>días en total. Algunos de novios, muchos de amigos, ninguno sin pensarte.</span></div>
+    <div class="dato"><b data-faltan>—</b><span>días para ver a NSQK juntos.</span></div>
+    <div class="dato"><b>2</b><span>veces que te he pedido que seas mi novia. La segunda viene en la siguiente hoja.</span></div>
+  </div>
+`, "", "Interludio: el tiempo");
 
+/* final */
+const caja = `<svg class="caja" viewBox="0 0 34 34" aria-hidden="true"><path d="M4 5 L30 4 L29 30 L5 29 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><path class="palomita" d="M8 17 L15 25 L32 2" fill="none" stroke="var(--azul)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 hoja(`
   <div class="eyebrow">Capítulo ${romanos[CAPITULOS.length]} <span class="cuando">hoy</span></div>
   <h2><span class="resalta">La servilleta, otra vez</span></h2>
   ${svg("caja", "Una caja de pizza que dice: esta vez sí")}
-  <div class="texto">
+  <div class="escena">
     <p>La primera vez te lo pregunté en una servilleta porque la caja nunca llegó.</p>
-    <p>Así que esta vez traje las dos.</p>
+    <p>En Pachuca lo quise volver a preguntar y no se dio.</p>
+    <p class="script">Así que esta vez traje las dos.</p>
+  </div>
+  <div class="col" style="align-items:center;gap:6px">
+    <p class="chico">Tus sellos: <b data-cuenta-sellos>0</b> de ${TOTAL_SELLOS}</p>
+    <div class="sellos-row" data-sellos-row></div>
   </div>
   <div class="servilleta" id="servilleta">
     <div class="para">${ELLA}:</div>
@@ -685,12 +1244,13 @@ hoja(`
   </div>
   <div class="respuesta" id="respuesta" hidden>
     <p class="grande"><span class="resalta" style="--hl:var(--azul-claro)">Dijiste que sí. Otra vez.</span></p>
-    <p class="subt">Lo firmo con la misma letra de la servilleta: aquí empieza el capítulo uno de lo que sigue.</p>
-    <p class="script">— Ruicito</p>
-    <button class="boton" data-ir="${CAPITULOS.length + 3}">Escribir el epílogo juntos</button>
+    <p class="subt">Aquí empieza el capítulo uno de lo que sigue.</p>
+    <p class="script">Te amo. — Ruicito</p>
+    <button class="boton" data-ir="${IDX_EPILOGO}">Escribir el epílogo juntos</button>
   </div>
 `, "", "La servilleta, otra vez");
 
+/* epílogo */
 hoja(`
   <div class="eyebrow">Epílogo</div>
   <h2>Esta parte la escribimos <span class="resalta" style="--hl:var(--azul-claro)">los dos</span></h2>
@@ -698,15 +1258,13 @@ hoja(`
   <div class="ideas">
     <button class="idea">Seguimos eligiéndonos</button>
     <button class="idea">Esta vez, sí</button>
-    <button class="idea">Capítulo uno de muchos</button>
-    <button class="idea">Desde una sudadera hasta siempre</button>
+    <button class="idea">De Hernán Cortés y Tenochtitlán, hasta siempre</button>
+    <button class="idea">Con caja y con servilleta</button>
   </div>
   <div id="editor" class="col">
     <label class="lbl" for="epilogo">Nuestra frase</label>
     <textarea id="epilogo" maxlength="220" placeholder="Escríbanla aquí…"></textarea>
-    <div class="fila">
-      <button class="boton" id="guardar">Firmar el libro</button>
-    </div>
+    <div class="fila"><button class="boton" id="guardar">Firmar el libro</button></div>
     <p class="aviso" id="aviso" role="status"></p>
   </div>
   <div id="firmado" class="col" hidden>
@@ -714,6 +1272,16 @@ hoja(`
     <p class="firmado" id="frase"></p>
     <p class="firma" id="firma"></p>
     <div class="fila" style="justify-content:center"><button class="boton sec" id="editar">Cambiar la frase</button></div>
+  </div>
+  <div class="col" style="border-top:2px dashed var(--gris-claro);padding-top:16px">
+    <h3>Para Ruicito</h3>
+    <p class="chico">Esto es todo lo que escribiste y contestaste en el libro. Mándamelo para guardarlo junto con el resto de la historia.</p>
+    <pre class="resumen" id="resumen"></pre>
+    <div class="fila">
+      <a class="boton ama" id="whats" href="#" target="_blank" rel="noopener">Mandar por WhatsApp</a>
+      <button class="boton sec" id="copiar">Copiar texto</button>
+    </div>
+    <p class="aviso" id="avisoCopiar" role="status"></p>
   </div>
 `, "", "Epílogo");
 
@@ -728,7 +1296,7 @@ const $paradas = document.getElementById("paradas");
 const $marcador = document.getElementById("marcador");
 const largo = rutaPath.getTotalLength();
 const puntos = hojas.map((_, i) => rutaPath.getPointAtLength(largo * i / (N - 1)));
-$paradas.innerHTML = puntos.map(p => `<circle class="parada" cx="${p.x}" cy="${p.y}" r="3.2"/>`).join("");
+$paradas.innerHTML = puntos.map(p => `<circle class="parada" cx="${p.x}" cy="${p.y}" r="3"/>`).join("");
 
 function ir(i) {
   actual = Math.max(0, Math.min(N - 1, i));
@@ -743,25 +1311,20 @@ function ir(i) {
   $marcador.setAttribute("transform", `translate(${p.x} ${p.y - 8})`);
   [...$paradas.children].forEach((c, j) => c.classList.toggle("hecha", j <= actual));
   $pagina.textContent = hojas[actual].etiqueta;
+  if (actual === IDX_EPILOGO) armarResumen();
 }
 
 $atras.onclick = () => ir(actual - 1);
 $adelante.onclick = () => ir(actual + 1);
 document.addEventListener("keydown", e => {
-  if (e.target.closest("textarea")) return;
+  if (e.target.closest("textarea, input")) return;
   if (e.key === "ArrowRight") ir(actual + 1);
   if (e.key === "ArrowLeft") ir(actual - 1);
-});
-document.addEventListener("click", e => {
-  const b = e.target.closest("[data-ir]");
-  if (b) ir(+b.dataset.ir);
-  const n = e.target.closest(".nota");
-  if (n) n.setAttribute("aria-expanded", n.getAttribute("aria-expanded") === "true" ? "false" : "true");
 });
 
 let x0 = null, y0 = null;
 $h.addEventListener("pointerdown", e => {
-  if (e.target.closest("button, textarea, a")) { x0 = null; return; }
+  if (e.target.closest("button, textarea, input, a, summary")) { x0 = null; return; }
   x0 = e.clientX; y0 = e.clientY;
 });
 $h.addEventListener("pointerup", e => {
@@ -770,6 +1333,154 @@ $h.addEventListener("pointerup", e => {
   if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) ir(actual + (dx < 0 ? 1 : -1));
   x0 = null;
 });
+
+/* ---------- sellos ---------- */
+function pintarSellos() {
+  document.querySelectorAll("[data-cuenta-sellos]").forEach(b => b.textContent = sellos.size);
+  document.querySelectorAll("[data-mini]").forEach(m => m.classList.toggle("si", sellos.has(+m.dataset.mini)));
+  document.querySelectorAll("[data-sellos-row]").forEach(r => {
+    r.innerHTML = CAPITULOS.map((_, i) => sellos.has(i) ? selloHTML(i) : selloVacio(i)).join("");
+  });
+}
+function ganarSello(i) {
+  if (sellos.has(i)) return;
+  sellos.add(i);
+  mem.set("sellos", [...sellos]);
+  const slot = document.querySelector(`[data-sello-slot="${i}"]`);
+  if (slot) slot.innerHTML = selloHTML(i, true);
+  pintarSellos();
+}
+
+/* ---------- interacciones ---------- */
+const dos = (btn) => { const c = btn.querySelectorAll(".cara"); c[0].hidden = !c[0].hidden; c[1].hidden = !c[1].hidden; return !c[0].hidden; };
+let papelitosQuedan = [];
+
+document.addEventListener("click", e => {
+  const ir_ = e.target.closest("[data-ir]");
+  if (ir_) { ir(+ir_.dataset.ir); return; }
+
+  const n = e.target.closest(".nota");
+  if (n) { n.setAttribute("aria-expanded", n.getAttribute("aria-expanded") === "true" ? "false" : "true"); return; }
+
+  const f = e.target.closest("[data-flip]");
+  if (f) { const frente = dos(f); f.querySelector(".pista").textContent = frente ? "tócala para voltearla" : "otra vez de frente"; return; }
+
+  const cj = e.target.closest("[data-caja]");
+  if (cj) {
+    const cerrada = dos(cj);
+    cj.querySelector(".pista").textContent = cerrada ? "ábrela" : "ciérrala";
+    cj.parentElement.querySelector("[data-caja-txt]").hidden = cerrada;
+    return;
+  }
+
+  const nb = e.target.closest("[data-nube]");
+  if (nb) {
+    nb.classList.add("despejada");
+    nb.querySelector(".pista").textContent = "";
+    nb.parentElement.querySelector("[data-nube-txt]").hidden = false;
+    ganarSello(CAPITULOS.findIndex(c => c.pausa));
+    return;
+  }
+
+  const cu = e.target.closest("[data-cuaderno]");
+  if (cu) {
+    const abierto = cu.classList.toggle("abierto");
+    cu.querySelector(".tapa-c").hidden = abierto;
+    cu.querySelector(".pagina-c").hidden = !abierto;
+    cu.setAttribute("aria-label", abierto ? "Cerrar el cuaderno" : "Abrir el cuaderno");
+    return;
+  }
+
+  const fr = e.target.closest("[data-frasco]");
+  if (fr) {
+    if (!papelitosQuedan.length) papelitosQuedan = PAPELITOS.map((_, i) => i).sort(() => Math.random() - .5);
+    const [t, c] = PAPELITOS[papelitosQuedan.pop()];
+    const p = fr.parentElement.querySelector("[data-papelito]");
+    p.hidden = false;
+    p.textContent = t;
+    p.style.setProperty("--c", c);
+    p.style.setProperty("--r", (Math.random() * 6 - 3).toFixed(1) + "deg");
+    p.classList.remove("sale"); void p.offsetWidth; p.classList.add("sale");
+    fr.textContent = papelitosQuedan.length ? "Saca otro" : "Ya los sacaste todos. ¿Otra vez?";
+    return;
+  }
+
+  const op = e.target.closest(".op");
+  if (op) {
+    const qz = op.closest("[data-quiz]");
+    const i = +qz.dataset.quiz;
+    const q = CAPITULOS[i].quiz;
+    const res = qz.querySelector(".res");
+    if (+op.dataset.op === q.ok) {
+      qz.querySelectorAll(".op").forEach(b => b.disabled = true);
+      op.classList.add("bien");
+      res.textContent = q.bien + " Sello ganado.";
+      res.style.color = "var(--verde)";
+      ganarSello(i);
+    } else {
+      op.classList.add("mal");
+      op.disabled = true;
+      res.textContent = ["Casi. Intenta otra vez.", "Mmm, no. Piénsale.", "Esa no. Te queda una."][qz.querySelectorAll(".op.mal").length - 1] || "Inténtalo otra vez.";
+      res.style.color = "var(--naranja-os)";
+    }
+  }
+});
+
+/* quizzes ya ganados */
+CAPITULOS.forEach((c, i) => {
+  if (!c.quiz || !sellos.has(i)) return;
+  const qz = document.querySelector(`[data-quiz="${i}"]`);
+  qz.querySelectorAll(".op").forEach(b => b.disabled = true);
+  qz.querySelector(`[data-op="${c.quiz.ok}"]`).classList.add("bien");
+  qz.querySelector(".res").textContent = "Sello ganado.";
+});
+
+/* tu versión + gato: se guardan solos */
+const versiones = mem.get("versiones", {});
+document.querySelectorAll("[data-version]").forEach(t => {
+  const i = t.dataset.version;
+  if (versiones[i]) { t.value = versiones[i]; t.closest("details").open = true; }
+  let tmr;
+  t.addEventListener("input", () => {
+    clearTimeout(tmr);
+    tmr = setTimeout(() => {
+      versiones[i] = t.value.trim();
+      mem.set("versiones", versiones);
+      document.querySelector(`[data-ver-ok="${i}"]`).textContent = versiones[i] ? "Guardado en este celular." : "";
+    }, 400);
+  });
+});
+const $gato = document.getElementById("gato");
+$gato.value = mem.get("gato", "");
+$gato.addEventListener("input", () => {
+  mem.set("gato", $gato.value.trim());
+  document.querySelector("[data-gato-ok]").textContent = $gato.value.trim() ? `Anotado: el gato se llama ${$gato.value.trim()}.` : "";
+});
+
+/* ---------- contadores ---------- */
+function diferencia(a, b) {
+  let y = b.getFullYear() - a.getFullYear();
+  let m = b.getMonth() - a.getMonth();
+  if (m < 0) { y--; m += 12; }
+  let ancla = new Date(a.getFullYear() + y, a.getMonth() + m, a.getDate(), a.getHours(), a.getMinutes());
+  if (ancla > b) { m--; if (m < 0) { y--; m += 12; } ancla = new Date(a.getFullYear() + y, a.getMonth() + m, a.getDate(), a.getHours(), a.getMinutes()); }
+  let r = Math.floor((b - ancla) / 1000);
+  const d = Math.floor(r / 86400); r -= d * 86400;
+  const h = Math.floor(r / 3600); r -= h * 3600;
+  const min = Math.floor(r / 60);
+  return { y, m, d, h, min, s: r - min * 60 };
+}
+const $t = k => document.querySelector(`[data-t="${k}"]`);
+function tic() {
+  const ahora = new Date();
+  const df = diferencia(PRIMER_SI, ahora);
+  for (const k in df) { const el = $t(k); if (el) el.textContent = df[k]; }
+  const total = Math.floor((ahora - PRIMER_SI) / 864e5).toLocaleString("es-MX");
+  document.querySelectorAll("[data-dias-total]").forEach(b => b.textContent = total);
+  const faltan = Math.max(0, Math.ceil((NSQK - ahora) / 864e5));
+  document.querySelectorAll("[data-faltan]").forEach(b => b.textContent = faltan);
+}
+tic(); setInterval(tic, 1000);
 
 /* ---------- la pregunta ---------- */
 const $si = document.getElementById("btnSi");
@@ -786,25 +1497,28 @@ function huir(e) {
   const r = $no.getBoundingClientRect();
   $no.classList.add("huye");
   const w = r.width, h = r.height, m = 16;
-  const x = m + Math.random() * Math.max(0, innerWidth - w - m * 2);
-  const y = m + Math.random() * Math.max(0, innerHeight - h - 120);
-  $no.style.left = x + "px";
-  $no.style.top = y + "px";
+  $no.style.left = (m + Math.random() * Math.max(0, innerWidth - w - m * 2)) + "px";
+  $no.style.top = (m + Math.random() * Math.max(0, innerHeight - h - 120)) + "px";
   if (intentos >= 7) $no.hidden = true;
 }
 $no.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") huir(); });
 $no.addEventListener("pointerdown", huir);
 $no.addEventListener("click", huir);
 
-$si.addEventListener("click", () => {
+function decirSi(animar) {
   $si.classList.add("marcado");
   $si.style.transform = "";
   $no.hidden = true;
   const r = document.getElementById("respuesta");
   r.hidden = false;
-  setTimeout(() => r.scrollIntoView({ behavior: "smooth", block: "center" }), 350);
-  confeti();
-});
+  if (animar) {
+    mem.set("si", new Date().toISOString());
+    setTimeout(() => r.scrollIntoView({ behavior: "smooth", block: "center" }), 350);
+    confeti();
+  }
+}
+$si.addEventListener("click", () => decirSi(true));
+if (mem.get("si", null)) decirSi(false);
 
 /* ---------- confeti ---------- */
 function confeti() {
@@ -814,10 +1528,10 @@ function confeti() {
   const ctx = cv.getContext("2d");
   const dpr = devicePixelRatio || 1;
   cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
-  ctx.scale(dpr, dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   const css = getComputedStyle(document.documentElement);
   const colores = ["--azul", "--naranja", "--amarillo", "--verde", "--gris", "--azul-claro"].map(v => css.getPropertyValue(v).trim());
-  const ps = Array.from({ length: 150 }, () => ({
+  const ps = Array.from({ length: 160 }, () => ({
     x: innerWidth / 2 + (Math.random() - .5) * 80, y: innerHeight * .55,
     vx: (Math.random() - .5) * 13, vy: -Math.random() * 15 - 6,
     r: Math.random() * Math.PI, vr: (Math.random() - .5) * .3,
@@ -847,7 +1561,7 @@ const $ta = document.getElementById("epilogo");
 const $editor = document.getElementById("editor");
 const $firmado = document.getElementById("firmado");
 const $aviso = document.getElementById("aviso");
-const fecha = new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
+const hoyTxt = () => new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
 
 function mostrarFirmado(texto, cuando) {
   document.getElementById("frase").textContent = "«" + texto + "»";
@@ -859,19 +1573,46 @@ document.querySelectorAll(".idea").forEach(b => b.onclick = () => { $ta.value = 
 document.getElementById("guardar").onclick = () => {
   const t = $ta.value.trim();
   if (!t) { $aviso.textContent = "Escriban algo primero. Aunque sea una palabra."; $ta.focus(); return; }
-  try { localStorage.setItem("nosotros:epilogo", JSON.stringify({ t, fecha })); } catch (e) {}
+  const fecha = hoyTxt();
+  mem.set("epilogo", { t, fecha });
   mostrarFirmado(t, fecha);
+  armarResumen();
   confeti();
 };
-document.getElementById("editar").onclick = () => {
-  $firmado.hidden = true;
-  $editor.hidden = false;
-  $ta.focus();
+document.getElementById("editar").onclick = () => { $firmado.hidden = true; $editor.hidden = false; $ta.focus(); };
+const ep = mem.get("epilogo", null);
+if (ep && ep.t) { $ta.value = ep.t; mostrarFirmado(ep.t, ep.fecha); }
+
+function armarResumen() {
+  const v = mem.get("versiones", {});
+  const lineas = ["Libro «Nosotros» — lo que escribí yo, " + ELLA, ""];
+  lineas.push(`Sellos: ${sellos.size} de ${TOTAL_SELLOS}`);
+  if (mem.get("si", null)) lineas.push("Respuesta en la servilleta: SÍ");
+  const g = mem.get("gato", "");
+  if (g) lineas.push("El gato se va a llamar: " + g);
+  const e = mem.get("epilogo", null);
+  if (e && e.t) lineas.push("Nuestra frase: «" + e.t + "»");
+  const caps = CAPITULOS.map((c, i) => v[i] ? `\nCap. ${romanos[i]} · ${c.titulo}\n${v[i]}` : "").filter(Boolean);
+  if (caps.length) { lineas.push("", "Mi versión:"); lineas.push(...caps); }
+  else lineas.push("", "(Todavía no escribes tu versión de ningún capítulo.)");
+  const txt = lineas.join("\n");
+  document.getElementById("resumen").textContent = txt;
+  document.getElementById("whats").href = "https://wa.me/?text=" + encodeURIComponent(txt);
+  return txt;
+}
+document.getElementById("copiar").onclick = () => {
+  const txt = armarResumen();
+  const av = document.getElementById("avisoCopiar");
+  const fallback = () => {
+    const r = document.createRange(); r.selectNodeContents(document.getElementById("resumen"));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    av.textContent = "Ya está seleccionado: cópialo con el menú del celular.";
+  };
+  try { navigator.clipboard.writeText(txt).then(() => av.textContent = "Copiado.", fallback); } catch (err) { fallback(); }
 };
-try {
-  const g = JSON.parse(localStorage.getItem("nosotros:epilogo") || "null");
-  if (g && g.t) { $ta.value = g.t; mostrarFirmado(g.t, g.fecha); }
-} catch (e) {}
+
+pintarSellos();
+armarResumen();
 ir(0);
 </script>
 </body>
