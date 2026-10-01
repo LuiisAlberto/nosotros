@@ -363,7 +363,6 @@ const EL = "Luis";
 const PRIMER_SI = new Date(2019, 11, 13, 14, 0);   // 13 dic 2019, la servilleta
 const NSQK = new Date(2027, 0, 23, 21, 0);          // 23 ene 2027
 
-const spotify = q => "https://open.spotify.com/search/" + encodeURIComponent(q);
 
 const CAPITULOS = [
   {
@@ -395,7 +394,7 @@ const CAPITULOS = [
         "<span class='script'>Spoiler: lo lograste. Y bastante más rápido que él.</span>"
       ]}
     ],
-    cancion: { lbl: "Suena", tit: "Morat · Sobre el amor y sus efectos secundarios", q: "Morat Sobre el amor y sus efectos secundarios" },
+    cancion: { lbl: "El disco de la sudadera", tit: "Morat · Sobre el amor y sus efectos secundarios", url: "https://open.spotify.com/album/7tPz6T5lFv998HZc0O0Wh2" },
     nota: "La sudadera todavía la tengo. Lo que nunca supe es si te gustó ella o el que la traía puesta.",
     quiz: { q: "¿Cómo te tenía guardada en mi celular?", ops: ["Tenochtitlán", "Hernán Cortés", "Adancilla"], ok: 1, bien: "Exacto. La conquistadora." }
   },
@@ -463,14 +462,12 @@ const CAPITULOS = [
       ]},
       { bloque: "inventario" },
       { t: "Te cantaba", p: [
-        "Y yo te cantaba. Canciones que nos gustaban a los dos.",
-        "Pero sobre todo una: <em>«Eres tú mi todo»</em>, de Escandalosos.",
+        "Y yo te cantaba canciones que nos gustaban a los dos.",
         "Fueron como seis meses. <span class='script'>Cortos en el calendario, enormes en todo lo demás.</span>"
       ]}
     ],
-    cancion: { lbl: "Te la cantaba", tit: "Escandalosos · Eres tú mi todo", q: "Escandalosos Eres tú mi todo" },
     nota: "Técnicamente seguimos casados por la kermés, ¿no?",
-    quiz: { q: "¿Qué canción te cantaba?", ops: ["La magia · Little Jesus", "Eres tú mi todo · Escandalosos", "Cómo te atreves · Morat"], ok: 1, bien: "Esa. Y te la sigo cantando si me dejas." }
+    quiz: { q: "¿Cómo eran nuestros anillos de la boda en la kermés?", ops: ["De oro, obvio", "De metal, como de aluminio", "De plástico, de los de dulce"], ok: 1, bien: "Sencillitos, pero nuestros." }
   },
   {
     titulo: "Intermedio", cuando: "2020", pausa: true,
@@ -514,7 +511,7 @@ const CAPITULOS = [
         "Hay cosas que no se olvidan. Esa es una de ellas. Gracias."
       ]}
     ],
-    cancion: { lbl: "Me la dedicaste", tit: "Little Jesus · La magia", q: "Little Jesus La magia" },
+    cancion: { lbl: "Me la dedicaste", tit: "Little Jesus · La magia", url: "https://open.spotify.com/track/6Z8JXcW9fQuNRXznoBMfgp" },
     nota: "Le debemos una a mi mejor amigo. Una grande.",
     quiz: { q: "¿Quién nos volvió a juntar?", ops: ["Tu amiga de la prepa", "Facebook, con sus recuerdos", "Mi mejor amigo, una noche de Minecraft"], ok: 2, bien: "Él. Y le vamos a deber eso para siempre." }
   },
@@ -543,7 +540,7 @@ const CAPITULOS = [
         "Y todavía nos quedan muchas primeras veces pendientes."
       ]}
     ],
-    cancion: { lbl: "Esa noche", tit: "Little Jesus · en vivo", q: "Little Jesus" },
+    cancion: { lbl: "Lo que cantamos esa noche", tit: "Little Jesus", url: "https://open.spotify.com/artist/5p1ARDx76hnOXoeigLIKit" },
     quiz: { q: "¿Qué cenamos en el Airbnb?", ops: ["Taquitos", "Pizza", "Sushi"], ok: 0, bien: "Taquitos. Cena de campeones." }
   },
   {
@@ -627,7 +624,7 @@ const PAPELITOS = [
   ["Me encanta cómo disfrutas las cosas pequeñas.", "var(--verde)"],
   ["Vale por taquitos y una peli. Tú eliges la peli.", "var(--amarillo)"],
   ["Tratas bonito a todos. A las personas, a los animales y a mí.", "var(--naranja)"],
-  ["Vale por una canción cantada por mí. Sí, otra vez Escandalosos.", "var(--azul)"],
+  ["Vale por una canción cantada por mí. Tú eliges cuál.", "var(--azul)"],
   ["Siempre sales adelante. Siempre.", "var(--verde)"],
   ["Vale por dejarte dormir todo lo que quieras, sin quejarme.", "var(--gris)"],
   ["Sientes mucho. Conmigo no tienes que tener miedo de demostrarlo.", "var(--naranja)"],
@@ -926,9 +923,9 @@ const BLOQUES = {
       <div class="papelito" data-papelito hidden></div>
     </div>`,
   discos: () => `<div class="discos">
-      <a href="${spotify("NSQK")}" target="_blank" rel="noopener">${disco("amarillo", "ink", 60)}<span>NSQK</span></a>
-      <a href="${spotify("Latin Mafia")}" target="_blank" rel="noopener">${disco("naranja", "ink", 60)}<span>Latin Mafia</span></a>
-      <a href="${spotify("Little Jesus")}" target="_blank" rel="noopener">${disco("verde", "ink", 60)}<span>Little Jesus</span></a>
+      <a href="https://open.spotify.com/artist/1jtvmXiemNFkPO11NMdjfu" target="_blank" rel="noopener">${disco("amarillo", "ink", 60)}<span>NSQK</span></a>
+      <a href="https://open.spotify.com/artist/6XTGKOV9jceQ6f67lnhpbF" target="_blank" rel="noopener">${disco("naranja", "ink", 60)}<span>Latin Mafia</span></a>
+      <a href="https://open.spotify.com/artist/5p1ARDx76hnOXoeigLIKit" target="_blank" rel="noopener">${disco("verde", "ink", 60)}<span>Little Jesus</span></a>
     </div>`,
   lista: () => `<ul class="lista">${[
       ["Casi la misma música", true], ["El mismo humor", true], ["Las mismas ganas de vivir juntos", true],
@@ -1117,7 +1114,7 @@ function vistaTrack(t, k) {
   if (t.tipo === "cap") {
     const c = t.cap, i = t.i;
     outro = `
-      ${c.cancion ? `<a class="cancion" href="${spotify(c.cancion.q)}" target="_blank" rel="noopener">${disco(["amarillo","naranja","verde","azul-claro"][i % 4], "ink")}<span class="info"><span class="lbl">${c.cancion.lbl}</span><span class="tit">${c.cancion.tit}</span></span><span class="ir" aria-label="Escuchar en Spotify">${flechaIr}</span></a>` : ""}
+      ${c.cancion ? `<a class="cancion" href="${c.cancion.url}" target="_blank" rel="noopener">${disco(["amarillo","naranja","verde","azul-claro"][i % 4], "ink")}<span class="info"><span class="lbl">${c.cancion.lbl}</span><span class="tit">${c.cancion.tit}</span></span><span class="ir" aria-label="Escuchar en Spotify">${flechaIr}</span></a>` : ""}
       ${c.nota ? `<button class="nota" aria-expanded="false"><span class="tapa">nota al margen · toca para leer</span><span class="dentro">${c.nota}</span></button>` : ""}
       ${c.recuerdo ? `<p class="recuerdo"><svg width="40" height="40" viewBox="-20 -20 40 40" aria-hidden="true"><path d="M-10 4 L-9 -14 L-2 -6 Z M10 4 L9 -14 L2 -6 Z" fill="#D5DAE3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cy="4" r="11" fill="#D5DAE3" stroke="currentColor" stroke-width="2"/><path d="M0 -20 L1.5 -16 L5 -15 L1.5 -14 L0 -10 L-1.5 -14 L-5 -15 L-1.5 -16 Z" fill="#FFC93D"/></svg><span>${c.recuerdo}</span></p>` : ""}
       ${c.quiz ? `<div class="quiz" data-quiz="${i}">
