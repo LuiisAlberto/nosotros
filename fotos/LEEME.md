@@ -4,6 +4,7 @@ Pon aquí las fotos de cada capítulo con estos nombres (jpg, cuadradas se ven m
 
 | Archivo | Capítulo |
 |---|---|
+| `portada.jpg` | Portada del disco |
 | `cap-01.jpg` | I · Me gusta tu sudadera |
 | `cap-02.jpg` | II · Afuera de tu salón |
 | `cap-03.jpg` | III · El plan de la caja de pizza |
