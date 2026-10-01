@@ -352,87 +352,105 @@ const spotify = q => "https://open.spotify.com/search/" + encodeURIComponent(q);
 
 const CAPITULOS = [
   {
-    titulo: "Me gusta tu sudadera", cuando: "2019 · la prepa", dibujo: null, foto: "fotos/cap-01.jpg",
+    titulo: "Me gusta tu sudadera", cuando: "2019 · la prepa", foto: "fotos/cap-01.jpg",
     escenas: [
       { t: "El pasillo", p: [
-        "Era 2019. Yo iba en segundo y tú en tercero, tu último año en la prepa.",
-        "Yo estaba afuera de un baño, sin hacer nada especial, con mi sudadera de Morat: la del disco <em>Sobre el amor y sus efectos secundarios</em>, con todo y sus firmas. Falsas, pero firmas.",
-        "Pasaste con tu amiga, me viste y dijiste: <span class='script'>«Me gusta tu sudadera».</span> Y te fuiste. Así, nada más."
+        "Era 2019. Yo iba en segundo; tú, en tercero, en tu último año de prepa.",
+        "Yo estaba afuera de un baño, sin hacer nada especial, con mi sudadera de Morat puesta.",
+        "La del disco <em>Sobre el amor y sus efectos secundarios</em>. Con firmas y todo. Falsas, pero firmas.",
+        "Entonces pasaste tú, con tu amiga.",
+        "Me miraste, dijiste <span class='script'>«me gusta tu sudadera»</span>… y seguiste caminando.",
+        "Así, sin más. Como si no acabaras de cambiarme el día."
       ]},
       { bloque: "sudaderaFlip" },
       { t: "Tu amiga", p: [
-        "Lo que no sabías es que alcancé a escuchar lo que siguió. Tu amiga te dijo que me pidieras mi Facebook, y lo dijo tan fuerte que casi lo gritó.",
-        "No te animaste. Así que ella vino, me lo pidió y te lo pasó.",
-        "Me escribiste tú primero. No me acuerdo qué decía ese mensaje, pero sí me acuerdo de lo que pensé de ti: que eras una chica muy linda y muy interesante."
+        "Lo que no sabías es que alcancé a oír lo que pasó después.",
+        "Tu amiga te dijo que me pidieras mi Facebook. Lo dijo tan fuerte que casi lo gritó.",
+        "Tú no te animaste. Así que ella vino, me lo pidió y te lo pasó.",
+        "Y fuiste tú la que me escribió primero.",
+        "No me acuerdo de qué decía ese mensaje. Sí me acuerdo de lo que pensé de ti: que eras muy linda, y muy interesante."
       ]},
       { t: "Tenochtitlán", p: [
-        "Al poco tiempo nos pasamos nuestros números y nació nuestro primer chiste local:"
+        "Al poco tiempo nos pasamos los números, y con ellos llegó nuestro primer chiste local."
       ]},
       { bloque: "celulares" },
       { p: [
-        "Tú me guardaste como Tenochtitlán y yo a ti como Hernán Cortés. Porque tú venías a conquistarme.",
-        "<span class='script'>Y lo lograste.</span>"
+        "Tú me guardaste como Tenochtitlán. Yo a ti, como Hernán Cortés.",
+        "Porque tú venías a conquistarme.",
+        "<span class='script'>Spoiler: lo lograste. Y bastante más rápido que él.</span>"
       ]}
     ],
     cancion: { lbl: "Suena", tit: "Morat · Sobre el amor y sus efectos secundarios", q: "Morat Sobre el amor y sus efectos secundarios" },
-    nota: "Dato: la sudadera todavía la tengo. Y todavía no sé si te gustó ella o el que la traía puesta.",
+    nota: "La sudadera todavía la tengo. Lo que nunca supe es si te gustó ella o el que la traía puesta.",
     quiz: { q: "¿Cómo te tenía guardada en mi celular?", ops: ["Tenochtitlán", "Hernán Cortés", "Adancilla"], ok: 1, bien: "Exacto. La conquistadora." }
   },
   {
-    titulo: "Afuera de tu salón", cuando: "2019 · los recesos", dibujo: "reloj", foto: "fotos/cap-02.jpg",
+    titulo: "Afuera de tu salón", cuando: "2019 · los recesos", foto: "fotos/cap-02.jpg",
     escenas: [
       { t: "La mejor parte del día", p: [
-        "Después de eso, el receso se volvió la mejor parte del día.",
-        "Te iba a buscar afuera de tu salón. Casi siempre ahí, casi siempre a la misma hora, siempre con ganas de verte."
+        "Desde ese mensaje, el receso dejó de ser un descanso y se volvió una cita.",
+        "Yo salía a buscarte y te esperaba afuera de tu salón. Casi siempre en el mismo lugar. Siempre con las mismas ganas."
       ]},
       { t: "Caminar y hablar", p: [
-        "No me acuerdo qué comíamos. Sí me acuerdo de que caminábamos muchísimo y hablábamos de todo: de cómo te había ido en el día, de cómo estaban las cosas con tus papás, de lo que fuera.",
-        "Ya pasaron muchos años, pero esa sensación de caminar a tu lado sin prisa no se me olvida."
+        "No me acuerdo qué comíamos. Me acuerdo de que caminábamos muchísimo.",
+        "Me contabas cómo te había ido, cómo estaban las cosas con tus papás, lo que se te ocurriera.",
+        "Y cualquier tema me parecía importante si lo contabas tú.",
+        "Pasaron muchos años y se me olvidaron muchos detalles. Esa sensación, no."
       ]},
       { t: "Desde ahí", p: [
-        "Creo que desde que te conocí supe que me gustabas de verdad.",
-        "Ese sentimiento nunca se fue. Y no creo que se vaya, porque como yo lo veo, <span class='script'>tú eres el amor de mi vida.</span>"
+        "Creo que me gustaste de verdad desde el principio.",
+        "Y ese sentimiento nunca se fue. Ni con el tiempo, ni con la distancia, ni con todo lo que vino después.",
+        "<span class='script'>Como yo lo veo, eres el amor de mi vida.</span>"
       ]}
     ],
     quiz: { q: "¿Dónde te esperaba en los recesos?", ops: ["En la cafetería", "Afuera de tu salón", "En la biblioteca"], ok: 1, bien: "Ahí mismito, todos los días." }
   },
   {
-    titulo: "El plan de la caja de pizza", cuando: "13 dic 2019", dibujo: null, foto: "fotos/cap-03.jpg",
+    titulo: "El plan de la caja de pizza", cuando: "13 dic 2019", foto: "fotos/cap-03.jpg",
     escenas: [
       { t: "La primera cita", p: [
-        "Después de tantos recesos, por fin tuvimos una cita de verdad, fuera de la escuela. Fuimos a Domino's. Creo que pedimos una de pepperoni.",
-        "Yo llevaba un súper plan: pedirles a los de Domino's que me ayudaran a escribir en la caja si querías ser mi novia, para que lo vieras al abrirla."
+        "Después de tantos recesos, por fin tuvimos una cita de verdad, fuera de la escuela.",
+        "Fuimos a Domino's. Creo que pedimos una de pepperoni.",
+        "Yo llevaba un plan perfecto: que los de Domino's me ayudaran a escribir en la caja si querías ser mi novia.",
+        "Tú ibas a abrirla, ibas a leerlo, y yo iba a quedar como el más romántico del mundo.",
+        "Solo había un detalle."
       ]},
       { bloque: "cajaPizza" },
-      { t: "La servilleta", p: [
-        "Así que improvisé. Agarré una servilleta y escribí, tal cual:"
+      { t: "Plan B", p: [
+        "Así que improvisé con lo único que tenía a la mano: una servilleta.",
+        "Y escribí, tal cual:"
       ]},
       { bloque: "servilletita" },
       { p: [
-        "Te dio muchísima risa cómo lo hice. Y dijiste que sí.",
-        "Fue el <em>13 de diciembre de 2019</em>. Nadie guardó la servilleta, pero yo me acuerdo perfecto de ella."
+        "Te dio muchísima risa cómo lo hice.",
+        "<span class='script'>Y dijiste que sí.</span>",
+        "Era el <em>13 de diciembre de 2019</em>. Nadie guardó esa servilleta, pero yo me la sé de memoria."
       ]}
     ],
     nota: "El plan falló. La servilleta no.",
     quiz: { q: "¿Qué día me dijiste que sí la primera vez?", ops: ["14 de febrero de 2020", "13 de noviembre de 2019", "13 de diciembre de 2019"], ok: 2, bien: "13/12/2019. Fecha oficial." }
   },
   {
-    titulo: "Seis meses", cuando: "dic 2019 – 2020", dibujo: "kermes", foto: "fotos/cap-04.jpg",
+    titulo: "Seis meses", cuando: "dic 2019 – 2020", foto: "fotos/cap-04.jpg",
     escenas: [
       { t: "El camino a tu casa", p: [
-        "Vivías muy cerquita de la prepa, así que te acompañaba caminando. Era poquito camino, pero siempre nos alcanzaba para hablar de todo."
+        "Vivías muy cerquita de la prepa, así que te acompañaba caminando.",
+        "Era poquito camino. Siempre nos alcanzaba para hablar de todo, y siempre se me hacía cortísimo."
       ]},
       { t: "La boda", p: [
-        "Y nos casamos. En una kermés, pero nos casamos. Firmamos papeles, creo que hasta costó dinero, y nos dieron unos anillos muy, muy sencillos, de metal, como de aluminio.",
+        "Y nos casamos. En una kermés, pero nos casamos.",
+        "Firmamos papeles, creo que hasta costó dinero, y nos dieron unos anillos de metal tan sencillos que parecían de aluminio.",
         "Creo que tú todavía tienes esos papeles. O por lo menos los tuviste."
       ]},
       { bloque: "acta" },
       { t: "Todo lo que nos dimos", p: [
-        "Nos regalamos de todo. Algunas cosas todavía existen; otras sólo en la memoria."
+        "Nos regalamos de todo. Algunas cosas todavía existen. Otras viven nada más en la memoria."
       ]},
       { bloque: "inventario" },
       { t: "Te cantaba", p: [
-        "Te cantaba canciones que nos gustaban a los dos. Pero sobre todo una: <em>«Eres tú mi todo»</em>, de Escandalosos."
+        "Y yo te cantaba. Canciones que nos gustaban a los dos.",
+        "Pero sobre todo una: <em>«Eres tú mi todo»</em>, de Escandalosos.",
+        "Fueron como seis meses. <span class='script'>Cortos en el calendario, enormes en todo lo demás.</span>"
       ]}
     ],
     cancion: { lbl: "Te la cantaba", tit: "Escandalosos · Eres tú mi todo", q: "Escandalosos Eres tú mi todo" },
@@ -440,37 +458,45 @@ const CAPITULOS = [
     quiz: { q: "¿Qué canción te cantaba?", ops: ["La magia · Little Jesus", "Eres tú mi todo · Escandalosos", "Cómo te atreves · Morat"], ok: 1, bien: "Esa. Y te la sigo cantando si me dejas." }
   },
   {
-    titulo: "Intermedio", cuando: "2020", dibujo: null, pausa: true,
+    titulo: "Intermedio", cuando: "2020", pausa: true,
     escenas: [
       { p: [
-        "Luego llegó la pandemia, y con ella el estrés de entrar a la uni.",
-        "Sentías que no tenías el tiempo que yo merecía. Y por eso terminamos."
+        "Luego llegó la pandemia, y con ella el estrés de entrar a la universidad.",
+        "Sentías que no tenías el tiempo que yo merecía.",
+        "Y por eso terminamos."
       ]},
       { t: "Lo que extrañé", p: [
-        "Extrañaba hacer llamada contigo. Hablar de lo que fuera. La paz que sentía pasando mi tiempo contigo.",
-        "La verdad, te extrañé a ti. Completa."
+        "Extrañaba las llamadas contigo.",
+        "Hablar de lo que fuera, a la hora que fuera.",
+        "Extrañaba la paz que sentía con solo pasar el tiempo contigo.",
+        "Pero, más que todo eso, te extrañaba a ti.",
+        "Esta canción es gris porque así se sintió ese tiempo."
       ]},
-      { p: ["Esta página se queda gris porque así se sintió ese tiempo."] },
       { bloque: "nube" }
     ]
   },
   {
-    titulo: "Una noche de Minecraft", cuando: "casi al final de la pandemia", dibujo: "minecraft", foto: "fotos/cap-06.jpg",
+    titulo: "Una noche de Minecraft", cuando: "casi al final de la pandemia", foto: "fotos/cap-06.jpg",
     escenas: [
       { t: "La llamada", p: [
-        "Una noche, cuando la pandemia ya se estaba terminando (aunque todavía no lo sabíamos), yo estaba jugando Minecraft con mi mejor amigo.",
-        "Él nos conocía muy bien a los dos y sabía toda la historia. Estando en llamada conmigo, te mandó mensaje para ver si querías volver a hablar conmigo.",
-        "Y así, entre bloques y una llamada a medianoche, <span class='script'>él nos volvió a juntar.</span>"
+        "Una noche, cuando la pandemia ya se estaba acabando (aunque todavía no lo sabíamos), yo estaba jugando Minecraft con mi mejor amigo.",
+        "Él nos conocía a los dos y se sabía toda la historia.",
+        "Estando en llamada conmigo, te mandó mensaje para ver si querías volver a hablar.",
+        "Y así, entre bloques y una llamada nocturna, <span class='script'>él nos volvió a juntar.</span>"
       ]},
       { t: "Siempre amigos", p: [
-        "Desde ahí volvimos a hablar y, con los años, vivimos de todo.",
-        "Aparte de haber sido novios, siempre fuimos amigos. Muy unidos, con una conexión que yo diría que es única. Y tenemos fotos de todo para comprobarlo."
+        "Desde ahí volvimos a hablar. Y con los años vivimos de todo.",
+        "Fuimos novios una vez. Pero antes y después de eso, siempre fuimos amigos. Muy unidos.",
+        "Con una conexión que, la verdad, no he encontrado con nadie más.",
+        "Y tenemos fotos de todo para comprobarlo."
       ]},
       { t: "La magia", p: [
-        "Un día me dedicaste <em>«La magia»</em>, de Little Jesus. Desde entonces es una de mis bandas favoritas. Bueno, de las nuestras."
+        "Un día me dedicaste <em>«La magia»</em>, de Little Jesus.",
+        "Desde entonces es una de mis bandas favoritas. Bueno, de las nuestras."
       ]},
       { t: "Mi abuelita", p: [
-        "Y cuando falleció mi abuelita, tú estuviste. Eso no se me va a olvidar nunca. Gracias."
+        "Y cuando falleció mi abuelita, estuviste ahí.",
+        "Hay cosas que no se olvidan. Esa es una de ellas. Gracias."
       ]}
     ],
     cancion: { lbl: "Me la dedicaste", tit: "Little Jesus · La magia", q: "Little Jesus La magia" },
@@ -478,87 +504,102 @@ const CAPITULOS = [
     quiz: { q: "¿Quién nos volvió a juntar?", ops: ["Tu amiga de la prepa", "Facebook, con sus recuerdos", "Mi mejor amigo, una noche de Minecraft"], ok: 2, bien: "Él. Y le vamos a deber eso para siempre." }
   },
   {
-    titulo: "Pachuca", cuando: "Little Jesus en vivo", dibujo: "boleto", foto: "fotos/cap-07.jpg",
+    titulo: "Pachuca", cuando: "Little Jesus en vivo", foto: "fotos/cap-07.jpg",
     escenas: [
       { t: "El concierto", p: [
-        "Contigo vi a Little Jesus en vivo por primera vez. Fue en Pachuca, en el auditorio de la plaza, el Auditorio Explanada.",
+        "Contigo vi a Little Jesus en vivo por primera vez.",
+        "Fue en Pachuca, en el Auditorio Explanada.",
         "Cantamos todas. Obvio. Somos súper fans."
       ]},
       { t: "El Airbnb", p: [
-        "También contigo me quedé en un Airbnb por primera vez. Compré taquitos para que cenáramos y te llevé un montón de peluches."
+        "También fue mi primera vez en un Airbnb. Contigo, claro.",
+        "Compré taquitos para cenar y te llevé un montón de peluches."
       ]},
       { t: "El cuaderno", p: [
-        "Y llevaba el cuaderno. Lo tenía para después, pero no aguanté y te lo di antes del concierto."
+        "Y llevaba algo más: un cuaderno que hice para ti.",
+        "Lo tenía para después del concierto, pero no aguanté y te lo di antes."
       ]},
       { bloque: "cuaderno" },
       { t: "Lo que no dije", p: [
-        "Ese día quería pedirte que fueras mi novia. No se dio la ocasión.",
-        "Después del concierto vimos pelis y nos dormimos juntos. Y ya.",
-        "Me quedé con la pregunta guardada. <span class='script'>Spoiler: aquí la traigo.</span>"
-      ]},
-      { p: ["Todavía tenemos muchas primeras veces pendientes. Ya quiero tacharlas contigo."] }
+        "Ese día quería pedirte que fueras mi novia.",
+        "Lo traía pensado. Pero no se dio la ocasión.",
+        "Después del concierto vimos pelis, nos quedamos dormidos juntos y ya.",
+        "Me quedé con la pregunta guardada. <span class='script'>Spoiler: aquí la traigo.</span>",
+        "Y todavía nos quedan muchas primeras veces pendientes."
+      ]}
     ],
     cancion: { lbl: "Esa noche", tit: "Little Jesus · en vivo", q: "Little Jesus" },
     quiz: { q: "¿Qué cenamos en el Airbnb?", ops: ["Taquitos", "Pizza", "Sushi"], ok: 0, bien: "Taquitos. Cena de campeones." }
   },
   {
-    titulo: "Verte crecer", cuando: "de 2019 a hoy", dibujo: "casa", foto: "fotos/cap-08.jpg",
+    titulo: "Verte crecer", cuando: "de 2019 a hoy", foto: "fotos/cap-08.jpg",
     escenas: [
       { t: "Tu casa", p: [
-        "Te he visto crecer. Te vi independizarte.",
-        "Conocí a Omali, tu gatita: entre gris muy clarito y blanca, muy tierna y experta en escaparse.",
-        "Estuve cuando llegó Rayo: café con blanco, medio loquito e hiperactivo.",
-        "Ya conozco tu casa."
+        "Te he visto crecer.",
+        "Te vi independizarte y hacer tu propio lugar.",
+        "Conocí a Omali, tu gatita: gris clarito, casi blanca, muy tierna y experta en escaparse.",
+        "Estuve cuando llegó Rayo: café con blanco, medio loquito y con energía para tres perros.",
+        "Hoy ya conozco tu casa."
       ]},
       { t: "Lo que admiro de ti", p: [
-        "Eres una mujer muy capaz y muy valiente. Siempre estás ahí para los demás. Tratas lindo a las personas y a los animales.",
-        "Sientes mucho, aunque te cueste demostrarlo y aunque eso a veces te dé miedo. Y siempre, siempre sales adelante.",
-        "Disfrutas las cosas pequeñas de la vida. Duermes mucho. Y quieres mucho.",
+        "Eres muy capaz. Eres muy valiente.",
+        "Siempre estás para los demás, y tratas lindo a las personas y a los animales.",
+        "Sientes muchísimo, aunque te cueste demostrarlo y aunque a veces eso te dé miedo.",
+        "Disfrutas las cosas pequeñas. Duermes mucho. Quieres mucho.",
+        "Y siempre, siempre, sales adelante.",
         "<span class='script'>La verdad, yo amo todo de ti.</span>"
       ]},
-      { t: "Mi frasco para ti", p: [
-        "Una vez tú me diste un frasco lleno de papelitos con cupones y cosas que te gustaban de mí. Este es el mío."
+      { t: "Mi frasco", p: [
+        "Una vez me diste un frasco lleno de papelitos, con cupones y cosas que te gustaban de mí.",
+        "Me tardé, pero aquí está el mío."
       ]},
       { bloque: "frasco" }
     ],
-    recuerdo: "Para Omali, que se fue en junio. En este libro se queda para siempre.",
+    recuerdo: "Para Omali, que se fue en junio. En esta historia se queda para siempre.",
     quiz: { q: "¿Cómo es Rayo?", ops: ["Negro y muy tranquilo", "Café con blanco y medio loquito", "Gris y dormilón"], ok: 1, bien: "Hiperactivo y perfecto." }
   },
   {
-    titulo: "Lo que tenemos", cuando: "hoy", dibujo: null, foto: "fotos/cap-09.jpg",
+    titulo: "Lo que tenemos", cuando: "hoy", foto: "fotos/cap-09.jpg",
     escenas: [
       { t: "Nuestra música", p: [
-        "En música somos bien alternativos. Toca uno para escucharlo:"
+        "Si alguien quiere entendernos, que nos escuche. Somos bien alternativos."
       ]},
       { bloque: "discos" },
-      { t: "Lo que ya es nuestro", p: [] },
+      { t: "Lo que ya es nuestro", p: [
+        "Y hay cosas que ya son de los dos."
+      ]},
       { bloque: "lista" },
       { t: "Lo que viene", p: [
-        "NSQK. Creo que es nuestro artista favorito de los dos. Y ya tenemos fecha:"
+        "NSQK. Creo que es nuestro artista favorito de los dos.",
+        "Y ya tenemos fecha:"
       ]},
       { bloque: "boleto" },
       { t: "Cuando vivamos juntos", p: [
-        "Nos imaginamos una familia: dos hijos, un gato y un perro (o sea, Rayo). Muy de película gringa, pero muy nuestro."
+        "Nos imaginamos una familia.",
+        "Dos hijos, un gato y un perro. O sea, Rayo.",
+        "Muy de película gringa, ya sé. <span class='script'>Pero muy nuestro.</span>"
       ]},
       { bloque: "familia" }
     ],
     quiz: { q: "¿Cuándo vamos a ver a NSQK?", ops: ["31 de diciembre de 2026", "23 de enero de 2027", "14 de febrero de 2027"], ok: 1, bien: "23/01/2027. Ya estamos contando." }
   },
   {
-    titulo: "Esta vez", cuando: "septiembre 2026", dibujo: "letrero", foto: "fotos/cap-10.jpg",
+    titulo: "Esta vez", cuando: "septiembre 2026", foto: "fotos/cap-10.jpg",
     escenas: [
       { t: "Nunca dejamos de gustarnos", p: [
-        "Por una razón u otra, en todos estos años nunca regresamos. Pero tampoco dejamos de gustarnos."
+        "Por una cosa o por otra, en todos estos años nunca regresamos.",
+        "Pero tampoco dejamos de gustarnos. Ni un poquito."
       ]},
       { t: "Hace dos semanas", p: [
-        "Hace un par de semanas volviste. Hablamos. Al día siguiente salimos y dejamos todo claro: los dos queremos esto.",
+        "Hace un par de semanas volviste. Hablamos.",
+        "Al día siguiente salimos y dejamos todo claro: los dos queremos esto.",
         "Tu familia ya me conoce. Tenemos conciertos por delante. Tenemos ganas de vivir juntos."
       ]},
       { t: "Lo que quiero", p: [
         "Te conozco desde 2019. He sido tu novio, tu amigo y tu Tenochtitlán.",
-        "<span class='script'>Esta vez quiero que funcione. De verdad.</span>",
-        "Y quiero hacerlo bien, como debió ser desde el principio: con caja y con servilleta.",
-        "Falta muchísimo por contar. Por eso este libro no se acaba aquí."
+        "Y esta vez quiero que funcione. De verdad.",
+        "Quiero hacerlo bien, como debió ser desde el principio: <span class='script'>con caja y con servilleta.</span>",
+        "Falta muchísimo por contar. Por eso este disco no se acaba aquí."
       ]}
     ],
     quiz: { q: "¿Desde qué año nos conocemos?", ops: ["2018", "2019", "2020"], ok: 1, bien: "2019. Y contando." }
@@ -910,7 +951,7 @@ const BLOQUES = {
     </div>
     <div class="respuesta" id="respuesta" hidden>
       <p class="grande">Dijiste que sí. Otra vez.</p>
-      <p>Aquí empieza el capítulo uno de lo que sigue.</p>
+      <p>Ahora sí, con caja y con servilleta. Lo que sigue lo escribimos juntos.</p>
       <p class="script">Te amo. — Ruicito</p>
     </div>`,
   editor: () => `<p class="maquina" style="font-size:.9rem;color:var(--tinta-2)">si no se les ocurre, arranquen con una de estas:</p>
@@ -946,34 +987,48 @@ function versosDe(escenas) {
   });
   return out;
 }
-const TRACKS = CAPITULOS.map((c, i) => ({
+const TRACKS = [{
+  tipo: "intro", titulo: "Intro", cuando: "antes de empezar", bg: "#1C2541", tt: "#FFFFFF", arte: "letrero",
+  versos: [
+    { t: "Antes de que empiece la música, una cosa." },
+    { t: "Esta historia la escribí yo, pero no es mía. Es nuestra." },
+    { t: "Empieza en un pasillo de la prepa, en 2019, y todavía no termina." },
+    { t: "Tiene una sudadera, una servilleta, una pandemia, un concierto y un montón de primeras veces." },
+    { t: "Algunas partes ya te las sabes. Otras nunca te las había dicho." },
+    { t: "<span class='script'>Ponle play.</span>" }
+  ]
+}].concat(CAPITULOS.map((c, i) => ({
   tipo: "cap", i, titulo: c.titulo, cuando: c.cuando, bg: COLOR[i][0], tt: COLOR[i][1], arte: ARTE[i], foto: c.foto, versos: versosDe(c.escenas), cap: c
-}));
+})));
 TRACKS.push({
   tipo: "interludio", titulo: "Interludio: el tiempo", cuando: "en vivo", bg: "#1F6B47", tt: "#FFFFFF", arte: "reloj",
   versos: [
+    { t: "Hagamos cuentas." },
     { t: "Desde aquella servilleta, el 13 de diciembre de 2019, han pasado…" },
     { b: "reloj" },
     { t: "Algunos de novios. Muchos de amigos. Ninguno sin acordarme de ti." },
+    { t: "Y lo que viene ya tiene fecha:" },
     { b: "datos" },
-    { t: "Y dos veces te he pedido que seas mi novia." },
-    { t: "<span class='script'>La segunda es la siguiente canción.</span>" }
+    { t: "En todo este tiempo, solo una vez te pedí que fueras mi novia." },
+    { t: "<span class='script'>La segunda vez es la siguiente canción.</span>" }
   ]
 });
 TRACKS.push({
   tipo: "final", titulo: "La servilleta (otra vez)", cuando: "hoy", bg: "#F1E7D6", tt: "#1E1B17", arte: "caja",
   versos: [
-    { t: "La primera vez te lo pregunté en una servilleta porque la caja nunca llegó.", sec: "Track extra" },
-    { t: "En Pachuca lo quise volver a preguntar y no se dio." },
-    { t: "<span class='script'>Así que esta vez traje las dos.</span>" },
+    { t: "Hace casi siete años te lo pregunté en una servilleta, porque la caja nunca llegó.", sec: "Track extra" },
+    { t: "En Pachuca te lo quise volver a preguntar, y no se dio." },
+    { t: "Esta vez no quise dejarlo a la suerte." },
+    { t: "<span class='script'>Así que traje las dos.</span>" },
     { b: "servilleta" }
   ]
 });
 TRACKS.push({
-  tipo: "epilogo", titulo: "Epílogo (a dúo)", cuando: "lo escribimos juntos", bg: "#1C2541", tt: "#FFFFFF", arte: "letrero",
+  tipo: "epilogo", titulo: "Epílogo (a dúo)", cuando: "lo escribimos juntos", bg: "#1C2541", tt: "#FFFFFF", arte: "kermes",
   versos: [
     { t: "Esta parte no la escribí yo." },
-    { t: "La escribimos los dos: la frase con la que cerramos este libro y empezamos el siguiente." },
+    { t: "Y no la voy a escribir solo." },
+    { t: "Es la frase con la que cerramos este disco y empezamos el siguiente. <span class='script'>La escribimos los dos.</span>" },
     { b: "editor" }
   ]
 });
@@ -1008,16 +1063,16 @@ function vistaInicio() {
       </button>
     </div>
     <ol class="tracklist">
-      ${TRACKS.map((t, k) => `<li><button data-track="${k}"><span class="i">${k + 1}</span><span style="min-width:0"><span class="nom">${t.titulo}</span><span class="sub">${t.tipo === "cap" ? "Edith &amp; Luis · " + t.cuando : t.cuando}</span></span><span data-oro-lista="${t.tipo === "cap" ? t.i : ""}"></span></button></li>`).join("")}
+      ${TRACKS.map((t, k) => `<li><button data-track="${k}"><span class="i">${k + 1}</span><span style="min-width:0"><span class="nom">${t.titulo}</span><span class="sub">${t.tipo === "cap" ? "Edith &amp; Luis · " + t.cuando : "Edith &amp; Luis · " + t.cuando}</span></span><span data-oro-lista="${t.tipo === "cap" ? t.i : ""}"></span></button></li>`).join("")}
     </ol>
     <div class="nota-papel">
       <h3>cómo se escucha este disco</h3>
       <ol>
         <li>Cada canción es un capítulo. La letra es nuestra historia y va apareciendo sola.</li>
-        <li>Toca la letra para avanzar más rápido. Pausa abajo cuando quieras.</li>
-        <li>Lo que esté pegado como papel, tócalo: se voltea, se abre o tiene algo adentro.</li>
-        <li>Al final de cada canción hay una pregunta. Si aciertas, ganas un disco de oro.</li>
-        <li>Cada canción tiene un espacio para <i>tu versión</i>. Al final me la mandas.</li>
+        <li>Si lees más rápido que la música, toca la letra. Si quieres pausa, abajo está el botón.</li>
+        <li>Todo lo que esté pegado como papel se toca: se voltea, se abre o trae algo adentro.</li>
+        <li>Al final de cada canción hay una pregunta sobre nosotros. Si aciertas, ganas un disco de oro.</li>
+        <li>Cada canción tiene un espacio para <i>tu versión</i>. Al final me la mandas y la guardo con todo lo demás.</li>
       </ol>
     </div>
   </div>`;
