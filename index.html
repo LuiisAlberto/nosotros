@@ -80,7 +80,7 @@ a { color: inherit; }
 .play-grande:hover { transform: scale(1.05); }
 .play-grande:active { transform: scale(.96); }
 .tracklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
-.tracklist button { width: 100%; min-height: 60px; display: grid; grid-template-columns: 28px 1fr auto; gap: 14px; align-items: center; background: none; border: 0; border-radius: 8px; padding: 8px 8px; text-align: left; transition: background-color .2s; }
+.tracklist button { width: 100%; min-height: 60px; display: grid; grid-template-columns: 24px 1fr auto; gap: 14px; align-items: center; background: none; border: 0; border-radius: 8px; padding: 8px 8px; text-align: left; transition: background-color .2s; }
 .tracklist button:hover { background: var(--app-2); }
 .tracklist .i { color: var(--txt-2); text-align: right; font-variant-numeric: tabular-nums; }
 .tracklist .nom { font-weight: 600; line-height: 1.2; display: block; }
@@ -115,14 +115,12 @@ a { color: inherit; }
 .letra { display: flex; flex-direction: column; gap: 22px; cursor: pointer; padding-bottom: 8px; }
 .ly { transition: opacity .5s var(--ease), transform .5s var(--ease); }
 .ly[data-e="futuro"] { display: none; }
-.ly[data-e="pasado"] { opacity: .5; }
 .ly[data-e="actual"] { animation: aparece .6s var(--ease); }
 @keyframes aparece { from { opacity: 0; transform: translateY(16px); } }
 .ly p { margin: 0; font-weight: 800; font-size: clamp(1.45rem, 6.4vw, 1.7rem); line-height: 1.28; letter-spacing: -.015em; text-wrap: pretty; }
 .ly .sec { display: block; margin-bottom: 10px; font-family: var(--f-maquina); font-weight: 700; font-size: .85rem; letter-spacing: .02em; opacity: .85; }
 .ly .script, .ly em { font-family: var(--f-serif); font-style: italic; font-weight: 500; letter-spacing: 0; }
 .ly .script { font-size: 1.08em; }
-.ly.blk[data-e="pasado"] { opacity: 1; }
 .siguele { align-self: center; display: inline-flex; align-items: center; gap: 8px; font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
 .siguele::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: late 1.4s ease-in-out infinite; }
 @keyframes late { 50% { transform: scale(1.7); opacity: .4; } }
@@ -298,17 +296,31 @@ details.version .guardado { color: var(--tt); opacity: .8; margin-top: 6px; }
 .resumen { white-space: pre-wrap; font-family: var(--f-maquina); font-size: .8rem; line-height: 1.5; margin: 0; background: var(--papel); color: var(--tinta); border-radius: 4px; padding: 14px; max-height: 240px; overflow: auto; }
 
 /* ---------- reproductor ---------- */
-.player { background: #0B0B0B; padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #222; }
-.player .barra { height: 4px; border-radius: 4px; background: #3A3A3A; overflow: hidden; }
-.player .barra span { display: block; height: 100%; width: 0; background: var(--txt); border-radius: 4px; transition: width .4s var(--ease); }
-.player .fila-p { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
-.player .ahora { min-width: 0; display: flex; flex-direction: column; line-height: 1.2; }
-.player .ahora b { font-size: .92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.player .ahora span { font-size: .78rem; color: var(--txt-2); }
-.player .ctrls { display: flex; align-items: center; gap: 4px; }
-.player .ctrl { width: 44px; height: 44px; border-radius: 50%; border: 0; background: none; color: var(--txt); display: grid; place-items: center; }
+.player { background: #0B0B0B; padding: 10px 16px calc(8px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 6px; border-top: 1px solid #222; }
+.player .ahora { display: flex; align-items: baseline; gap: 8px; min-width: 0; line-height: 1.2; }
+.player .ahora b { font-size: .92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.player .ahora span { font-size: .78rem; color: var(--txt-2); white-space: nowrap; flex: none; }
+.seek { position: relative; height: 22px; display: flex; align-items: center; cursor: pointer; touch-action: none; }
+.seek .riel { position: relative; width: 100%; height: 4px; border-radius: 4px; background: #3A3A3A; }
+.seek .lleno { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 4px; background: var(--txt); }
+.seek .perilla { position: absolute; top: 50%; left: 0; width: 13px; height: 13px; border-radius: 50%; background: var(--txt); transform: translate(-50%, -50%) scale(0); transition: transform .15s var(--ease); }
+.seek:hover .lleno, .seek.arrastrando .lleno { background: var(--verde-play); }
+.seek:hover .perilla, .seek:focus-visible .perilla, .seek.arrastrando .perilla { transform: translate(-50%, -50%) scale(1); }
+.tiempos { display: flex; justify-content: space-between; font-size: .72rem; color: var(--txt-2); font-variant-numeric: tabular-nums; margin-top: -4px; }
+.player .ctrls { display: flex; align-items: center; justify-content: center; gap: 14px; }
+.player .ctrl { width: 44px; height: 44px; border-radius: 50%; border: 0; background: none; color: var(--txt); display: grid; place-items: center; transition: transform .12s var(--ease), color .2s; }
+.player .ctrl:hover:not(:disabled) { transform: scale(1.08); }
+.player .ctrl:active:not(:disabled) { transform: scale(.94); }
 .player .ctrl:disabled { opacity: .3; cursor: default; }
-.player .ctrl.pp { background: var(--txt); color: #0B0B0B; width: 46px; height: 46px; }
+.player .ctrl.sec { color: var(--txt-2); }
+.player .ctrl.pp { background: var(--txt); color: #0B0B0B; width: 56px; height: 56px; }
+.aviso-pausa { position: absolute; left: 50%; bottom: calc(100% + 10px); transform: translateX(-50%); background: var(--txt); color: #0B0B0B; font-size: .82rem; font-weight: 700; padding: 6px 14px; border-radius: 999px; white-space: nowrap; pointer-events: none; animation: entra .3s var(--ease); }
+.player { position: relative; }
+.ly[data-e="otro"] { opacity: .5; cursor: pointer; transition: opacity .2s; }
+.ly[data-e="otro"]:hover { opacity: .8; }
+.ly[data-e="actual"] { cursor: pointer; }
+.ly.blk[data-e="otro"] { opacity: 1; cursor: default; }
+.tracklist .dur { color: var(--txt-2); font-size: .82rem; font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: 8px; }
 
 canvas#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 40; }
 
@@ -324,14 +336,17 @@ canvas#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-e
 <main class="app" id="app">
   <div class="vistas" id="vistas"></div>
   <div class="player" id="player" hidden>
-    <div class="barra" aria-hidden="true"><span id="pBarra"></span></div>
-    <div class="fila-p">
-      <div class="ahora" aria-live="polite"><b id="pTitulo"></b><span id="pSub"></span></div>
-      <div class="ctrls">
-        <button class="ctrl" id="pPrev" aria-label="Canción anterior"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5 V19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M19 5 L9 12 L19 19 Z" fill="currentColor"/></svg></button>
-        <button class="ctrl pp" id="pPlay" aria-label="Pausar"><svg id="icoPlay" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="currentColor"/></svg><svg id="icoPausa" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" hidden><rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor"/><rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor"/></svg></button>
-        <button class="ctrl" id="pNext" aria-label="Siguiente línea"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 5 V19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M5 5 L15 12 L5 19 Z" fill="currentColor"/></svg></button>
-      </div>
+    <div class="ahora" aria-live="polite"><b id="pTitulo"></b><span id="pSub"></span></div>
+    <div class="seek" id="seek" role="slider" tabindex="0" aria-label="Avance de la canción" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="riel"><span class="lleno" id="pLleno"></span><span class="perilla" id="pPerilla"></span></div>
+    </div>
+    <div class="tiempos" aria-hidden="true"><span id="tA">0:00</span><span id="tB">0:00</span></div>
+    <div class="ctrls">
+      <button class="ctrl sec" id="pPrevT" aria-label="Canción anterior"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5 V19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M19 5 L8 12 L19 19 Z" fill="currentColor"/></svg></button>
+      <button class="ctrl" id="pPrev" aria-label="Línea anterior"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 6 L4 12 L11 18 Z M20 6 L13 12 L20 18 Z" fill="currentColor"/></svg></button>
+      <button class="ctrl pp" id="pPlay" aria-label="Reproducir"><svg id="icoPlay" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5 L19 12 L8 19 Z" fill="currentColor"/></svg><svg id="icoPausa" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" hidden><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg></button>
+      <button class="ctrl" id="pNext" aria-label="Línea siguiente"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6 L11 12 L4 18 Z M13 6 L20 12 L13 18 Z" fill="currentColor"/></svg></button>
+      <button class="ctrl sec" id="pNextT" aria-label="Canción siguiente"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5 V19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M5 5 L16 12 L5 19 Z" fill="currentColor"/></svg></button>
     </div>
   </div>
 </main>
@@ -1033,6 +1048,10 @@ TRACKS.push({
   ]
 });
 const IDX_FINAL = TRACKS.findIndex(t => t.tipo === "final");
+/* duración de cada línea: lo que tarda en leerse con calma */
+const durVerso = v => v.b ? 8000 : Math.min(8500, 2000 + v.t.replace(/<[^>]+>/g, "").length * 45);
+TRACKS.forEach(t => { t.durs = t.versos.map(durVerso); t.acum = t.durs.reduce((a, d, j) => (a.push(j ? a[j - 1] + t.durs[j - 1] : 0), a), []); t.total = t.durs.reduce((a, b) => a + b, 0); });
+const fmt = ms => { const s = Math.floor(ms / 1000); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
 const IDX_EPILOGO = TRACKS.findIndex(t => t.tipo === "epilogo");
 
 /* ---------- vistas ---------- */
@@ -1063,7 +1082,7 @@ function vistaInicio() {
       </button>
     </div>
     <ol class="tracklist">
-      ${TRACKS.map((t, k) => `<li><button data-track="${k}"><span class="i">${k + 1}</span><span style="min-width:0"><span class="nom">${t.titulo}</span><span class="sub">${t.tipo === "cap" ? "Edith &amp; Luis · " + t.cuando : "Edith &amp; Luis · " + t.cuando}</span></span><span data-oro-lista="${t.tipo === "cap" ? t.i : ""}"></span></button></li>`).join("")}
+      ${TRACKS.map((t, k) => `<li><button data-track="${k}"><span class="i">${k + 1}</span><span style="min-width:0"><span class="nom">${t.titulo}</span><span class="sub">${t.tipo === "cap" ? "Edith &amp; Luis · " + t.cuando : "Edith &amp; Luis · " + t.cuando}</span></span><span class="dur"><span data-oro-lista="${t.tipo === "cap" ? t.i : ""}"></span>${fmt(t.total)}</span></button></li>`).join("")}
     </ol>
     <div class="nota-papel">
       <h3>cómo se escucha este disco</h3>
@@ -1136,7 +1155,7 @@ function vistaTrack(t, k) {
     <div class="arte" style="--rot:${k % 2 ? 2 : -2}deg"><div class="cuadro" data-arte>${svg(t.arte, "Dibujo de " + t.titulo)}</div><div class="pie">${t.cuando}</div></div>
     <div class="t-info"><div><h2>${t.titulo}</h2><p>${ELLA} &amp; ${EL}</p></div></div>
     <div class="letra" data-letra>${versos}</div>
-    <span class="siguele" data-siguele>toca para seguir</span>
+    <span class="siguele" data-siguele>toca la línea para seguir · una anterior para regresar</span>
     <div class="outro" data-outro hidden>
       <p class="fin">— fin de la canción —</p>
       ${outro}
@@ -1157,14 +1176,22 @@ TRACKS.forEach(vistaTrack);
 
 /* ---------- reproductor ---------- */
 const $player = document.getElementById("player");
-const $pBarra = document.getElementById("pBarra");
 const $pTitulo = document.getElementById("pTitulo");
 const $pSub = document.getElementById("pSub");
 const $pPlay = document.getElementById("pPlay");
 const $pPrev = document.getElementById("pPrev");
 const $pNext = document.getElementById("pNext");
-const revelado = mem.get("revelado", {});
-let vistaActual = 0, trackActual = -1, sonando = false, tmr = null;
+const $pPrevT = document.getElementById("pPrevT");
+const $pNextT = document.getElementById("pNextT");
+const $seek = document.getElementById("seek");
+const $lleno = document.getElementById("pLleno");
+const $perilla = document.getElementById("pPerilla");
+const $tA = document.getElementById("tA");
+const $tB = document.getElementById("tB");
+const visto = mem.get("revelado", {});   /* cuántas líneas ya se mostraron en cada canción */
+const pos = mem.get("pos", {});          /* línea actual de cada canción */
+let vistaActual = 0, trackActual = -1, sonando = false, transcurrido = 0, ultimo = 0, raf = 0;
+const suave = () => matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 
 function mostrar(idx) {
   vistas.forEach((v, j) => { v.el.hidden = j !== idx; v.el.inert = j !== idx; });
@@ -1173,6 +1200,7 @@ function mostrar(idx) {
   v.el.scrollTop = 0;
   v.el.style.animation = "none"; void v.el.offsetWidth; v.el.style.animation = "";
 }
+function guardar() { mem.set("revelado", visto); mem.set("pos", pos); }
 function irInicio() { pausar(); trackActual = -1; $player.hidden = true; mostrar(0); pintarOros(); }
 function irTrack(k) {
   pausar();
@@ -1181,71 +1209,154 @@ function irTrack(k) {
   $player.hidden = false;
   const t = TRACKS[k];
   $pTitulo.textContent = t.titulo;
-  $pSub.textContent = `${ELLA} & ${EL} · canción ${k + 1} de ${TRACKS.length}`;
-  $pPrev.disabled = k === 0;
-  if (!revelado[k]) { revelado[k] = 1; guardarRevelado(); }
+  $pSub.textContent = `· ${ELLA} & ${EL}`;
+  $pPrevT.disabled = k === 0;
+  $pNextT.disabled = k === TRACKS.length - 1;
+  const total = t.versos.length;
+  if (!visto[k]) { visto[k] = 1; pos[k] = 0; guardar(); }
+  if (pos[k] === undefined || pos[k] >= visto[k]) pos[k] = visto[k] - 1;
+  transcurrido = 0;
   pintarTrack(k, false);
-  if (revelado[k] < TRACKS[k].versos.length) reproducir();
+  pintarTiempo();
+  if (visto[k] < total) reproducir();
   if (t.tipo === "epilogo") armarResumen();
 }
-function guardarRevelado() { mem.set("revelado", revelado); }
 function pintarTrack(k, desplazar) {
   const el = vistas[k + 1].el;
-  const n = revelado[k] || 0;
+  const n = visto[k] || 0, p = pos[k] || 0;
   const total = TRACKS[k].versos.length;
   el.querySelectorAll("[data-letra] .ly").forEach(ly => {
     const j = +ly.dataset.n;
-    ly.dataset.e = j < n - 1 ? "pasado" : j === n - 1 ? "actual" : "futuro";
+    ly.dataset.e = j >= n ? "futuro" : j === p ? "actual" : "otro";
   });
   const completo = n >= total;
   el.querySelector("[data-outro]").hidden = !completo;
-  el.querySelector("[data-siguele]").hidden = completo;
-  $pBarra.style.width = (Math.min(n, total) / total * 100) + "%";
-  $pNext.disabled = completo;
-  if (completo) pausar();
+  el.querySelector("[data-siguele]").hidden = completo && p === total - 1;
+  $pPrev.disabled = p === 0;
   if (desplazar) {
     const actual = el.querySelector('.ly[data-e="actual"]');
-    if (actual) actual.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+    if (actual) actual.scrollIntoView({ behavior: suave(), block: "center" });
   }
 }
-function avanzar() {
+/* salta a la línea n de la canción actual (n puede estar adelante: la revela) */
+function irLinea(n, desde = 0) {
+  if (trackActual < 0) return;
+  const k = trackActual, t = TRACKS[k], total = t.versos.length;
+  n = Math.max(0, Math.min(total - 1, n));
+  const nuevaVista = n + 1 > (visto[k] || 0);
+  pos[k] = n;
+  if (nuevaVista) visto[k] = n + 1;
+  guardar();
+  transcurrido = desde;
+  pintarTrack(k, true);
+  pintarTiempo();
+  if (nuevaVista && visto[k] >= total && ["cap", "intro", "interludio"].includes(t.tipo)) {
+    setTimeout(() => vistas[k + 1].el.querySelector("[data-outro]").scrollIntoView({ behavior: suave(), block: "start" }), 1400);
+  }
+}
+function siguienteLinea() {
   if (trackActual < 0) return;
   const k = trackActual, total = TRACKS[k].versos.length;
-  if ((revelado[k] || 0) >= total) return;
-  revelado[k] = (revelado[k] || 0) + 1;
-  guardarRevelado();
-  pintarTrack(k, true);
-  if (revelado[k] >= total) {
-    setTimeout(() => { const o = vistas[k + 1].el.querySelector("[data-outro]"); o.scrollIntoView({ behavior: "smooth", block: "start" }); }, 900);
+  if (pos[k] < total - 1) irLinea(pos[k] + 1);
+  else terminar();
+}
+function anteriorLinea() {
+  if (trackActual < 0) return;
+  const k = trackActual;
+  /* como en Spotify: si ya avanzó un poco, regresa al inicio de la línea; si no, a la anterior */
+  if (transcurrido > 1500 || pos[k] === 0) { transcurrido = 0; pintarTiempo(); }
+  else irLinea(pos[k] - 1);
+}
+function terminar() {
+  const k = trackActual, t = TRACKS[k];
+  pausar();
+  transcurrido = t.durs[pos[k]];
+  pintarTiempo();
+  if (visto[k] < t.versos.length) { visto[k] = t.versos.length; guardar(); pintarTrack(k, false); }
+}
+function pintarTiempo() {
+  if (trackActual < 0) return;
+  const t = TRACKS[trackActual], p = pos[trackActual] || 0;
+  const ahora = Math.min(t.total, t.acum[p] + Math.min(transcurrido, t.durs[p]));
+  const pct = ahora / t.total * 100;
+  $lleno.style.width = pct + "%";
+  $perilla.style.left = pct + "%";
+  $seek.setAttribute("aria-valuenow", Math.round(pct));
+  $seek.setAttribute("aria-valuetext", `${fmt(ahora)} de ${fmt(t.total)}`);
+  $tA.textContent = fmt(ahora);
+  $tB.textContent = fmt(t.total);
+}
+function bucle(ts) {
+  if (!sonando) return;
+  const dt = ultimo ? ts - ultimo : 0;
+  ultimo = ts;
+  transcurrido += dt;
+  const k = trackActual, t = TRACKS[k];
+  if (transcurrido >= t.durs[pos[k]]) {
+    if (pos[k] < t.versos.length - 1) irLinea(pos[k] + 1);
+    else { terminar(); return; }
   }
-  if (sonando) programar();
+  pintarTiempo();
+  raf = requestAnimationFrame(bucle);
 }
-function espera() {
-  const k = trackActual, v = TRACKS[k].versos[(revelado[k] || 1) - 1];
-  if (!v) return 3000;
-  if (v.b) return 7000;
-  const largo = v.t.replace(/<[^>]+>/g, "").length;
-  return Math.min(8000, 1800 + largo * 42);
-}
-function programar() { clearTimeout(tmr); tmr = setTimeout(avanzar, espera()); }
 function reproducir() {
   if (trackActual < 0) return;
-  if ((revelado[trackActual] || 0) >= TRACKS[trackActual].versos.length) return;
-  sonando = true; actualizarPlay(); programar();
+  const k = trackActual, t = TRACKS[k];
+  if (pos[k] >= t.versos.length - 1 && transcurrido >= t.durs[pos[k]]) { irLinea(0); }
+  sonando = true; ultimo = 0; actualizarPlay();
+  cancelAnimationFrame(raf); raf = requestAnimationFrame(bucle);
 }
-function pausar() { sonando = false; clearTimeout(tmr); actualizarPlay(); }
+function pausar() { sonando = false; cancelAnimationFrame(raf); actualizarPlay(); }
 function actualizarPlay() {
   document.getElementById("icoPlay").hidden = sonando;
   document.getElementById("icoPausa").hidden = !sonando;
   $pPlay.setAttribute("aria-label", sonando ? "Pausar" : "Reproducir");
 }
+let avisoTmr;
+function avisar(txt) {
+  $player.querySelectorAll(".aviso-pausa").forEach(a => a.remove());
+  const a = document.createElement("div");
+  a.className = "aviso-pausa"; a.textContent = txt;
+  $player.appendChild(a);
+  clearTimeout(avisoTmr); avisoTmr = setTimeout(() => a.remove(), 2200);
+}
 $pPlay.onclick = () => sonando ? pausar() : reproducir();
-$pNext.onclick = () => avanzar();
-$pPrev.onclick = () => { if (trackActual > 0) irTrack(trackActual - 1); };
+$pNext.onclick = () => siguienteLinea();
+$pPrev.onclick = () => anteriorLinea();
+$pPrevT.onclick = () => { if (trackActual > 0) irTrack(trackActual - 1); };
+$pNextT.onclick = () => { if (trackActual < TRACKS.length - 1) irTrack(trackActual + 1); };
+
+/* barra: tocar o arrastrar para moverse por la canción */
+function buscar(clientX) {
+  const r = $seek.getBoundingClientRect();
+  const f = Math.max(0, Math.min(1, (clientX - r.left) / r.width));
+  const t = TRACKS[trackActual], ms = f * t.total;
+  let n = t.acum.findIndex((a, j) => ms < a + t.durs[j]);
+  if (n < 0) n = t.versos.length - 1;
+  irLinea(n, ms - t.acum[n]);
+}
+let arrastre = false;
+$seek.addEventListener("pointerdown", e => { if (trackActual < 0) return; arrastre = true; $seek.classList.add("arrastrando"); $seek.setPointerCapture(e.pointerId); buscar(e.clientX); });
+$seek.addEventListener("pointermove", e => { if (arrastre) buscar(e.clientX); });
+const soltar = () => { arrastre = false; $seek.classList.remove("arrastrando"); };
+$seek.addEventListener("pointerup", soltar);
+$seek.addEventListener("pointercancel", soltar);
+$seek.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") { e.preventDefault(); e.stopPropagation(); siguienteLinea(); }
+  if (e.key === "ArrowLeft") { e.preventDefault(); e.stopPropagation(); anteriorLinea(); }
+});
+
+/* si ella toca un recuerdo pegado, la música se pausa para que lo vea con calma */
+document.addEventListener("pointerdown", e => {
+  if (sonando && e.target.closest(".letra .insert")) { pausar(); avisar("En pausa para que lo veas con calma"); }
+});
+document.addEventListener("visibilitychange", () => { if (document.hidden) pausar(); });
 
 document.addEventListener("keydown", e => {
   if (e.target.closest("textarea, input")) return;
-  if (trackActual >= 0 && (e.key === " " || e.key === "ArrowRight")) { e.preventDefault(); avanzar(); }
+  if (trackActual >= 0 && e.key === " " && !e.target.closest("button, summary, a")) { e.preventDefault(); sonando ? pausar() : reproducir(); }
+  if (trackActual >= 0 && e.key === "ArrowRight") { e.preventDefault(); siguienteLinea(); }
+  if (trackActual >= 0 && e.key === "ArrowLeft") { e.preventDefault(); anteriorLinea(); }
   if (e.key === "Escape") irInicio();
 });
 
@@ -1274,7 +1385,7 @@ document.addEventListener("click", e => {
   if (tr) { irTrack(+tr.dataset.track); return; }
   if (e.target.closest("[data-inicio]")) { irInicio(); return; }
   if (e.target.closest("[data-play-album]")) {
-    const k = TRACKS.findIndex((t, j) => (revelado[j] || 0) < t.versos.length);
+    const k = TRACKS.findIndex((t, j) => (visto[j] || 0) < t.versos.length);
     irTrack(k < 0 ? 0 : k);
     return;
   }
@@ -1342,9 +1453,13 @@ document.addEventListener("click", e => {
     }
     return;
   }
-  /* tocar la letra = siguiente línea */
-  const letra = e.target.closest("[data-letra]");
-  if (letra && !e.target.closest(".insert, a, button, input, textarea")) avanzar();
+  /* tocar la letra: la actual avanza, una anterior regresa a ella (como en Spotify) */
+  const ly = e.target.closest("[data-letra] .ly");
+  if (ly && !e.target.closest(".insert, a, button, input, textarea")) {
+    const n = +ly.dataset.n, k = trackActual;
+    if (n === pos[k]) siguienteLinea();
+    else { irLinea(n); if (!sonando) reproducir(); }
+  }
 });
 
 /* quizzes ya ganados */
