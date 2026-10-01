@@ -86,7 +86,6 @@ a { color: inherit; }
 .tracklist .nom { font-weight: 600; line-height: 1.2; display: block; }
 .tracklist .sub { color: var(--txt-2); font-size: .82rem; display: block; }
 .tracklist .on .nom { color: var(--verde-play); }
-.tracklist .oro { width: 22px; height: 22px; }
 .seccion-t { margin: 8px 0 0; font-family: var(--f-display); font-weight: 700; font-size: 1.1rem; letter-spacing: -.01em; }
 .nota-papel { background: var(--papel); color: var(--tinta); padding: 18px 18px 16px; transform: rotate(-1deg); position: relative; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 8px 18px rgba(0, 0, 0, .35); }
 .nota-papel::before { content: ""; position: absolute; width: 80px; height: 22px; background: var(--cinta); top: -10px; left: 24px; transform: rotate(-4deg); }
@@ -157,14 +156,15 @@ a { color: inherit; }
 
 .servilletita { align-self: center; background: var(--blanco); padding: 18px 22px; transform: rotate(-3deg); box-shadow: 0 6px 14px rgba(0, 0, 0, .12); font-family: var(--f-serif); font-style: italic; font-size: 1.8rem; line-height: 1.1; text-align: center; background-image: linear-gradient(135deg, transparent 49.7%, rgba(36, 33, 29, .07) 50%, transparent 50.3%); }
 
-.acta { display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--tinta-2); outline: 1px solid var(--tinta-2); outline-offset: 4px; padding: 16px 14px; margin: 5px; }
-.acta .titulo-acta { font-family: var(--f-maquina); font-weight: 700; font-size: 1.1rem; text-align: center; letter-spacing: .1em; }
-.acta .sub { text-align: center; color: var(--tinta-2); margin: 0 0 6px; font-size: .8rem; }
-.acta dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; }
-.acta dt { font-family: var(--f-maquina); font-size: .78rem; color: var(--tinta-2); padding-top: 4px; }
-.acta dd { margin: 0; font-family: var(--f-serif); font-style: italic; font-size: 1.15rem; line-height: 1.2; border-bottom: 1px dotted var(--tinta-2); min-width: 0; }
-.acta .firmas { display: flex; justify-content: space-around; gap: 12px; margin-top: 10px; font-family: var(--f-serif); font-style: italic; font-size: 1.35rem; color: var(--azul); }
 
+.anillos { border: 0; background: none; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; align-self: center; width: 100%; max-width: 280px; }
+.anillos .anillo { transition: transform .9s var(--ease); transform-box: view-box; }
+.anillos .izq { transform: translateX(-58px) rotate(-10deg); transform-origin: 110px 72px; }
+.anillos .der { transform: translateX(58px) rotate(10deg); transform-origin: 110px 72px; }
+.anillos .corazon-an { opacity: 0; transition: opacity .5s var(--ease) .6s; }
+.anillos.juntos .izq { transform: translateX(-17px); }
+.anillos.juntos .der { transform: translateX(17px); }
+.anillos.juntos .corazon-an { opacity: 1; }
 .inventario { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .inventario > div { min-width: 0; }
 .inventario h4 { margin: 0 0 6px; font-family: var(--f-maquina); font-weight: 700; font-size: .9rem; color: var(--naranja-os); }
@@ -248,6 +248,9 @@ input[type="text"]:focus, textarea:focus { outline: 2px solid var(--azul); outli
 .quiz .op:disabled { cursor: default; }
 .quiz .op.mal { color: var(--gris); text-decoration: line-through; }
 .quiz .op.bien { background: #DDF1E5; border-color: var(--verde); }
+.secreto { background: var(--amarillo); color: var(--tinta); padding: 14px 16px; transform: rotate(1deg); box-shadow: 0 6px 14px rgba(0, 0, 0, .15); animation: sale .5s var(--ease); }
+.secreto .s-lbl { font-family: var(--f-maquina); font-size: .8rem; }
+.secreto p { margin: 4px 0 0; font-family: var(--f-serif); font-style: italic; font-size: 1.3rem; line-height: 1.25; }
 .quiz .res { margin: 0; min-height: 1.3em; font-family: var(--f-serif); font-style: italic; font-size: 1.2rem; }
 details.version { background: rgba(0, 0, 0, .22); border-radius: 12px; padding: 4px 14px; }
 details.version[open] { padding-bottom: 14px; }
@@ -264,13 +267,6 @@ details.version .guardado { color: var(--tt); opacity: .8; margin-top: 6px; }
 .boton.borde { background: transparent; color: var(--tt); box-shadow: inset 0 0 0 2px var(--tt); }
 .insert .boton { background: var(--tinta); color: var(--papel); }
 .insert .boton.borde { background: transparent; color: var(--tinta); box-shadow: inset 0 0 0 2px var(--tinta); }
-
-/* disco de oro (sello) */
-.oro { width: 44px; height: 44px; flex: none; }
-.oro.nuevo { animation: estampa .6s var(--ease); }
-@keyframes estampa { from { transform: scale(2.2) rotate(-90deg); opacity: 0; } }
-.oros { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
-.oros svg { width: 26px; height: 26px; }
 
 /* ---------- final + epílogo ---------- */
 .servilleta { position: relative; align-self: center; width: min(100%, 330px); background: var(--blanco); color: var(--tinta); padding: 26px 22px 22px; box-shadow: 0 14px 30px rgba(0, 0, 0, .25); transform: rotate(-2deg); clip-path: polygon(0 2%, 4% 0, 12% 1.5%, 22% 0, 35% 1%, 48% 0, 60% 1.6%, 74% 0, 86% 1.2%, 100% 0, 99% 20%, 100% 45%, 98.6% 70%, 100% 100%, 88% 98.6%, 70% 100%, 50% 98.4%, 30% 100%, 12% 98.5%, 0 100%, 1.2% 70%, 0 40%); }
@@ -417,6 +413,7 @@ const CAPITULOS = [
         "<span class='script'>Como yo lo veo, eres el amor de mi vida.</span>"
       ]}
     ],
+    nota: "Si alguien de tu salón se preguntaba por qué siempre había un tipo esperando afuera: era yo, y era por ti.",
     quiz: { q: "¿Dónde te esperaba en los recesos?", ops: ["En la cafetería", "Afuera de tu salón", "En la biblioteca"], ok: 1, bien: "Ahí mismito, todos los días." }
   },
   {
@@ -456,7 +453,7 @@ const CAPITULOS = [
         "Firmamos papeles, creo que hasta costó dinero, y nos dieron unos anillos de metal tan sencillos que parecían de aluminio.",
         "Creo que tú todavía tienes esos papeles. O por lo menos los tuviste."
       ]},
-      { bloque: "acta" },
+      { bloque: "anillos" },
       { t: "Todo lo que nos dimos", p: [
         "Nos regalamos de todo. Algunas cosas todavía existen. Otras viven nada más en la memoria."
       ]},
@@ -467,7 +464,7 @@ const CAPITULOS = [
       ]}
     ],
     nota: "Técnicamente seguimos casados por la kermés, ¿no?",
-    quiz: { q: "¿Cómo eran nuestros anillos de la boda en la kermés?", ops: ["De oro, obvio", "De metal, como de aluminio", "De plástico, de los de dulce"], ok: 1, bien: "Sencillitos, pero nuestros." }
+    quiz: { q: "¿Cómo eran nuestros anillos de la boda en la kermés?", ops: ["De oro, obvio", "De metal, como de aluminio", "De plástico, de los de dulce"], ok: 1, bien: "Exacto. Los de aluminio." }
   },
   {
     titulo: "Intermedio", cuando: "2020", pausa: true,
@@ -541,6 +538,7 @@ const CAPITULOS = [
       ]}
     ],
     cancion: { lbl: "Lo que cantamos esa noche", tit: "Little Jesus", url: "https://open.spotify.com/artist/5p1ARDx76hnOXoeigLIKit" },
+    nota: "La pregunta que no te hice en Pachuca la traje guardada hasta hoy. Ya casi llegamos a ella.",
     quiz: { q: "¿Qué cenamos en el Airbnb?", ops: ["Taquitos", "Pizza", "Sushi"], ok: 0, bien: "Taquitos. Cena de campeones." }
   },
   {
@@ -568,6 +566,7 @@ const CAPITULOS = [
       { bloque: "frasco" }
     ],
     recuerdo: "Para Omali, que se fue en junio. En esta historia se queda para siempre.",
+    nota: "Rayo y yo tenemos algo en común: los dos nos emocionamos de más cada vez que te vemos.",
     quiz: { q: "¿Cómo es Rayo?", ops: ["Negro y muy tranquilo", "Café con blanco y medio loquito", "Gris y dormilón"], ok: 1, bien: "Hiperactivo y perfecto." }
   },
   {
@@ -593,6 +592,7 @@ const CAPITULOS = [
       ]},
       { bloque: "familia" }
     ],
+    nota: "Ya estoy practicando las canciones para el 23 de enero. No prometo afinar, pero sí cantarlas todas contigo.",
     quiz: { q: "¿Cuándo vamos a ver a NSQK?", ops: ["31 de diciembre de 2026", "23 de enero de 2027", "14 de febrero de 2027"], ok: 1, bien: "23/01/2027. Ya estamos contando." }
   },
   {
@@ -614,6 +614,7 @@ const CAPITULOS = [
         "Falta muchísimo por contar. Por eso este disco no se acaba aquí."
       ]}
     ],
+    nota: "Esta vez no improvisé con una servilleta. Esta vez lo preparé todo. Sigue a la siguiente canción.",
     quiz: { q: "¿Desde qué año nos conocemos?", ops: ["2018", "2019", "2020"], ok: 1, bien: "2019. Y contando." }
   }
 ];
@@ -859,10 +860,6 @@ const COLOR = [
 const ARTE = ["sudadera", "reloj", "cajaCerrada", "kermes", "nube", "minecraft", "boleto", "casa", "familia", "letrero"];
 
 const flechaIr = `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="currentColor"/></svg>`;
-const oro = (gano, nuevo) => `<svg class="oro${nuevo ? " nuevo" : ""}" viewBox="0 0 44 44" role="img" aria-label="${gano ? "Disco de oro ganado" : "Disco de oro pendiente"}">
-  <circle cx="22" cy="22" r="20" fill="${gano ? "#E8B730" : "none"}" stroke="${gano ? "#8A6510" : "currentColor"}" stroke-width="2" ${gano ? "" : 'stroke-dasharray="4 4" opacity=".55"'}/>
-  ${gano ? '<circle cx="22" cy="22" r="13" fill="none" stroke="#C9971F" stroke-width="1.5"/><circle cx="22" cy="22" r="7" fill="#FFF4C8"/><circle cx="22" cy="22" r="2" fill="#8A6510"/><path d="M10 14 Q14 9 20 8" fill="none" stroke="#FFF4C8" stroke-width="2" stroke-linecap="round" opacity=".8"/>' : ""}
-</svg>`;
 
 /* ---------- recuerdos pegados (bloques interactivos) ---------- */
 const BLOQUES = {
@@ -884,18 +881,15 @@ const BLOQUES = {
     </button>
     <p class="lead centro" data-caja-txt hidden>…no había caja. Nunca nos la llevaron.</p>`,
   servilletita: () => `<div class="servilletita">¿Quieres ser mi novia? ♡</div>`,
-  acta: () => `<div class="acta" role="group" aria-label="Acta de matrimonio de kermés">
-      <div class="titulo-acta">ACTA DE MATRIMONIO</div>
-      <p class="sub maquina">Registro Civil de la Kermés · Prepa · 2019–2020</p>
-      <dl>
-        <dt>Ella</dt><dd>Edith Adán Paredes</dd>
-        <dt>Él</dt><dd>Luis Alberto Ruíz Gutiérrez</dd>
-        <dt>Anillos</dt><dd>de metal, como de aluminio</dd>
-        <dt>Costo</dt><dd>unas monedas, creo</dd>
-        <dt>Vigencia</dt><dd>hasta que la kermés nos separe</dd>
-      </dl>
-      <div class="firmas"><span>Adancilla</span><span>Ruicito</span></div>
-    </div>`,
+  anillos: () => `<button class="anillos" data-anillos aria-label="Juntar los anillos">
+      <svg class="doodle" viewBox="0 0 220 130" aria-hidden="true">
+        <g class="anillo izq"><circle cx="110" cy="72" r="28" fill="none" stroke="#C9CDD6" stroke-width="10"/><circle cx="110" cy="72" r="33" class="k f-none"/><circle cx="110" cy="72" r="23" class="k f-none"/><path d="M96 52 Q104 46 112 46" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></g>
+        <g class="anillo der"><circle cx="110" cy="72" r="28" fill="none" stroke="#C9CDD6" stroke-width="10"/><circle cx="110" cy="72" r="33" class="k f-none"/><circle cx="110" cy="72" r="23" class="k f-none"/><path d="M96 52 Q104 46 112 46" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></g>
+        <path class="k f-naranja corazon-an" stroke-width="2" transform="translate(110 22) scale(1.5)" d="M0 6 C -11 -4 -8 -13 0 -7 C 8 -13 11 -4 0 6 Z"/>
+      </svg>
+      <span class="pista">júntalos</span>
+    </button>
+    <p class="lead centro" data-anillos-txt hidden>Sencillitos, de metal, de kermés. Pero nuestros.</p>`,
   inventario: () => `<div class="inventario">
       <div><h4>Yo a ti</h4><ul>
         <li>Muchos peluches (que todavía tienes)</li><li>Cartas</li><li>Detalles de todo tipo</li>
@@ -949,8 +943,6 @@ const BLOQUES = {
   datos: () => `<div class="dato"><b data-faltan>—</b><span>días para ver a NSQK juntos.</span></div>`,
   servilleta: () => `${svg("caja", "Una caja de pizza que dice: esta vez sí")}
     <div class="col" style="align-items:center;gap:6px">
-      <span class="maquina" style="font-size:.85rem;color:var(--tinta-2)">tus discos de oro: <span data-cuenta-sellos>0</span> de ${TOTAL_SELLOS}</span>
-      <div class="oros" data-oros></div>
     </div>
     <div class="servilleta" id="servilleta">
       <div class="para">para ${ELLA}:</div>
@@ -1073,13 +1065,13 @@ function vistaInicio() {
     </div>
     <p class="contador-linea"><span data-msd-largo>—</span> desde aquella servilleta.</p>
     <div class="acciones">
-      <span class="mini">Discos de oro: <b data-cuenta-sellos>0</b> de ${TOTAL_SELLOS}</span>
+      <span class="mini">${TRACKS.length} canciones · ${Math.round(TRACKS.reduce((a, t) => a + t.total, 0) / 60000)} min</span>
       <button class="play-grande" data-play-album aria-label="Reproducir la historia desde el principio">
         <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="currentColor"/></svg>
       </button>
     </div>
     <ol class="tracklist">
-      ${TRACKS.map((t, k) => `<li><button data-track="${k}"><span class="i">${k + 1}</span><span style="min-width:0"><span class="nom">${t.titulo}</span><span class="sub">${t.tipo === "cap" ? "Edith &amp; Luis · " + t.cuando : "Edith &amp; Luis · " + t.cuando}</span></span><span class="dur"><span data-oro-lista="${t.tipo === "cap" ? t.i : ""}"></span>${fmt(t.total)}</span></button></li>`).join("")}
+      ${TRACKS.map((t, k) => `<li><button data-track="${k}"><span class="i">${k + 1}</span><span style="min-width:0"><span class="nom">${t.titulo}</span><span class="sub">${t.tipo === "cap" ? "Edith &amp; Luis · " + t.cuando : "Edith &amp; Luis · " + t.cuando}</span></span><span class="dur">${fmt(t.total)}</span></button></li>`).join("")}
     </ol>
     <div class="nota-papel">
       <h3>cómo se escucha este disco</h3>
@@ -1087,7 +1079,7 @@ function vistaInicio() {
         <li>Cada canción es un capítulo. La letra es nuestra historia y va apareciendo sola.</li>
         <li>Si lees más rápido que la música, toca la letra. Si quieres pausa, abajo está el botón.</li>
         <li>Todo lo que esté pegado como papel se toca: se voltea, se abre o trae algo adentro.</li>
-        <li>Al final de cada canción hay una pregunta sobre nosotros. Si aciertas, ganas un disco de oro.</li>
+        <li>Al final de cada canción hay una pregunta sobre nosotros. Si aciertas, te cuento un secreto.</li>
         <li>Cada canción tiene un espacio para <i>tu versión</i>. Al final me la mandas y la guardo con todo lo demás.</li>
       </ol>
     </div>
@@ -1115,13 +1107,13 @@ function vistaTrack(t, k) {
     const c = t.cap, i = t.i;
     outro = `
       ${c.cancion ? `<a class="cancion" href="${c.cancion.url}" target="_blank" rel="noopener">${disco(["amarillo","naranja","verde","azul-claro"][i % 4], "ink")}<span class="info"><span class="lbl">${c.cancion.lbl}</span><span class="tit">${c.cancion.tit}</span></span><span class="ir" aria-label="Escuchar en Spotify">${flechaIr}</span></a>` : ""}
-      ${c.nota ? `<button class="nota" aria-expanded="false"><span class="tapa">nota al margen · toca para leer</span><span class="dentro">${c.nota}</span></button>` : ""}
       ${c.recuerdo ? `<p class="recuerdo"><svg width="40" height="40" viewBox="-20 -20 40 40" aria-hidden="true"><path d="M-10 4 L-9 -14 L-2 -6 Z M10 4 L9 -14 L2 -6 Z" fill="#D5DAE3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cy="4" r="11" fill="#D5DAE3" stroke="currentColor" stroke-width="2"/><path d="M0 -20 L1.5 -16 L5 -15 L1.5 -14 L0 -10 L-1.5 -14 L-5 -15 L-1.5 -16 Z" fill="#FFC93D"/></svg><span>${c.recuerdo}</span></p>` : ""}
       ${c.quiz ? `<div class="quiz" data-quiz="${i}">
-        <span class="q-lbl">pregunta para ganar el disco de oro</span>
+        <span class="q-lbl">¿te acuerdas? si aciertas, te cuento un secreto</span>
         <p class="q">${c.quiz.q}</p>
         <div class="ops">${c.quiz.ops.map((o, j) => `<button class="op" data-op="${j}">${o}</button>`).join("")}</div>
         <p class="res" role="status"></p>
+        ${c.nota ? `<div class="secreto" hidden><span class="s-lbl">el secreto</span><p>${c.nota}</p></div>` : ""}
       </div>` : ""}
       <details class="version">
         <summary>¿Y tú cómo lo recuerdas?</summary>
@@ -1147,7 +1139,7 @@ function vistaTrack(t, k) {
     <div class="t-head">
       <button class="icono" data-inicio aria-label="Volver al álbum"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9 L12 16 L19 9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <span class="lbl">Canción ${k + 1} · Nosotros</span>
-      <span data-oro-slot="${t.tipo === "cap" ? t.i : ""}"></span>
+      <span></span>
     </div>
     <div class="arte" style="--rot:${k % 2 ? 2 : -2}deg"><div class="cuadro" data-arte>${svg(t.arte, "Dibujo de " + t.titulo)}</div><div class="pie">${t.cuando}</div></div>
     <div class="t-info"><div><h2>${t.titulo}</h2><p>${ELLA} &amp; ${EL}</p></div></div>
@@ -1359,18 +1351,11 @@ document.addEventListener("keydown", e => {
 
 /* ---------- discos de oro ---------- */
 function pintarOros() {
-  document.querySelectorAll("[data-cuenta-sellos]").forEach(b => b.textContent = sellos.size);
-  document.querySelectorAll("[data-oro-lista]").forEach(s => { const i = s.dataset.oroLista; s.innerHTML = i === "" ? "" : (sellos.has(+i) ? oro(true) : ""); });
-  document.querySelectorAll("[data-oro-slot]").forEach(s => { const i = s.dataset.oroSlot; s.innerHTML = i === "" ? "" : oro(sellos.has(+i)); });
-  document.querySelectorAll("[data-oros]").forEach(r => r.innerHTML = CAPITULOS.map((_, i) => oro(sellos.has(i))).join(""));
 }
 function ganarSello(i) {
   if (sellos.has(i)) return;
   sellos.add(i);
   mem.set("sellos", [...sellos]);
-  pintarOros();
-  const slot = document.querySelector(`[data-oro-slot="${i}"]`);
-  if (slot) slot.innerHTML = oro(true, true);
 }
 
 /* ---------- toques ---------- */
@@ -1411,6 +1396,13 @@ document.addEventListener("click", e => {
     ganarSello(CAPITULOS.findIndex(c => c.pausa));
     return;
   }
+  const an = e.target.closest("[data-anillos]");
+  if (an) {
+    const juntos = an.classList.toggle("juntos");
+    an.querySelector(".pista").textContent = juntos ? "sepáralos" : "júntalos";
+    an.parentElement.querySelector("[data-anillos-txt]").hidden = !juntos;
+    return;
+  }
   const cu = e.target.closest("[data-cuaderno]");
   if (cu) {
     const abierto = cu.classList.toggle("abierto");
@@ -1440,7 +1432,8 @@ document.addEventListener("click", e => {
     if (+op.dataset.op === q.ok) {
       qz.querySelectorAll(".op").forEach(b => b.disabled = true);
       op.classList.add("bien");
-      res.textContent = q.bien + " Disco de oro ganado.";
+      res.textContent = q.bien;
+      const sec = qz.querySelector(".secreto"); if (sec) sec.hidden = false;
       res.style.color = "#1F7A4C";
       ganarSello(i);
     } else {
@@ -1465,7 +1458,8 @@ CAPITULOS.forEach((c, i) => {
   const qz = document.querySelector(`[data-quiz="${i}"]`);
   qz.querySelectorAll(".op").forEach(b => b.disabled = true);
   qz.querySelector(`[data-op="${c.quiz.ok}"]`).classList.add("bien");
-  qz.querySelector(".res").textContent = "Disco de oro ganado.";
+  qz.querySelector(".res").textContent = c.quiz.bien;
+  const sec = qz.querySelector(".secreto"); if (sec) sec.hidden = false;
 });
 
 /* tu versión + gato: se guardan solos */
@@ -1614,7 +1608,7 @@ if (ep && ep.t) { $ta.value = ep.t; mostrarFirmado(ep.t, ep.fecha); }
 function armarResumen() {
   const v = mem.get("versiones", {});
   const lineas = ["Disco «Nosotros» — lo que escribí yo, " + ELLA, ""];
-  lineas.push(`Discos de oro: ${sellos.size} de ${TOTAL_SELLOS}`);
+  lineas.push(`Preguntas acertadas: ${sellos.size} de ${CAPITULOS.filter(c => c.quiz).length}`);
   if (mem.get("si", null)) lineas.push("Respuesta en la servilleta: SÍ");
   const g = mem.get("gato", "");
   if (g) lineas.push("El gato se va a llamar: " + g);
