@@ -114,7 +114,7 @@ a { color: inherit; }
 .hoy-letra p { margin: 0; font-weight: 800; font-size: clamp(1.3rem, 6vw, 1.55rem); line-height: 1.25; letter-spacing: -.015em; }
 .hoy-especial { margin: 0; display: flex; align-items: center; gap: 10px; background: var(--app-2); border-radius: 10px; padding: 10px 12px; font-weight: 700; font-size: .92rem; }
 .hoy-especial::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--verde-play); flex: none; }
-.hoy-datos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.hoy-datos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .hoy-datos div { background: var(--app-2); border-radius: 10px; padding: 12px 6px 10px; text-align: center; display: flex; flex-direction: column; gap: 2px; }
 .hoy-datos b { font-family: var(--f-display); font-weight: 800; font-size: 1.6rem; line-height: 1; font-variant-numeric: tabular-nums; }
 .hoy-datos span { font-size: .75rem; color: var(--txt-2); }
@@ -253,12 +253,13 @@ input[type="text"]:focus, textarea:focus { outline: 2px solid var(--azul); outli
 .col { display: flex; flex-direction: column; gap: 10px; }
 .fila { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
-.reloj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.reloj-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .reloj-grid div { border-radius: 10px; padding: 14px 4px 10px; text-align: center; display: flex; flex-direction: column; gap: 4px; min-width: 0; color: var(--blanco); }
 .reloj-grid div:nth-child(1) { background: var(--azul); }
 .reloj-grid div:nth-child(2) { background: var(--naranja-os); }
 .reloj-grid div:nth-child(3) { background: #2E8B57; }
-.reloj-grid b { font-family: var(--f-display); font-weight: 800; font-size: clamp(2rem, 11vw, 2.8rem); line-height: .9; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.reloj-grid div:nth-child(4) { background: #C4473E; }
+.reloj-grid b { font-family: var(--f-display); font-weight: 800; font-size: clamp(1.6rem, 8.5vw, 2.3rem); line-height: .9; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
 .reloj-grid span { font-family: var(--f-maquina); font-size: .82rem; }
 .dato { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: baseline; }
 .dato b { font-family: var(--f-display); font-weight: 800; font-size: 2rem; line-height: 1; color: var(--naranja-os); font-variant-numeric: tabular-nums; }
@@ -1034,6 +1035,7 @@ const BLOQUES = {
       <p class="guardado" data-gato-ok></p>
     </div>`,
   reloj: () => `<div class="reloj-grid">
+      <div><b data-t="anios">—</b><span>años</span></div>
       <div><b data-t="meses">—</b><span>meses</span></div>
       <div><b data-t="semanas">—</b><span>semanas</span></div>
       <div><b data-t="dias">—</b><span>días</span></div>
@@ -1574,7 +1576,7 @@ function pintarHoy() {
     ${especial ? `<p class="hoy-especial">${especial}</p>` : ""}
     <div class="hoy-letra" style="--c:${color}"><span class="lbl">Razón del día</span><p>${razon}</p></div>
     <div class="hoy-datos">
-      <div><b>${t.meses}</b><span>meses</span></div><div><b>${t.semanas}</b><span>semanas</span></div><div><b>${t.dias}</b><span>días</span></div>
+      <div><b>${t.anios}</b><span>${t.anios === 1 ? "año" : "años"}</span></div><div><b>${t.meses}</b><span>${t.meses === 1 ? "mes" : "meses"}</span></div><div><b>${t.semanas}</b><span>${t.semanas === 1 ? "semana" : "semanas"}</span></div><div><b>${t.dias}</b><span>${t.dias === 1 ? "día" : "días"}</span></div>
     </div>
     <p class="hoy-pie">desde aquella servilleta</p>
     <div class="hoy-filas">
@@ -1819,14 +1821,15 @@ function mesesSemanasDias(a, b) {
   const ancla = new Date(a.getFullYear(), a.getMonth() + meses, a.getDate());
   const hoy = new Date(b.getFullYear(), b.getMonth(), b.getDate());
   const resto = Math.round((hoy - ancla) / 864e5);
-  return { meses, semanas: Math.floor(resto / 7), dias: resto % 7 };
+  return { anios: Math.floor(meses / 12), meses: meses % 12, semanas: Math.floor(resto / 7), dias: resto % 7 };
 }
 const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
 function tic() {
   const ahora = new Date();
   const t = mesesSemanasDias(PRIMER_SI, ahora);
   for (const k in t) document.querySelectorAll(`[data-t="${k}"]`).forEach(el => el.textContent = t[k]);
-  const partes = [plural(t.meses, "mes", "meses")];
+  const partes = [plural(t.anios, "año", "años")];
+  if (t.meses) partes.push(plural(t.meses, "mes", "meses"));
   if (t.semanas) partes.push(plural(t.semanas, "semana", "semanas"));
   if (t.dias) partes.push(plural(t.dias, "día", "días"));
   const txt = partes.length > 1 ? partes.slice(0, -1).join(", ") + " y " + partes[partes.length - 1] : partes[0];
