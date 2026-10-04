@@ -1423,7 +1423,7 @@ vistas.forEach(v => v.el.querySelectorAll("[data-letra] .ly:not(.blk) p").forEac
 
 const DICCION = { "NSQK": "N S Q K", "NSQK.": "N S Q K.", "♡": "" };
 const decir = palabra => DICCION[palabra] ?? palabra.replace(/[«»♡]/g, "");
-let vozEs = null, narrar = mem.get("narracion", false), tokenVoz = 0, luz = 0, luzVoz = -1, inicioVoz = 0, estVoz = 0, hayLimites = false, pidioVoz = 0, arrancoVoz = false, fallasVoz = 0;
+let vozEs = null, narrar = mem.get("narracion2", true), tokenVoz = 0, luz = 0, luzVoz = -1, inicioVoz = 0, estVoz = 0, hayLimites = false, pidioVoz = 0, arrancoVoz = false, fallasVoz = 0;
 const $pVoz = document.getElementById("pVoz");
 /* narración grabada (ElevenLabs): un mp3 por línea en audio/ y tiempos por palabra en audio/tiempos.json */
 let TIEMPOS = {}, hayAudio = false, conAudio = false;
@@ -1498,9 +1498,14 @@ function hablarGrabado(ly) {
   luzVoz = desde; ly._desde = desde; hayLimites = true; conAudio = true;
   estVoz = Math.max(1200, tw[tw.length - 1][1] * 1000);
   const src = "audio/" + clave + ".mp3";
-  if (!$aud.src.endsWith(src)) $aud.src = src;
   const ir = () => { try { $aud.currentTime = desde ? tw[desde][0] : 0; } catch (e) {} };
-  if ($aud.readyState >= 1) ir(); else $aud.onloadedmetadata = () => { if (mio === tokenVoz) ir(); };
+  $aud.onloadedmetadata = null;
+  if (!$aud.src.endsWith(src)) {
+    /* load() corta en seco el audio anterior; si no, el celular alcanza a tocar su final y la posición se adelanta */
+    $aud.src = src;
+    $aud.load();
+    if (desde) $aud.onloadedmetadata = () => { if (mio === tokenVoz) ir(); };
+  } else ir();
   $aud.onplaying = () => { if (mio === tokenVoz) { arrancoVoz = true; inicioVoz = performance.now(); } };
   $aud.onended = () => { if (mio === tokenVoz) { luzVoz = ly._w.length; lineaDicha(mio); } };
   $aud.onerror = () => { if (mio === tokenVoz) fallaVoz(); };
@@ -1526,7 +1531,7 @@ function pintarLuz() {
   const ly = lyActual();
   if (!ly || !ly._w) return;
   const n = ly._w.length, d = TRACKS[trackActual].durs[pos[trackActual]];
-  if (conAudio && luzVoz >= 0 && luzVoz < n) {
+  if (conAudio && arrancoVoz && luzVoz >= 0 && luzVoz < n) {
     const tw = TIEMPOS[claveLinea()], ahora = $aud.currentTime + .08;
     let i = luzVoz;
     while (i < n && tw[i][0] <= ahora) i++;
@@ -1660,7 +1665,7 @@ function avisar(txt) {
 }
 $pPlay.onclick = () => sonando ? pausar() : reproducir();
 $pVoz.onclick = () => {
-  narrar = !narrar; mem.set("narracion", narrar); fallasVoz = 0;
+  narrar = !narrar; mem.set("narracion2", narrar); fallasVoz = 0;
   $pVoz.setAttribute("aria-pressed", narrar);
   if (!narrar) callar(); else if (sonando) hablar();
   avisar(narrar ? "Narración encendida" : "Narración apagada");
