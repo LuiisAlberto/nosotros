@@ -1,6 +1,6 @@
 /* Guarda una copia del disco para que abra rápido y sin señal.
    Siempre intenta primero la versión nueva de internet. */
-const CACHE = "nosotros-v7";
+const CACHE = "nosotros-v8";
 self.addEventListener("install", e => self.skipWaiting());
 self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));
 self.addEventListener("fetch", e => {

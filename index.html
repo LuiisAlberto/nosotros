@@ -416,7 +416,7 @@ canvas#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-e
   <div class="vistas" id="vistas"></div>
   <div class="player" id="player" hidden>
     <div class="ahora"><div class="txt-ahora" aria-live="polite"><b id="pTitulo"></b><span id="pSub"></span></div>
-      <button class="voz" id="pVoz" aria-pressed="true" hidden><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 V15 H8 L13 19 V5 L8 9 Z" fill="currentColor"/><path d="M16.5 8.5 Q19 12 16.5 15.5 M19 6 Q23 12 19 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Narración</button></div>
+      <button class="voz" id="pVoz" aria-pressed="false" hidden><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 V15 H8 L13 19 V5 L8 9 Z" fill="currentColor"/><path d="M16.5 8.5 Q19 12 16.5 15.5 M19 6 Q23 12 19 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Narración</button></div>
     <div class="seek" id="seek" role="slider" tabindex="0" aria-label="Avance de la canción" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <div class="riel"><span class="lleno" id="pLleno"></span><span class="perilla" id="pPerilla"></span></div>
     </div>
@@ -1260,7 +1260,7 @@ function vistaInicio() {
       <ol>
         <li>Cada canción es un capítulo. La letra es nuestra historia y va apareciendo sola.</li>
         <li>Si lees más rápido que la música, toca la letra. Si quieres pausa, abajo está el botón.</li>
-        <li>Si tu celular tiene voz en español, te la va a ir narrando mientras se ilumina. Puedes apagarla con el botón «Narración» de abajo.</li>
+        <li>Si quieres que una voz te la vaya leyendo mientras se ilumina, prende el botón «Narración» de abajo.</li>
         <li>Todo lo que esté pegado como papel se toca: se voltea, se abre o trae algo adentro.</li>
         <li>Al final de cada canción hay una pregunta sobre nosotros. Si aciertas, te ganas un vale de verdad: lo raspas, se guarda en tu cartera y me lo cobras cuando quieras.</li>
         <li>Cada canción tiene un espacio para <i>tu versión</i>. Al final me la mandas y la guardo con todo lo demás.</li>
@@ -1423,12 +1423,16 @@ vistas.forEach(v => v.el.querySelectorAll("[data-letra] .ly:not(.blk) p").forEac
 
 const DICCION = { "NSQK": "N S Q K", "NSQK.": "N S Q K.", "♡": "" };
 const decir = palabra => DICCION[palabra] ?? palabra.replace(/[«»♡]/g, "");
-let vozEs = null, narrar = mem.get("voz", true), tokenVoz = 0, luz = 0, luzVoz = -1, inicioVoz = 0, estVoz = 0, hayLimites = false, pidioVoz = 0, arrancoVoz = false, fallasVoz = 0;
+let vozEs = null, narrar = mem.get("narracion", false), tokenVoz = 0, luz = 0, luzVoz = -1, inicioVoz = 0, estVoz = 0, hayLimites = false, pidioVoz = 0, arrancoVoz = false, fallasVoz = 0;
 const $pVoz = document.getElementById("pVoz");
 function elegirVoz() {
   if (!("speechSynthesis" in window)) return;
   const vs = speechSynthesis.getVoices();
-  vozEs = vs.find(v => /es[-_]MX/i.test(v.lang)) || vs.find(v => /es[-_](US|419)/i.test(v.lang)) || vs.find(v => /^es/i.test(v.lang)) || null;
+  /* la mejor voz en español: primero las naturales/neuronales, primero de México */
+  const buena = v => /natural|neural|enhanced|premium|online|google/i.test(v.name);
+  const es = vs.filter(v => /^es/i.test(v.lang));
+  const orden = v => (buena(v) ? 0 : 4) + (/es[-_]MX/i.test(v.lang) ? 0 : /es[-_](US|419)/i.test(v.lang) ? 1 : 2);
+  vozEs = es.sort((a, b) => orden(a) - orden(b))[0] || null;
   $pVoz.hidden = !vozEs;
   $pVoz.setAttribute("aria-pressed", narrar && !!vozEs);
 }
@@ -1601,8 +1605,9 @@ function reproducir() {
 }
 function pausar() { sonando = false; callar(); cancelAnimationFrame(raf); actualizarPlay(); }
 function actualizarPlay() {
-  document.getElementById("icoPlay").hidden = sonando;
-  document.getElementById("icoPausa").hidden = !sonando;
+  /* los íconos son SVG: se ocultan con el atributo, no con la propiedad */
+  document.getElementById("icoPlay").toggleAttribute("hidden", sonando);
+  document.getElementById("icoPausa").toggleAttribute("hidden", !sonando);
   $pPlay.setAttribute("aria-label", sonando ? "Pausar" : "Reproducir");
 }
 let avisoTmr;
@@ -1615,7 +1620,7 @@ function avisar(txt) {
 }
 $pPlay.onclick = () => sonando ? pausar() : reproducir();
 $pVoz.onclick = () => {
-  narrar = !narrar; mem.set("voz", narrar); fallasVoz = 0;
+  narrar = !narrar; mem.set("narracion", narrar); fallasVoz = 0;
   $pVoz.setAttribute("aria-pressed", narrar);
   if (!narrar) callar(); else if (sonando) hablar();
   avisar(narrar ? "Narración encendida" : "Narración apagada");
