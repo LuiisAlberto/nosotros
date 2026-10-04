@@ -40,7 +40,7 @@ Luis creó cuenta (plan gratis, 10,000 créditos) y guardó la clave en el entor
 - **Fotos**: Luis las va a mandar. Van en `fotos/portada.jpg` y `fotos/cap-01.jpg` … `cap-10.jpg`
   (ver `fotos/LEEME.md`); el sitio las usa solas si existen.
 - Premio mayor: el texto actual promete «una sorpresa que ya tengo preparada».
-- Concierto de Little Jesus en Explanada: Luis dice 28 feb 2024; fuentes dicen 2025. En el sitio va sin año.
+- Concierto de Little Jesus en Explanada: 28 feb 2025 (confirmado por Luis).
 
 ## Cómo publicar
 Commit y push a `ccr-73ad139d-amf649`; GitHub Pages se actualiza en 1–2 minutos.
