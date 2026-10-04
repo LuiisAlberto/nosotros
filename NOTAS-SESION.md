@@ -29,7 +29,7 @@ Luis creó cuenta (plan gratis, 10,000 créditos) y guardó la clave en el entor
   (132 líneas, ~7,670 caracteres). Si cambia un texto, volver a correrlo y borrar ese mp3.
 - `herramientas/narrar.js [prefijo]` genera `audio/<track>-<linea>.mp3` y `audio/tiempos.json`
   ([inicio, fin] en segundos por palabra). Salta lo que ya existe.
-- **Hecho:** las 132 líneas (todas las canciones). Créditos usados: 8,267 / 10,000 (quedan ~1,700 para retoques).
+- **Hecho:** las 132 líneas (todas las canciones). Créditos usados: 8,352 / 10,000 (quedan ~1,650 para retoques).
 - **Falta:** probar en el celular de verdad. La narración viene encendida por defecto (clave `narracion2` en `mem`).
 - Reproductor: si hay `TIEMPOS[clave]` la línea usa `hablarGrabado()` (un solo `<audio>` reutilizado,
   palabras se prenden según `tiempos.json`); si no, cae a `speechSynthesis`. `sw.js` va en `nosotros-v9`

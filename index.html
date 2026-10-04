@@ -629,7 +629,7 @@ const CAPITULOS = [
         "Ese día quería pedirte que fueras mi novia.",
         "Lo traía pensado. Pero no se dio la ocasión.",
         "Después del concierto vimos pelis, nos quedamos dormidos juntos y ya.",
-        "Me quedé con la pregunta guardada. <span class='script'>Spoiler: aquí la traigo.</span>",
+        "Me quedé con la pregunta guardada.",
         "Y todavía nos quedan muchas primeras veces pendientes."
       ]}
     ],
@@ -1118,11 +1118,9 @@ TRACKS.push({
     { t: "Hagamos cuentas." },
     { t: "Desde aquella servilleta, el 13 de diciembre de 2019, han pasado…" },
     { b: "reloj" },
-    { t: "Algunos de novios. Muchos de amigos. Ninguno sin acordarme de ti." },
+    { t: "Algunos de novios. Muchos de amigos. Ninguno sin olvidarme de ti." },
     { t: "Y lo que viene ya tiene fecha:" },
-    { b: "datos" },
-    { t: "En todo este tiempo, solo una vez te pedí que fueras mi novia." },
-    { t: "<span class='script'>La segunda vez es la siguiente canción.</span>" }
+    { b: "datos" }
   ]
 });
 TRACKS.push({
@@ -1422,7 +1420,7 @@ function envolverPalabras(p) {
 }
 vistas.forEach(v => v.el.querySelectorAll("[data-letra] .ly:not(.blk) p").forEach(p => { p.closest(".ly")._w = envolverPalabras(p); }));
 
-const DICCION = { "NSQK": "N S Q K", "NSQK.": "N S Q K.", "♡": "" };
+const DICCION = { "NSQK": "Nescuik", "NSQK.": "Nescuik.", "♡": "" };
 const decir = palabra => DICCION[palabra] ?? palabra.replace(/[«»♡]/g, "");
 let vozEs = null, narrar = mem.get("narracion2", true), tokenVoz = 0, luz = 0, luzVoz = -1, inicioVoz = 0, estVoz = 0, hayLimites = false, pidioVoz = 0, arrancoVoz = false, fallasVoz = 0;
 const $pVoz = document.getElementById("pVoz");
