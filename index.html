@@ -1395,6 +1395,8 @@ function irTrack(k) {
   const total = t.versos.length;
   if (!visto[k]) { visto[k] = 1; pos[k] = 0; guardar(); }
   if (pos[k] === undefined || pos[k] >= visto[k]) pos[k] = visto[k] - 1;
+  /* canción ya escuchada completa: play empieza desde arriba, como en Spotify */
+  if (visto[k] >= total && pos[k] >= total - 1) pos[k] = 0;
   transcurrido = 0;
   pintarTrack(k, false);
   pintarTiempo();
@@ -1421,7 +1423,7 @@ vistas.forEach(v => v.el.querySelectorAll("[data-letra] .ly:not(.blk) p").forEac
 
 const DICCION = { "NSQK": "N S Q K", "NSQK.": "N S Q K.", "♡": "" };
 const decir = palabra => DICCION[palabra] ?? palabra.replace(/[«»♡]/g, "");
-let vozEs = null, narrar = mem.get("voz", true), tokenVoz = 0, luz = 0, luzVoz = -1, inicioVoz = 0, estVoz = 0, hayLimites = false;
+let vozEs = null, narrar = mem.get("voz", true), tokenVoz = 0, luz = 0, luzVoz = -1, inicioVoz = 0, estVoz = 0, hayLimites = false, pidioVoz = 0, arrancoVoz = false, fallasVoz = 0;
 const $pVoz = document.getElementById("pVoz");
 function elegirVoz() {
   if (!("speechSynthesis" in window)) return;
@@ -1456,6 +1458,8 @@ function hablar() {
     hayLimites = true;
     luzVoz = Math.max(luzVoz, desde + i + 1);
   };
+  u.onstart = () => { if (mio === tokenVoz) { arrancoVoz = true; inicioVoz = performance.now(); } };
+  u.onerror = e => { if (mio === tokenVoz && !/interrupted|canceled/.test(e.error || "")) fallaVoz(); };
   u.onend = () => {
     if (mio !== tokenVoz) return;
     luzVoz = ly._w.length;
@@ -1465,7 +1469,20 @@ function hablar() {
       if (pos[k] < TRACKS[k].versos.length - 1) irLinea(pos[k] + 1); else terminar();
     }, 450);
   };
-  speechSynthesis.speak(u);
+  arrancoVoz = false; pidioVoz = performance.now();
+  try { speechSynthesis.resume(); speechSynthesis.speak(u); } catch (e) { fallaVoz(); }
+}
+/* si la voz no arranca o se traba, la canción sigue sola (y tras dos fallas se apaga la narración) */
+function fallaVoz() {
+  const ly = lyActual();
+  callar();
+  fallasVoz++;
+  if (ly && ly._w && trackActual >= 0) transcurrido = (luz / ly._w.length) * TRACKS[trackActual].durs[pos[trackActual]] * .85;
+  if (fallasVoz >= 2 && narrar) {
+    narrar = false;
+    $pVoz.setAttribute("aria-pressed", "false");
+    avisar("La voz no funcionó en este celular. Sigue sin narración.");
+  }
 }
 function pintarLuz() {
   const ly = lyActual();
@@ -1559,8 +1576,13 @@ function bucle(ts) {
   ultimo = ts;
   transcurrido += dt;
   const k = trackActual, t = TRACKS[k];
-  const conVoz = narrando() && !t.versos[pos[k]].b;
-  if (conVoz) transcurrido = Math.min(transcurrido, t.durs[pos[k]] - 1);
+  const conVoz = narrando() && !t.versos[pos[k]].b && luzVoz >= 0;
+  if (conVoz) {
+    transcurrido = Math.min(transcurrido, t.durs[pos[k]] - 1);
+    const espera = performance.now() - pidioVoz;
+    if (!arrancoVoz && espera > 2500) fallaVoz();
+    else if (espera > estVoz * 1.6 + 1500) { callar(); if (pos[k] < t.versos.length - 1) irLinea(pos[k] + 1); else { terminar(); return; } }
+  }
   else if (transcurrido >= t.durs[pos[k]]) {
     if (pos[k] < t.versos.length - 1) irLinea(pos[k] + 1);
     else { terminar(); return; }
@@ -1593,7 +1615,7 @@ function avisar(txt) {
 }
 $pPlay.onclick = () => sonando ? pausar() : reproducir();
 $pVoz.onclick = () => {
-  narrar = !narrar; mem.set("voz", narrar);
+  narrar = !narrar; mem.set("voz", narrar); fallasVoz = 0;
   $pVoz.setAttribute("aria-pressed", narrar);
   if (!narrar) callar(); else if (sonando) hablar();
   avisar(narrar ? "Narración encendida" : "Narración apagada");
