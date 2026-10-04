@@ -19,7 +19,7 @@ recuerdos interactivos pegados como álbum de fotos. Termina en la «Pista ocult
 - Narración actual: voz del celular (`speechSynthesis`) con `hablar()`/`callar()`/`fallaVoz()`; botón «Narración»
   apagado por defecto (`mem` clave `narracion`). A Luis **no le gustó** cómo suena; tampoco las voces de Edge TTS.
 
-## Narración con ElevenLabs (en curso)
+## Narración con ElevenLabs (lista)
 Luis creó cuenta (plan gratis, 10,000 créditos) y guardó la clave en el entorno como `ELEVENLABS_API_KEY`;
 `api.elevenlabs.io` ya está en dominios permitidos. **Nunca imprimir ni subir la clave.**
 
@@ -29,12 +29,12 @@ Luis creó cuenta (plan gratis, 10,000 créditos) y guardó la clave en el entor
   (132 líneas, ~7,670 caracteres). Si cambia un texto, volver a correrlo y borrar ese mp3.
 - `herramientas/narrar.js [prefijo]` genera `audio/<track>-<linea>.mp3` y `audio/tiempos.json`
   ([inicio, fin] en segundos por palabra). Salta lo que ya existe.
-- **Hecho:** Intro (`0-*`). Créditos usados tras la Intro: 682 / 10,000.
-- **Falta:** correr `node herramientas/narrar.js` para el resto (≈7,300 caracteres; alcanza justo) y probar en celular.
+- **Hecho:** las 132 líneas (todas las canciones). Créditos usados: 8,267 / 10,000 (quedan ~1,700 para retoques).
+- **Falta:** probar en el celular de verdad. La narración sigue apagada por defecto (botón «Narración»).
 - Reproductor: si hay `TIEMPOS[clave]` la línea usa `hablarGrabado()` (un solo `<audio>` reutilizado,
   palabras se prenden según `tiempos.json`); si no, cae a `speechSynthesis`. `sw.js` va en `nosotros-v9`
   y ya no guarda respuestas 206.
-- Rama de trabajo: `claude/elevenlab-voice-samples-mx-6b5ve5` (falta pasarlo a `ccr-73ad139d-amf649` para publicar).
+- Publicado en `ccr-73ad139d-amf649` (trabajado en `claude/elevenlab-voice-samples-mx-6b5ve5`).
 
 ## Otros pendientes
 - **Fotos**: Luis las va a mandar. Van en `fotos/portada.jpg` y `fotos/cap-01.jpg` … `cap-10.jpg`
