@@ -156,6 +156,9 @@ a { color: inherit; }
 .ly[data-e="actual"] { animation: aparece .6s var(--ease); }
 @keyframes aparece { from { opacity: 0; transform: translateY(16px); } }
 .ly p { margin: 0; font-weight: 800; font-size: clamp(1.45rem, 6.4vw, 1.7rem); line-height: 1.28; letter-spacing: -.015em; text-wrap: pretty; }
+.ly .w { transition: opacity .35s ease, text-shadow .35s ease; }
+.ly[data-e="actual"]:not(.blk) .w { opacity: .38; }
+.ly[data-e="actual"] .w.on { opacity: 1; text-shadow: 0 0 18px color-mix(in srgb, var(--tt) 35%, transparent); }
 .ly .sec { display: block; margin-bottom: 10px; font-family: var(--f-maquina); font-weight: 700; font-size: .85rem; letter-spacing: .02em; opacity: .85; }
 .ly .script, .ly em { font-family: var(--f-serif); font-style: italic; font-weight: 500; letter-spacing: 0; }
 .ly .script { font-size: 1.08em; }
@@ -354,6 +357,10 @@ details.version .guardado { color: var(--tt); opacity: .8; margin-top: 6px; }
 /* ---------- reproductor ---------- */
 .player { background: #0B0B0B; padding: 10px 16px calc(8px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 6px; border-top: 1px solid #222; }
 .player .ahora { display: flex; align-items: baseline; gap: 8px; min-width: 0; line-height: 1.2; }
+.player .ahora { justify-content: space-between; }
+.player .ahora .txt-ahora { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.voz { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 12px; border-radius: 999px; border: 1px solid #3A3A3A; background: none; color: var(--txt-2); font-size: .78rem; font-weight: 700; transition: background-color .2s, color .2s, border-color .2s; }
+.voz[aria-pressed="true"] { background: var(--verde-play); border-color: var(--verde-play); color: #0B0B0B; }
 .player .ahora b { font-size: .92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .player .ahora span { font-size: .78rem; color: var(--txt-2); white-space: nowrap; flex: none; }
 .seek { position: relative; height: 22px; display: flex; align-items: center; cursor: pointer; touch-action: none; }
@@ -408,7 +415,8 @@ canvas#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-e
 <main class="app" id="app">
   <div class="vistas" id="vistas"></div>
   <div class="player" id="player" hidden>
-    <div class="ahora" aria-live="polite"><b id="pTitulo"></b><span id="pSub"></span></div>
+    <div class="ahora"><div class="txt-ahora" aria-live="polite"><b id="pTitulo"></b><span id="pSub"></span></div>
+      <button class="voz" id="pVoz" aria-pressed="true" hidden><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9 V15 H8 L13 19 V5 L8 9 Z" fill="currentColor"/><path d="M16.5 8.5 Q19 12 16.5 15.5 M19 6 Q23 12 19 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Narración</button></div>
     <div class="seek" id="seek" role="slider" tabindex="0" aria-label="Avance de la canción" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <div class="riel"><span class="lleno" id="pLleno"></span><span class="perilla" id="pPerilla"></span></div>
     </div>
@@ -601,11 +609,11 @@ const CAPITULOS = [
     quiz: { q: "¿Quién nos volvió a juntar?", ops: ["Tu amiga de la prepa", "Facebook, con sus recuerdos", "Mi mejor amigo, una noche de Minecraft"], ok: 2, bien: "Él. Y le vamos a deber eso para siempre." }
   },
   {
-    titulo: "Explanada", cuando: "Little Jesus en vivo", foto: "fotos/cap-07.jpg",
+    titulo: "Explanada", cuando: "28 de febrero", foto: "fotos/cap-07.jpg",
     escenas: [
       { t: "El concierto", p: [
         "Contigo vi a Little Jesus en vivo por primera vez.",
-        "Fue en Pachuca, en el Auditorio Explanada.",
+        "Fue el 28 de febrero, en Pachuca, en el Auditorio Explanada.",
         "Cantamos todas. Obvio. Somos súper fans."
       ]},
       { t: "El Airbnb", p: [
@@ -687,8 +695,8 @@ const CAPITULOS = [
         "Por una cosa o por otra, en todos estos años nunca regresamos.",
         "Pero tampoco dejamos de gustarnos. Ni un poquito."
       ]},
-      { t: "Hace dos semanas", p: [
-        "Hace un par de semanas volviste. Hablamos.",
+      { t: "Hace unas semanas", p: [
+        "Hace unas semanas volviste. Hablamos.",
         "Al día siguiente salimos y dejamos todo claro: los dos queremos esto.",
         "Tu familia ya me conoce. Tenemos conciertos por delante. Tenemos ganas de vivir juntos."
       ]},
@@ -704,7 +712,7 @@ const CAPITULOS = [
 ];
 
 /* vales: el premio de cada canción (se revelan con un raspadito y se canjean por WhatsApp) */
-const TELEFONO = "";   /* tu número con lada de país, sin + ni espacios, ej. "5215512345678". Vacío = ella elige el chat */
+const TELEFONO = "525648113759";   /* tu número con lada de país, sin + ni espacios, ej. "5215512345678". Vacío = ella elige el chat */
 const VALES = [
   "Vale por usar mi sudadera de Morat un día entero. Con firmas falsas y todo.",
   "Vale por una caminata larga, sin destino, hablando de todo como en los recesos.",
@@ -1252,6 +1260,7 @@ function vistaInicio() {
       <ol>
         <li>Cada canción es un capítulo. La letra es nuestra historia y va apareciendo sola.</li>
         <li>Si lees más rápido que la música, toca la letra. Si quieres pausa, abajo está el botón.</li>
+        <li>Si tu celular tiene voz en español, te la va a ir narrando mientras se ilumina. Puedes apagarla con el botón «Narración» de abajo.</li>
         <li>Todo lo que esté pegado como papel se toca: se voltea, se abre o trae algo adentro.</li>
         <li>Al final de cada canción hay una pregunta sobre nosotros. Si aciertas, te ganas un vale de verdad: lo raspas, se guarda en tu cartera y me lo cobras cuando quieras.</li>
         <li>Cada canción tiene un espacio para <i>tu versión</i>. Al final me la mandas y la guardo con todo lo demás.</li>
@@ -1392,6 +1401,86 @@ function irTrack(k) {
   if (visto[k] < total) reproducir();
   if (t.tipo === "epilogo") armarResumen();
 }
+/* ---------- palabras que se iluminan + narración ---------- */
+function envolverPalabras(p) {
+  const w = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
+  const nodos = [];
+  while (w.nextNode()) nodos.push(w.currentNode);
+  nodos.forEach(nd => {
+    const f = document.createDocumentFragment();
+    nd.textContent.split(/(\s+)/).forEach(pt => {
+      if (!pt) return;
+      if (/^\s+$/.test(pt)) f.appendChild(document.createTextNode(pt));
+      else { const sp = document.createElement("span"); sp.className = "w"; sp.textContent = pt; f.appendChild(sp); }
+    });
+    nd.replaceWith(f);
+  });
+  return [...p.querySelectorAll(".w")];
+}
+vistas.forEach(v => v.el.querySelectorAll("[data-letra] .ly:not(.blk) p").forEach(p => { p.closest(".ly")._w = envolverPalabras(p); }));
+
+const DICCION = { "NSQK": "N S Q K", "NSQK.": "N S Q K.", "♡": "" };
+const decir = palabra => DICCION[palabra] ?? palabra.replace(/[«»♡]/g, "");
+let vozEs = null, narrar = mem.get("voz", true), tokenVoz = 0, luz = 0, luzVoz = -1, inicioVoz = 0, estVoz = 0, hayLimites = false;
+const $pVoz = document.getElementById("pVoz");
+function elegirVoz() {
+  if (!("speechSynthesis" in window)) return;
+  const vs = speechSynthesis.getVoices();
+  vozEs = vs.find(v => /es[-_]MX/i.test(v.lang)) || vs.find(v => /es[-_](US|419)/i.test(v.lang)) || vs.find(v => /^es/i.test(v.lang)) || null;
+  $pVoz.hidden = !vozEs;
+  $pVoz.setAttribute("aria-pressed", narrar && !!vozEs);
+}
+if ("speechSynthesis" in window) { elegirVoz(); if (speechSynthesis.addEventListener) speechSynthesis.addEventListener("voiceschanged", elegirVoz); else speechSynthesis.onvoiceschanged = elegirVoz; }
+const narrando = () => narrar && vozEs && sonando;
+function lyActual() {
+  if (trackActual < 0) return null;
+  return vistas[trackActual + 1].el.querySelector(`[data-letra] .ly[data-n="${pos[trackActual]}"]`);
+}
+function callar() { tokenVoz++; luzVoz = -1; if ("speechSynthesis" in window && (speechSynthesis.speaking || speechSynthesis.pending)) speechSynthesis.cancel(); }
+function hablar() {
+  const ly = lyActual();
+  if (!ly || !ly._w || !narrando()) return;
+  callar();
+  const mio = tokenVoz;
+  const desde = Math.min(luz, ly._w.length - 1);
+  const partes = ly._w.slice(desde).map(w => decir(w.textContent));
+  let txt = "", ini = [];
+  partes.forEach(pt => { ini.push(txt.length); txt += pt + " "; });
+  const u = new SpeechSynthesisUtterance(txt.trim());
+  u.voice = vozEs; u.lang = vozEs.lang; u.rate = .95; u.pitch = 1;
+  luzVoz = desde; ly._desde = desde; inicioVoz = performance.now(); estVoz = Math.max(1200, txt.length * 62);
+  u.onboundary = e => {
+    if (mio !== tokenVoz || e.name && e.name !== "word") return;
+    let i = ini.length - 1;
+    while (i > 0 && ini[i] > e.charIndex) i--;
+    hayLimites = true;
+    luzVoz = Math.max(luzVoz, desde + i + 1);
+  };
+  u.onend = () => {
+    if (mio !== tokenVoz) return;
+    luzVoz = ly._w.length;
+    setTimeout(() => {
+      if (mio !== tokenVoz || !sonando) return;
+      const k = trackActual;
+      if (pos[k] < TRACKS[k].versos.length - 1) irLinea(pos[k] + 1); else terminar();
+    }, 450);
+  };
+  speechSynthesis.speak(u);
+}
+function pintarLuz() {
+  const ly = lyActual();
+  if (!ly || !ly._w) return;
+  const n = ly._w.length, d = TRACKS[trackActual].durs[pos[trackActual]];
+  if (luzVoz >= 0) {
+    /* con voz: sigue las palabras que dice; si el celular no avisa cada palabra, las calcula por tiempo */
+    const calc = ly._desde + Math.ceil((performance.now() - inicioVoz) / estVoz * (n - ly._desde));
+    luz = luzVoz >= n ? n : Math.max(luz, hayLimites ? luzVoz : Math.min(n - 1, calc));
+  } else {
+    luz = Math.min(n, Math.ceil(Math.min(1, transcurrido / (d * .85)) * n));
+  }
+  ly._w.forEach((w, i) => w.classList.toggle("on", i < luz));
+}
+
 function pintarTrack(k, desplazar) {
   const el = vistas[k + 1].el;
   const n = visto[k] || 0, p = pos[k] || 0;
@@ -1420,8 +1509,12 @@ function irLinea(n, desde = 0) {
   if (nuevaVista) visto[k] = n + 1;
   guardar();
   transcurrido = desde;
+  callar();
+  luz = 0;
   pintarTrack(k, true);
   pintarTiempo();
+  pintarLuz();
+  if (sonando) hablar();
   if (nuevaVista && visto[k] >= total && ["cap", "intro", "interludio"].includes(t.tipo)) {
     setTimeout(() => vistas[k + 1].el.querySelector("[data-outro]").scrollIntoView({ behavior: suave(), block: "start" }), 1400);
   }
@@ -1436,14 +1529,16 @@ function anteriorLinea() {
   if (trackActual < 0) return;
   const k = trackActual;
   /* como en Spotify: si ya avanzó un poco, regresa al inicio de la línea; si no, a la anterior */
-  if (transcurrido > 1500 || pos[k] === 0) { transcurrido = 0; pintarTiempo(); }
+  if (transcurrido > 1500 || pos[k] === 0) irLinea(pos[k]);
   else irLinea(pos[k] - 1);
 }
 function terminar() {
   const k = trackActual, t = TRACKS[k];
   pausar();
   transcurrido = t.durs[pos[k]];
+  luz = 1e9; luzVoz = -1;
   pintarTiempo();
+  const ly = lyActual(); if (ly && ly._w) ly._w.forEach(w => w.classList.add("on"));
   if (visto[k] < t.versos.length) { visto[k] = t.versos.length; guardar(); pintarTrack(k, false); }
 }
 function pintarTiempo() {
@@ -1464,11 +1559,14 @@ function bucle(ts) {
   ultimo = ts;
   transcurrido += dt;
   const k = trackActual, t = TRACKS[k];
-  if (transcurrido >= t.durs[pos[k]]) {
+  const conVoz = narrando() && !t.versos[pos[k]].b;
+  if (conVoz) transcurrido = Math.min(transcurrido, t.durs[pos[k]] - 1);
+  else if (transcurrido >= t.durs[pos[k]]) {
     if (pos[k] < t.versos.length - 1) irLinea(pos[k] + 1);
     else { terminar(); return; }
   }
   pintarTiempo();
+  pintarLuz();
   raf = requestAnimationFrame(bucle);
 }
 function reproducir() {
@@ -1476,9 +1574,10 @@ function reproducir() {
   const k = trackActual, t = TRACKS[k];
   if (pos[k] >= t.versos.length - 1 && transcurrido >= t.durs[pos[k]]) { irLinea(0); }
   sonando = true; ultimo = 0; actualizarPlay();
+  hablar();
   cancelAnimationFrame(raf); raf = requestAnimationFrame(bucle);
 }
-function pausar() { sonando = false; cancelAnimationFrame(raf); actualizarPlay(); }
+function pausar() { sonando = false; callar(); cancelAnimationFrame(raf); actualizarPlay(); }
 function actualizarPlay() {
   document.getElementById("icoPlay").hidden = sonando;
   document.getElementById("icoPausa").hidden = !sonando;
@@ -1493,6 +1592,12 @@ function avisar(txt) {
   clearTimeout(avisoTmr); avisoTmr = setTimeout(() => a.remove(), 2200);
 }
 $pPlay.onclick = () => sonando ? pausar() : reproducir();
+$pVoz.onclick = () => {
+  narrar = !narrar; mem.set("voz", narrar);
+  $pVoz.setAttribute("aria-pressed", narrar);
+  if (!narrar) callar(); else if (sonando) hablar();
+  avisar(narrar ? "Narración encendida" : "Narración apagada");
+};
 $pNext.onclick = () => siguienteLinea();
 $pPrev.onclick = () => anteriorLinea();
 $pPrevT.onclick = () => { if (trackActual > 0) irTrack(trackActual - 1); };
