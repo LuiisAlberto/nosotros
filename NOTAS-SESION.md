@@ -19,20 +19,22 @@ recuerdos interactivos pegados como álbum de fotos. Termina en la «Pista ocult
 - Narración actual: voz del celular (`speechSynthesis`) con `hablar()`/`callar()`/`fallaVoz()`; botón «Narración»
   apagado por defecto (`mem` clave `narracion`). A Luis **no le gustó** cómo suena; tampoco las voces de Edge TTS.
 
-## Siguiente paso pendiente: narración con ElevenLabs
+## Narración con ElevenLabs (en curso)
 Luis creó cuenta (plan gratis, 10,000 créditos) y guardó la clave en el entorno como `ELEVENLABS_API_KEY`;
 `api.elevenlabs.io` ya está en dominios permitidos. **Nunca imprimir ni subir la clave.**
 
-Plan:
-1. Probar voces en español mexicano (modelo `eleven_multilingual_v2`), generar 3–4 muestras cortas con el
-   pedazo «Entonces pasaste tú, con tu amiga…» y que Luis elija. Quiere algo natural y no pausado.
-2. Generar un audio **por línea de texto** (no por bloque `b`) con el endpoint
-   `POST /v1/text-to-speech/{voice_id}/with-timestamps`, que devuelve audio + tiempos por carácter.
-   Total aprox. 7–10 mil caracteres: cuidar no pasarse de los 10,000 créditos (generar primero solo la Intro).
-3. Guardar en `audio/<track>-<linea>.mp3` y los tiempos por palabra en `audio/tiempos.json`.
-4. En el reproductor: si existe el audio de la línea, reproducirlo con `<audio>` y prender palabras según
-   `tiempos.json`; al terminar el audio, pasar a la siguiente línea. Si falla, seguir con el modo actual.
-5. Probar play/pausa, saltar líneas y regresar; subir `sw.js` de versión (`CACHE`) para que el celular agarre lo nuevo.
+- Plan gratis **no** deja usar voces de la biblioteca (las mexicanas) ni diseñar voces por API. Se probaron
+  voces premade leyendo español; Luis eligió **Chris** (`iP95p4xoKVk53GoZ742B`, `eleven_multilingual_v2`).
+- `herramientas/lineas.js` (Playwright) saca de `index.html` el texto de cada línea → `herramientas/lineas.json`
+  (132 líneas, ~7,670 caracteres). Si cambia un texto, volver a correrlo y borrar ese mp3.
+- `herramientas/narrar.js [prefijo]` genera `audio/<track>-<linea>.mp3` y `audio/tiempos.json`
+  ([inicio, fin] en segundos por palabra). Salta lo que ya existe.
+- **Hecho:** Intro (`0-*`). Créditos usados tras la Intro: 682 / 10,000.
+- **Falta:** correr `node herramientas/narrar.js` para el resto (≈7,300 caracteres; alcanza justo) y probar en celular.
+- Reproductor: si hay `TIEMPOS[clave]` la línea usa `hablarGrabado()` (un solo `<audio>` reutilizado,
+  palabras se prenden según `tiempos.json`); si no, cae a `speechSynthesis`. `sw.js` va en `nosotros-v9`
+  y ya no guarda respuestas 206.
+- Rama de trabajo: `claude/elevenlab-voice-samples-mx-6b5ve5` (falta pasarlo a `ccr-73ad139d-amf649` para publicar).
 
 ## Otros pendientes
 - **Fotos**: Luis las va a mandar. Van en `fotos/portada.jpg` y `fotos/cap-01.jpg` … `cap-10.jpg`
