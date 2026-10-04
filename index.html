@@ -1397,7 +1397,8 @@ function irTrack(k) {
   if (pos[k] === undefined || pos[k] >= visto[k]) pos[k] = visto[k] - 1;
   /* canción ya escuchada completa: play empieza desde arriba, como en Spotify */
   if (visto[k] >= total && pos[k] >= total - 1) pos[k] = 0;
-  transcurrido = 0;
+  /* la canción anterior pudo terminar con luz = 1e9; si no se limpia, la narración arranca en la última palabra */
+  transcurrido = 0; luz = 0;
   pintarTrack(k, false);
   pintarTiempo();
   if (visto[k] < total) reproducir();
