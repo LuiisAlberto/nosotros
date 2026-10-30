@@ -105,20 +105,15 @@ a { color: inherit; }
 .tracklist .sub { color: var(--txt-2); font-size: .82rem; display: block; }
 .tracklist .on .nom { color: var(--verde-play); }
 .hoy { display: flex; flex-direction: column; gap: 14px; }
-.hoy-cab { display: flex; align-items: center; gap: 12px; }
-.hoy-cab .mini-arte { width: 52px; height: 52px; flex: none; border-radius: 6px; background: linear-gradient(135deg, var(--naranja) 0 50%, var(--azul) 50%); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: .72rem; color: #121212; letter-spacing: -.02em; box-shadow: 0 6px 14px rgba(0, 0, 0, .35); }
-.hoy-cab b { display: block; font-size: 1.05rem; font-weight: 800; line-height: 1.2; }
-.hoy-cab span { display: block; font-size: .82rem; color: var(--txt-2); }
+.hoy-fecha { margin: -6px 0 0; font-size: .82rem; font-weight: 700; color: var(--txt-2); }
 .hoy-letra { border-radius: 12px; padding: 18px 18px 20px; background: var(--c, #D9572B); color: #fff; display: flex; flex-direction: column; gap: 10px; }
 .hoy-letra .lbl { font-size: .78rem; font-weight: 800; letter-spacing: .02em; opacity: .85; }
 .hoy-letra p { margin: 0; font-weight: 800; font-size: clamp(1.3rem, 6vw, 1.55rem); line-height: 1.25; letter-spacing: -.015em; }
 .hoy-especial { margin: 0; display: flex; align-items: center; gap: 10px; background: var(--app-2); border-radius: 10px; padding: 10px 12px; font-weight: 700; font-size: .92rem; }
 .hoy-especial::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--verde-play); flex: none; }
-.hoy-datos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.hoy-datos div { background: var(--app-2); border-radius: 10px; padding: 12px 6px 10px; text-align: center; display: flex; flex-direction: column; gap: 2px; }
-.hoy-datos b { font-family: var(--f-display); font-weight: 800; font-size: 1.6rem; line-height: 1; font-variant-numeric: tabular-nums; }
-.hoy-datos span { font-size: .75rem; color: var(--txt-2); }
-.hoy-pie { margin: -6px 0 0; font-size: .78rem; color: var(--txt-2); text-align: center; }
+.hoy-letra .manana { margin: 0; font-size: .82rem; font-weight: 600; opacity: .8; }
+.hoy-cuenta { margin: 0; font-size: 1.02rem; line-height: 1.45; color: var(--txt-2); }
+.hoy-cuenta b { color: var(--txt); font-weight: 800; }
 .hoy-filas { display: flex; flex-direction: column; }
 .hoy-linea { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 10px 2px; border-top: 1px solid var(--app-3); font-size: .92rem; color: var(--txt-2); }
 .hoy-linea b { color: var(--txt); font-size: 1rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -1251,15 +1246,15 @@ function vistaInicio() {
     <ol class="tracklist" data-lista="a"></ol>
     <h2 class="seccion-t">Lado B <span class="sub-lado">se va abriendo con el tiempo</span></h2>
     <ol class="tracklist" data-lista="b"></ol>
-    <h2 class="seccion-t">Hoy</h2>
-    <section class="hoy" data-hoy aria-label="Hoy"></section>
+    <h2 class="seccion-t" data-hoy-t hidden>Hoy</h2>
+    <section class="hoy" data-hoy aria-label="Hoy" hidden></section>
     <section class="cartera" data-cartera aria-label="Tu cartera de vales"></section>
     <div class="nota-papel" data-guia>
       <h3>Cómo se escucha este disco</h3>
       <ol>
         <li>Cada canción es un capítulo. La letra es nuestra historia y va apareciendo sola.</li>
         <li>Si lees más rápido que la música, toca la letra. Si quieres pausa, abajo está el botón.</li>
-        <li>Si quieres que una voz te la vaya leyendo mientras se ilumina, prende el botón «Narración» de abajo.</li>
+        <li>Una voz te la va leyendo mientras se ilumina. Si prefieres leer en silencio, apaga «Narración» abajo.</li>
         <li>Todo lo que esté pegado como papel se toca: se voltea, se abre o trae algo adentro.</li>
         <li>Al final de cada canción hay una pregunta sobre nosotros. Si aciertas, te ganas un vale de verdad: lo raspas, se guarda en tu cartera y me lo cobras cuando quieras.</li>
         <li>Cada canción tiene un espacio para <i>tu versión</i>. Al final me la mandas y la guardo con todo lo demás.</li>
@@ -1733,33 +1728,39 @@ function pintarLista() {
   document.querySelector('[data-lista="a"]').innerHTML = TRACKS.map((t, k) => t.tipo === "ladob" ? "" : fila(t, k)).join("");
   document.querySelector('[data-lista="b"]').innerHTML = TRACKS.map((t, k) => t.tipo === "ladob" ? fila(t, k) : "").join("");
 }
+/* «Hoy» es para cuando vuelva otros días: aparece hasta que termina el disco
+   (así tampoco le gana la sorpresa al contador de «Hagamos cuentas») */
+const discoTerminado = () => !!mem.get("si", null) || (visto[IDX_FINAL] || 0) >= TRACKS[IDX_FINAL].versos.length;
 function pintarHoy() {
   const el = document.querySelector("[data-hoy]");
   if (!el) return;
+  const listo = discoTerminado();
+  el.hidden = !listo;
+  document.querySelector("[data-hoy-t]").hidden = !listo;
+  if (!listo) return;
   const hoy = new Date();
   const nDia = Math.floor(new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) / 864e5);
   const razon = RAZONES[((nDia % RAZONES.length) + RAZONES.length) % RAZONES.length];
   const t = mesesSemanasDias(PRIMER_SI, hoy);
+  const partes = [];
+  if (t.anios) partes.push(plural(t.anios, "año", "años"));
+  if (t.meses) partes.push(plural(t.meses, "mes", "meses"));
+  const dias = t.semanas * 7 + t.dias;
+  if (dias || !partes.length) partes.push(plural(dias, "día", "días"));
+  const cuenta = partes.length > 1 ? partes.slice(0, -1).join(", ") + " y " + partes[partes.length - 1] : partes[0];
   let especial = "";
   if (hoy.getDate() === 13 && hoy.getMonth() === 11) especial = `Hoy es 13 de diciembre: ${hoy.getFullYear() - 2019} años de aquella servilleta.`;
   else if (hoy.getDate() === 13) especial = `Hoy es 13. Otro mes desde aquella servilleta.`;
-  const prox = TRACKS.filter(x => x.desde && !abierta(x)).sort((a, b) => a.desde - b.desde)[0];
   const faltanNSQK = diasPara(NSQK);
   const COLORES_DIA = ["#D9572B", "#2F5FB8", "#2E8B57", "#C4473E", "#23807A", "#5E6472"];
   const color = COLORES_DIA[((nDia % COLORES_DIA.length) + COLORES_DIA.length) % COLORES_DIA.length];
-  const fecha = hoy.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" });
+  const fecha = hoy.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" }).replace(",", "");
   el.innerHTML = `
-    <div class="hoy-cab"><span class="mini-arte" aria-hidden="true">HOY</span><div><b>Hecho para Edith</b><span>${fecha.charAt(0).toUpperCase() + fecha.slice(1)} · cambia cada día</span></div></div>
+    <p class="hoy-fecha">${fecha.charAt(0).toUpperCase() + fecha.slice(1)}</p>
     ${especial ? `<p class="hoy-especial">${especial}</p>` : ""}
-    <div class="hoy-letra" style="--c:${color}"><span class="lbl">Razón del día</span><p>${razon}</p></div>
-    <div class="hoy-datos">
-      <div><b>${t.anios}</b><span>${t.anios === 1 ? "año" : "años"}</span></div><div><b>${t.meses}</b><span>${t.meses === 1 ? "mes" : "meses"}</span></div><div><b>${t.semanas}</b><span>${t.semanas === 1 ? "semana" : "semanas"}</span></div><div><b>${t.dias}</b><span>${t.dias === 1 ? "día" : "días"}</span></div>
-    </div>
-    <p class="hoy-pie">desde aquella servilleta</p>
-    <div class="hoy-filas">
-      ${faltanNSQK > 0 ? `<p class="hoy-linea"><span>Para NSQK juntos</span><b>${faltanNSQK} días</b></p>` : ""}
-      ${prox ? `<p class="hoy-linea"><span>Próxima del Lado B: ${prox.titulo}</span><b>${diasPara(prox.desde)} días</b></p>` : ""}
-    </div>`;
+    <div class="hoy-letra" style="--c:${color}"><span class="lbl">Razón del día</span><p>${razon}</p><p class="manana">Mañana hay otra.</p></div>
+    <p class="hoy-cuenta"><b>${cuenta}</b> desde aquella servilleta.</p>
+    ${faltanNSQK > 0 ? `<div class="hoy-filas"><p class="hoy-linea"><span>Para ver a NSQK juntos</span><b>${plural(faltanNSQK, "día", "días")}</b></p></div>` : ""}`;
 }
 
 /* ---------- raspaditos ---------- */
