@@ -13,7 +13,7 @@ recuerdos interactivos pegados como álbum de fotos. Termina en la «Pista ocult
 - `CAPITULOS`: textos de las 10 canciones (escenas → líneas), preguntas (`quiz`) y canciones de Spotify.
 - `TRACKS`: Intro + capítulos + «Hagamos cuentas» + «Pista oculta» + «Final (feat. Edith)» + Lado B
   (`tipo: "ladob"`, se abren solos en su fecha `desde`).
-- `VALES`, `PREMIO_MAYOR`, `TELEFONO` (WhatsApp de Luis: 525648113759), `RAZONES` (razón del día), `PAPELITOS`.
+- `VALES`, `PREMIO_MAYOR`, `TELEFONO` (WhatsApp de Luis: 525648113759), `PAPELITOS`.
 - Reproductor: `irTrack`, `irLinea`, `siguienteLinea`, `bucle`, `reproducir`, `pausar`.
 - Palabras que se iluminan: cada línea se parte en `<span class="w">` (`envolverPalabras`); `pintarLuz` las prende.
 - Narración actual: voz del celular (`speechSynthesis`) con `hablar()`/`callar()`/`fallaVoz()`; botón «Narración»

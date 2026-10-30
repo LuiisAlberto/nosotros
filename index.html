@@ -104,19 +104,6 @@ a { color: inherit; }
 @keyframes eq { 0%, 100% { height: 3px; } 50% { height: 11px; } }
 .tracklist .sub { color: var(--txt-2); font-size: .82rem; display: block; }
 .tracklist .on .nom { color: var(--verde-play); }
-.hoy { display: flex; flex-direction: column; gap: 14px; }
-.hoy-fecha { margin: -6px 0 0; font-size: .82rem; font-weight: 700; color: var(--txt-2); }
-.hoy-letra { border-radius: 12px; padding: 18px 18px 20px; background: var(--c, #D9572B); color: #fff; display: flex; flex-direction: column; gap: 10px; }
-.hoy-letra .lbl { font-size: .78rem; font-weight: 800; letter-spacing: .02em; opacity: .85; }
-.hoy-letra p { margin: 0; font-weight: 800; font-size: clamp(1.3rem, 6vw, 1.55rem); line-height: 1.25; letter-spacing: -.015em; }
-.hoy-especial { margin: 0; display: flex; align-items: center; gap: 10px; background: var(--app-2); border-radius: 10px; padding: 10px 12px; font-weight: 700; font-size: .92rem; }
-.hoy-especial::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--verde-play); flex: none; }
-.hoy-letra .manana { margin: 0; font-size: .82rem; font-weight: 600; opacity: .8; }
-.hoy-cuenta { margin: 0; font-size: 1.02rem; line-height: 1.45; color: var(--txt-2); }
-.hoy-cuenta b { color: var(--txt); font-weight: 800; }
-.hoy-filas { display: flex; flex-direction: column; }
-.hoy-linea { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 10px 2px; border-top: 1px solid var(--app-3); font-size: .92rem; color: var(--txt-2); }
-.hoy-linea b { color: var(--txt); font-size: 1rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .tracklist .cerrada { width: 100%; min-height: 62px; display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; padding: 8px; color: var(--txt-2); }
 .tracklist .cerrada .i { display: grid; place-items: center; }
 .nuevo { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: var(--verde-play); color: #121212; font-size: .68rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
@@ -1163,32 +1150,6 @@ const abierta = t => !t.desde || new Date() >= t.desde;
 const diasPara = d => Math.max(0, Math.ceil((new Date(d.getFullYear(), d.getMonth(), d.getDate()) - new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())) / 864e5));
 const fechaCorta = d => d.toLocaleDateString("es-MX", { day: "numeric", month: "long" });
 
-/* una razón distinta cada día (agrega todas las que quieras) */
-const RAZONES = [
-  "Porque me dijiste «me gusta tu sudadera» y me cambiaste el día.",
-  "Porque me escribiste primero, aunque tu amiga hizo la mitad del trabajo.",
-  "Porque contigo cualquier camino se siente corto.",
-  "Porque te reíste de mi servilleta y aun así dijiste que sí.",
-  "Porque me dedicaste «La magia» y ahora es nuestra.",
-  "Porque estuviste cuando se fue mi abuelita.",
-  "Porque eres muy valiente, aunque a veces no lo notes.",
-  "Porque tratas bonito a todos, hasta a los perritos más loquitos.",
-  "Porque disfrutas las cosas pequeñas.",
-  "Porque cantamos todas en Pachuca.",
-  "Porque tenemos el mismo humor.",
-  "Porque nuestra música se parece tanto que ya no sé cuál canción es tuya y cuál es mía.",
-  "Porque sientes muchísimo.",
-  "Porque siempre sales adelante.",
-  "Porque contigo las primeras veces se sienten importantes.",
-  "Porque volviste.",
-  "Porque eres mi Hernán Cortés.",
-  "Porque quieres mucho, y se nota.",
-  "Porque eres muy capaz.",
-  "Porque hablar contigo de lo que sea se siente como estar en paz.",
-  "Porque nos imaginamos la misma casa, con Rayo incluido.",
-  "Porque después de todo este tiempo me sigues gustando igual.",
-  "Porque eres tú. Y con eso basta."
-];
 
 const IDX_FINAL = TRACKS.findIndex(t => t.tipo === "final");
 /* duración de cada línea: lo que tarda en leerse con calma */
@@ -1246,8 +1207,6 @@ function vistaInicio() {
     <ol class="tracklist" data-lista="a"></ol>
     <h2 class="seccion-t">Lado B <span class="sub-lado">se va abriendo con el tiempo</span></h2>
     <ol class="tracklist" data-lista="b"></ol>
-    <h2 class="seccion-t" data-hoy-t hidden>Hoy</h2>
-    <section class="hoy" data-hoy aria-label="Hoy" hidden></section>
     <section class="cartera" data-cartera aria-label="Tu cartera de vales"></section>
     <div class="nota-papel" data-guia>
       <h3>Cómo se escucha este disco</h3>
@@ -1373,7 +1332,7 @@ function mostrar(idx) {
   v.el.style.animation = "none"; void v.el.offsetWidth; v.el.style.animation = "";
 }
 function guardar() { mem.set("revelado", visto); mem.set("pos", pos); }
-function irInicio() { pausar(); trackActual = -1; $player.hidden = true; mostrar(0); pintarCartera(); pintarLista(); pintarHoy(); }
+function irInicio() { pausar(); trackActual = -1; $player.hidden = true; mostrar(0); pintarCartera(); pintarLista(); }
 function irTrack(k) {
   if (!abierta(TRACKS[k])) return;
   pausar();
@@ -1728,41 +1687,6 @@ function pintarLista() {
   document.querySelector('[data-lista="a"]').innerHTML = TRACKS.map((t, k) => t.tipo === "ladob" ? "" : fila(t, k)).join("");
   document.querySelector('[data-lista="b"]').innerHTML = TRACKS.map((t, k) => t.tipo === "ladob" ? fila(t, k) : "").join("");
 }
-/* «Hoy» es para cuando vuelva otros días: aparece hasta que termina el disco
-   (así tampoco le gana la sorpresa al contador de «Hagamos cuentas») */
-const discoTerminado = () => !!mem.get("si", null) || (visto[IDX_FINAL] || 0) >= TRACKS[IDX_FINAL].versos.length;
-function pintarHoy() {
-  const el = document.querySelector("[data-hoy]");
-  if (!el) return;
-  const listo = discoTerminado();
-  el.hidden = !listo;
-  document.querySelector("[data-hoy-t]").hidden = !listo;
-  if (!listo) return;
-  const hoy = new Date();
-  const nDia = Math.floor(new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) / 864e5);
-  const razon = RAZONES[((nDia % RAZONES.length) + RAZONES.length) % RAZONES.length];
-  const t = mesesSemanasDias(PRIMER_SI, hoy);
-  const partes = [];
-  if (t.anios) partes.push(plural(t.anios, "año", "años"));
-  if (t.meses) partes.push(plural(t.meses, "mes", "meses"));
-  const dias = t.semanas * 7 + t.dias;
-  if (dias || !partes.length) partes.push(plural(dias, "día", "días"));
-  const cuenta = partes.length > 1 ? partes.slice(0, -1).join(", ") + " y " + partes[partes.length - 1] : partes[0];
-  let especial = "";
-  if (hoy.getDate() === 13 && hoy.getMonth() === 11) especial = `Hoy es 13 de diciembre: ${hoy.getFullYear() - 2019} años de aquella servilleta.`;
-  else if (hoy.getDate() === 13) especial = `Hoy es 13. Otro mes desde aquella servilleta.`;
-  const faltanNSQK = diasPara(NSQK);
-  const COLORES_DIA = ["#D9572B", "#2F5FB8", "#2E8B57", "#C4473E", "#23807A", "#5E6472"];
-  const color = COLORES_DIA[((nDia % COLORES_DIA.length) + COLORES_DIA.length) % COLORES_DIA.length];
-  const fecha = hoy.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" }).replace(",", "");
-  el.innerHTML = `
-    <p class="hoy-fecha">${fecha.charAt(0).toUpperCase() + fecha.slice(1)}</p>
-    ${especial ? `<p class="hoy-especial">${especial}</p>` : ""}
-    <div class="hoy-letra" style="--c:${color}"><span class="lbl">Razón del día</span><p>${razon}</p><p class="manana">Mañana hay otra.</p></div>
-    <p class="hoy-cuenta"><b>${cuenta}</b> desde aquella servilleta.</p>
-    ${faltanNSQK > 0 ? `<div class="hoy-filas"><p class="hoy-linea"><span>Para ver a NSQK juntos</span><b>${plural(faltanNSQK, "día", "días")}</b></p></div>` : ""}`;
-}
-
 /* ---------- raspaditos ---------- */
 function prepararRascas(raiz) {
   raiz.querySelectorAll("[data-rasca]").forEach(r => {
@@ -2168,7 +2092,6 @@ if ("serviceWorker" in navigator && location.protocol === "https:" && /github\.i
 }
 pintarCartera();
 pintarLista();
-pintarHoy();
 armarResumen();
 mostrar(0);
 </script>

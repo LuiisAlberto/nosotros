@@ -17,6 +17,5 @@ Para verlo: abre `index.html` en el navegador o publícalo con GitHub Pages (Set
 
 ## Para que vuelva
 
-- **Hoy** (portada, aparece hasta que ella termina el disco): una razón distinta cada día (`RAZONES`), cuánto tiempo llevan desde la servilleta y cuánto falta para NSQK; los días 13 tienen mensaje especial.
 - **Lado B**: canciones con fecha (`desde`) que se abren solas ese día. Para agregar otra, copia una entrada `tipo: "ladob"` en `index.html`.
 - **App**: `manifest.webmanifest`, `sw.js` e íconos para agregarlo a la pantalla de inicio.
