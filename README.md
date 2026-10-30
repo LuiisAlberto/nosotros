@@ -17,5 +17,6 @@ Para verlo: abre `index.html` en el navegador o publícalo con GitHub Pages (Set
 
 ## Para que vuelva
 
+- **Nosotros Wrapped** (portada, aparece al terminar el disco): historias estilo Spotify Wrapped con los minutos que escuchó, su canción #1, su top 5, los vales que ganó y su artista #1; al final se guarda como imagen (1080×1920). El tiempo por canción se guarda en `mem` (`escuchado`).
 - **Lado B**: canciones con fecha (`desde`) que se abren solas ese día. Para agregar otra, copia una entrada `tipo: "ladob"` en `index.html`.
 - **App**: `manifest.webmanifest`, `sw.js` e íconos para agregarlo a la pantalla de inicio.

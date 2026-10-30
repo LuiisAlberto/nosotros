@@ -109,6 +109,50 @@ a { color: inherit; }
 .nuevo { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: var(--verde-play); color: #121212; font-size: .68rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
 .sub-lado { font-family: var(--f-ui); font-weight: 500; font-size: .82rem; color: var(--txt-2); letter-spacing: 0; margin-left: 6px; }
 .seccion-t { margin: 14px 0 0; font-family: var(--f-ui); font-weight: 800; font-size: 1.35rem; letter-spacing: -.01em; }
+/* ---------- Nosotros Wrapped ---------- */
+.wr-card { position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; width: 100%; min-height: 108px; padding: 18px; border: 0; border-radius: 14px; text-align: left; color: #fff; background: radial-gradient(circle at calc(100% - 42px) 50%, var(--naranja) 0 62px, transparent 63px), var(--azul); cursor: pointer; transition: transform .2s var(--ease); }
+.wr-card:active { transform: scale(.98); }
+.wr-card .lbl { font-size: .74rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
+.wr-card b { display: block; margin-top: 4px; font-family: var(--f-display); font-weight: 800; font-size: 1.32rem; line-height: 1.05; letter-spacing: -.03em; }
+.wr-card small { display: block; margin-top: 6px; font-size: .86rem; opacity: .9; }
+.wr-card .ir { width: 48px; height: 48px; border-radius: 50%; background: #121212; display: grid; place-items: center; }
+.wr { position: fixed; inset: 0; z-index: 60; background: #000; display: flex; justify-content: center; }
+.wr-marco { position: relative; width: 100%; max-width: 480px; height: 100%; overflow: hidden; }
+.wr-barras { position: absolute; top: calc(10px + env(safe-area-inset-top, 0px)); left: 12px; right: 12px; z-index: 3; display: flex; gap: 4px; }
+.wr-barras i { flex: 1; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, .35); }
+.wr-barras i.on { background: #fff; }
+.wr-cerrar { position: absolute; top: calc(22px + env(safe-area-inset-top, 0px)); right: 8px; z-index: 4; width: 44px; height: 44px; border: 0; border-radius: 50%; background: none; color: #fff; display: grid; place-items: center; cursor: pointer; }
+.wr-slide { position: absolute; inset: 0; padding: 86px 26px 40px; display: flex; flex-direction: column; justify-content: center; gap: 14px; background: var(--bg); color: var(--tx, #fff); }
+.wr-slide.entra > * { animation: wr-sube .45s var(--ease) both; }
+.wr-slide.entra > *:nth-child(2) { animation-delay: .08s; } .wr-slide.entra > *:nth-child(3) { animation-delay: .16s; } .wr-slide.entra > *:nth-child(4) { animation-delay: .24s; }
+@keyframes wr-sube { from { opacity: 0; transform: translateY(18px); } }
+@media (prefers-reduced-motion: reduce) { .wr-slide.entra > * { animation: none; } }
+.wr-slide .k1 { font-size: .8rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; opacity: .85; margin: 0; }
+.wr-slide h2 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: clamp(2rem, 10vw, 2.6rem); line-height: 1; letter-spacing: -.04em; }
+.wr-slide .enorme { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: clamp(5rem, 30vw, 8rem); line-height: .85; letter-spacing: -.06em; font-variant-numeric: tabular-nums; }
+.wr-slide p { margin: 0; font-size: 1.15rem; line-height: 1.4; font-weight: 600; }
+.wr-slide .suave { opacity: .85; font-weight: 500; font-size: 1rem; }
+.wr-slide .script { font-family: var(--f-serif); font-style: italic; font-weight: 500; }
+.wr-pola { align-self: center; width: min(70%, 250px); background: #fff; padding: 12px 12px 0; transform: rotate(-3deg); box-shadow: 0 18px 30px rgba(0, 0, 0, .3); }
+.wr-pola .doodle { display: block; width: 100%; height: auto; background: var(--azul-claro); }
+.wr-pola span { display: block; padding: 10px 0 12px; text-align: center; font-family: var(--f-maquina); font-size: .85rem; color: var(--ink); }
+.wr-top { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.wr-top li { display: grid; grid-template-columns: 34px 54px 1fr; gap: 12px; align-items: center; }
+.wr-top .n { font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; }
+.wr-top .mini { width: 54px; height: 54px; border-radius: 4px; overflow: hidden; background: var(--azul-claro); }
+.wr-top .mini svg { width: 100%; height: 100%; }
+.wr-top b { display: block; font-size: 1.05rem; line-height: 1.2; }
+.wr-top small { display: block; font-size: .85rem; opacity: .75; }
+.wr-avatar { width: 150px; height: 150px; border-radius: 50%; background: var(--naranja); color: var(--ink); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 3rem; letter-spacing: -.04em; box-shadow: 0 20px 40px rgba(0, 0, 0, .3); }
+.wr-resumen { background: var(--paper); color: var(--ink); border-radius: 16px; padding: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+.wr-resumen .todo { grid-column: 1 / -1; }
+.wr-resumen span { display: block; font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+.wr-resumen b { display: block; font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; line-height: 1.05; letter-spacing: -.03em; }
+.wr-resumen ol { margin: 4px 0 0; padding-left: 1.2em; font-weight: 700; font-size: .95rem; line-height: 1.45; }
+.wr-botones { display: flex; gap: 10px; flex-wrap: wrap; }
+.wr-botones button { flex: 1; min-height: 48px; padding: 8px 16px; border-radius: 999px; border: 0; font-weight: 800; font-size: .95rem; cursor: pointer; }
+.wr-botones .pri { background: var(--verde-play); color: #121212; }
+.wr-botones .sec { background: rgba(255, 255, 255, .14); color: #fff; }
 .nota-papel { background: var(--app-2); border-radius: 12px; padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 10px; }
 .nota-papel ol { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 8px; font-size: .92rem; color: var(--txt-2); }
 .nota-papel h3 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; }
@@ -430,6 +474,13 @@ canvas#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-e
       <button class="op-hoja" data-copiar-link><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14 L14 10 M8.5 11.5 L6.5 13.5 A3.5 3.5 0 0 0 11.5 18.5 L13.5 16.5 M15.5 12.5 L17.5 10.5 A3.5 3.5 0 0 0 12.5 5.5 L10.5 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Copiar link</button>
     </div>
     <p class="aviso-hoja" data-aviso-hoja role="status"></p>
+  </div>
+</div>
+<div class="wr" data-wr hidden role="dialog" aria-modal="true" aria-label="Nosotros Wrapped">
+  <div class="wr-marco">
+    <div class="wr-barras" data-wr-barras aria-hidden="true"></div>
+    <button class="wr-cerrar" data-wr-cerrar aria-label="Cerrar"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+    <div data-wr-slides aria-live="polite"></div>
   </div>
 </div>
 <canvas id="confeti" hidden></canvas>
@@ -1195,7 +1246,6 @@ function vistaInicio() {
         <button class="accion" data-ir-guia aria-label="Cómo se escucha este disco"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 11 V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.2" fill="currentColor"/></svg></button>
         <button class="accion" data-instalar hidden aria-label="Instalar como app"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7 V15 M8.5 11.5 L12 15 L15.5 11.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="accion" data-compartir aria-label="Compartir y descargar el QR"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15 V4 M7.5 8.5 L12 4 L16.5 8.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 11.5 H5.5 A1.5 1.5 0 0 0 4 13 V19 A1.5 1.5 0 0 0 5.5 20.5 H18.5 A1.5 1.5 0 0 0 20 19 V13 A1.5 1.5 0 0 0 18.5 11.5 H18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-        <button class="accion" data-ir-cartera aria-label="Tu cartera de vales"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6.5" width="18" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M15 12.5 H21" stroke="currentColor" stroke-width="1.8"/><circle cx="16.8" cy="12.5" r="1.1" fill="currentColor"/></svg></button>
       </div>
       <div class="der">
         <button class="accion" data-aleatorio aria-label="Escuchar una canción al azar"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7 H7 C10 7 11 9 12 12 C13 15 14 17 17 17 H21 M18 14 L21 17 L18 20 M3 17 H7 C8.6 17 9.6 16.4 10.3 15.4 M13.7 8.6 C14.4 7.6 15.4 7 17 7 H21 M18 4 L21 7 L18 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -1207,6 +1257,10 @@ function vistaInicio() {
     <ol class="tracklist" data-lista="a"></ol>
     <h2 class="seccion-t">Lado B <span class="sub-lado">se va abriendo con el tiempo</span></h2>
     <ol class="tracklist" data-lista="b"></ol>
+    <button class="wr-card" data-wrapped hidden>
+      <span><span class="lbl">Ya está listo</span><b>Tu Nosotros Wrapped</b><small>Lo que escuchaste de nuestra historia.</small></span>
+      <span class="ir" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5 L19 12 L8 19 Z" fill="#fff"/></svg></span>
+    </button>
     <section class="cartera" data-cartera aria-label="Tu cartera de vales"></section>
     <div class="nota-papel" data-guia>
       <h3>Cómo se escucha este disco</h3>
@@ -1332,7 +1386,7 @@ function mostrar(idx) {
   v.el.style.animation = "none"; void v.el.offsetWidth; v.el.style.animation = "";
 }
 function guardar() { mem.set("revelado", visto); mem.set("pos", pos); }
-function irInicio() { pausar(); trackActual = -1; $player.hidden = true; mostrar(0); pintarCartera(); pintarLista(); }
+function irInicio() { pausar(); trackActual = -1; $player.hidden = true; mostrar(0); pintarCartera(); pintarLista(); pintarWrapped(); }
 function irTrack(k) {
   if (!abierta(TRACKS[k])) return;
   pausar();
@@ -1578,6 +1632,7 @@ function bucle(ts) {
   const dt = ultimo ? ts - ultimo : 0;
   ultimo = ts;
   transcurrido += dt;
+  sumarEscucha(trackActual, dt);
   const k = trackActual, t = TRACKS[k];
   const conVoz = narrando() && !t.versos[pos[k]].b && luzVoz >= 0;
   if (conVoz) {
@@ -1602,7 +1657,16 @@ function reproducir() {
   hablar();
   cancelAnimationFrame(raf); raf = requestAnimationFrame(bucle);
 }
-function pausar() { sonando = false; callar(); cancelAnimationFrame(raf); actualizarPlay(); }
+function pausar() { sonando = false; callar(); cancelAnimationFrame(raf); actualizarPlay(); mem.set("escuchado", escuchado); }
+/* cuánto tiempo suena cada canción (para el Wrapped) */
+const escuchado = mem.get("escuchado", {});
+let ultimoGuardado = 0;
+function sumarEscucha(k, dt) {
+  if (k < 0 || dt <= 0 || dt > 1000) return;
+  escuchado[k] = (escuchado[k] || 0) + dt;
+  const ahora = performance.now();
+  if (ahora - ultimoGuardado > 4000) { ultimoGuardado = ahora; mem.set("escuchado", escuchado); }
+}
 function actualizarPlay() {
   /* los íconos son SVG: se ocultan con el atributo, no con la propiedad */
   document.getElementById("icoPlay").toggleAttribute("hidden", sonando);
@@ -1687,6 +1751,127 @@ function pintarLista() {
   document.querySelector('[data-lista="a"]').innerHTML = TRACKS.map((t, k) => t.tipo === "ladob" ? "" : fila(t, k)).join("");
   document.querySelector('[data-lista="b"]').innerHTML = TRACKS.map((t, k) => t.tipo === "ladob" ? fila(t, k) : "").join("");
 }
+/* ---------- Nosotros Wrapped ---------- */
+/* aparece cuando termina el disco (la pista oculta) o ya dijo que sí */
+const discoTerminado = () => !!mem.get("si", null) || (visto[IDX_FINAL] || 0) >= TRACKS[IDX_FINAL].versos.length;
+function pintarWrapped() { const b = document.querySelector("[data-wrapped]"); if (b) b.hidden = !discoTerminado(); }
+function datosWrapped() {
+  const porTrack = TRACKS.map((t, k) => {
+    const n = Math.min(visto[k] || 0, t.versos.length);
+    /* si escuchó antes de que existiera el contador, se estima con las líneas que ya vio */
+    const estimado = t.durs.slice(0, n).reduce((a, b) => a + b, 0);
+    return { k, t, ms: Math.max(escuchado[k] || 0, estimado), lineas: t.versos.slice(0, n).filter(v => !v.b).length };
+  }).filter(x => x.ms > 0);
+  const top = [...porTrack].sort((a, b) => b.ms - a.ms).slice(0, 5);
+  const ms = porTrack.reduce((a, x) => a + x.ms, 0);
+  const lineas = porTrack.reduce((a, x) => a + x.lineas, 0);
+  const totalLineas = TRACKS.filter(t => !t.desde).reduce((a, t) => a + t.versos.filter(v => !v.b).length, 0);
+  return { top, minutos: Math.max(1, Math.round(ms / 6e4)), lineas: Math.min(lineas, totalLineas), totalLineas, vales: vales.size };
+}
+const fmtMin = ms => { const m = Math.floor(ms / 6e4), s = Math.round(ms % 6e4 / 1e3); return m ? `${m} min ${s} s` : `${s} s`; };
+function tiempoJuntos() {
+  const t = mesesSemanasDias(PRIMER_SI, new Date()), partes = [];
+  if (t.anios) partes.push(plural(t.anios, "año", "años"));
+  if (t.meses) partes.push(plural(t.meses, "mes", "meses"));
+  const d = t.semanas * 7 + t.dias;
+  if (d || !partes.length) partes.push(plural(d, "día", "días"));
+  return partes.length > 1 ? partes.slice(0, -1).join(", ") + " y " + partes[partes.length - 1] : partes[0];
+}
+let wrSlides = [], wrI = 0, wrDatos = null;
+function slidesWrapped(d) {
+  const uno = d.top[0];
+  const valesTxt = d.vales === VALES.length ? "Todos. Ahora sí te debo el premio mayor." : d.vales ? "Y todos se cobran: están en tu cartera." : "Ninguno… pero igual te los debo.";
+  return [
+    { bg: "var(--naranja)", tx: "var(--ink)", html: `<p class="k1">Nosotros Wrapped</p><h2>${ELLA}, este es tu resumen.</h2><p class="script" style="font-size:1.5rem">De 2019 a hoy.</p><p class="suave">Toca para seguir.</p>` },
+    { bg: "var(--azul)", html: `<p class="k1">Escuchaste</p><p class="enorme">${d.minutos}</p><p>${d.minutos === 1 ? "minuto" : "minutos"} de nuestra historia.</p><p class="suave">Leíste ${d.lineas} de ${d.totalLineas} líneas. ${d.lineas >= d.totalLineas ? "Todas. Ni una saltada." : "Las demás te esperan."}</p>` },
+    uno && { bg: "#2E8B57", html: `<p class="k1">Tu canción #1</p><div class="wr-pola">${svg(uno.t.arte, "")}<span>${uno.t.cuando}</span></div><h2>${uno.t.titulo}</h2><p class="suave">${fmtMin(uno.ms)} escuchándola.</p>` },
+    d.top.length > 1 && { bg: "#151515", html: `<p class="k1">Tu top ${d.top.length}</p><ol class="wr-top">${d.top.map((x, i) => `<li><span class="n">${i + 1}</span><span class="mini">${svg(x.t.arte, "")}</span><span><b>${x.t.titulo}</b><small>${fmtMin(x.ms)}</small></span></li>`).join("")}</ol>` },
+    { bg: "var(--amarillo)", tx: "var(--ink)", html: `<p class="k1">Ganaste</p><p class="enorme">${d.vales}</p><p>de ${VALES.length} vales.</p><p class="suave">${valesTxt}</p>` },
+    { bg: "#C4473E", html: `<p class="k1">Tu artista #1</p><div class="wr-avatar" aria-hidden="true">E&amp;L</div><h2>Ruicito</h2><p>Llevas ${tiempoJuntos()} escuchándolo.</p><p class="suave">Estás en el top 1 de sus oyentes. Bueno: eres la única.</p>` },
+    { bg: "#151515", html: `<p class="k1">Tu Nosotros Wrapped</p>
+      <div class="wr-resumen">
+        <div class="todo"><span>Top canciones</span><ol>${d.top.map(x => `<li>${x.t.titulo}</li>`).join("")}</ol></div>
+        <div><span>Minutos</span><b>${d.minutos}</b></div><div><span>Vales</span><b>${d.vales}/${VALES.length}</b></div>
+        <div class="todo"><span>Artista #1</span><b>Ruicito</b></div>
+      </div>
+      <div class="wr-botones"><button class="pri" data-wr-guardar>Guardar imagen</button><button class="sec" data-wr-otra>Ver otra vez</button></div>` }
+  ].filter(Boolean);
+}
+const $wr = document.querySelector("[data-wr]");
+function abrirWrapped() {
+  pausar();
+  wrDatos = datosWrapped();
+  wrSlides = slidesWrapped(wrDatos);
+  $wr.querySelector("[data-wr-barras]").innerHTML = wrSlides.map(() => "<i></i>").join("");
+  $wr.hidden = false;
+  irSlide(0);
+  $wr.querySelector("[data-wr-cerrar]").focus();
+}
+function cerrarWrapped() { $wr.hidden = true; const b = document.querySelector("[data-wrapped]"); if (b) b.focus(); }
+function irSlide(i) {
+  wrI = Math.max(0, Math.min(wrSlides.length - 1, i));
+  const sl = wrSlides[wrI];
+  $wr.querySelector("[data-wr-slides]").innerHTML = `<div class="wr-slide entra" style="--bg:${sl.bg};--tx:${sl.tx || "#fff"}">${sl.html}</div>`;
+  $wr.querySelectorAll("[data-wr-barras] i").forEach((b, j) => b.classList.toggle("on", j <= wrI));
+}
+$wr.addEventListener("click", e => {
+  if (e.target.closest("[data-wr-cerrar]")) return cerrarWrapped();
+  if (e.target.closest("[data-wr-guardar]")) return guardarWrapped();
+  if (e.target.closest("[data-wr-otra]")) return irSlide(0);
+  if (e.target.closest("button, a")) return;
+  const r = $wr.querySelector(".wr-marco").getBoundingClientRect();
+  irSlide(e.clientX - r.left < r.width / 3 ? wrI - 1 : wrI + 1);
+});
+document.addEventListener("keydown", e => {
+  if ($wr.hidden) return;
+  if (e.key === "Escape") cerrarWrapped();
+  else if (e.key === "ArrowRight") irSlide(wrI + 1);
+  else if (e.key === "ArrowLeft") irSlide(wrI - 1);
+});
+document.addEventListener("click", e => { if (e.target.closest("[data-wrapped]")) abrirWrapped(); });
+
+/* la imagen para guardar o compartir, tamaño historia (1080×1920) */
+async function guardarWrapped() {
+  const d = wrDatos, W = 1080, H = 1920;
+  try { await Promise.all(["800 80px Unbounded", "700 40px Figtree", "italic 500 60px Fraunces"].map(f => document.fonts.load(f))); } catch (e) {}
+  const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+  const c = cv.getContext("2d");
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  c.fillStyle = css("--azul"); c.fillRect(0, 0, W, H);
+  c.fillStyle = css("--naranja"); c.beginPath(); c.arc(W + 60, 160, 420, 0, Math.PI * 2); c.fill();
+  c.fillStyle = css("--verde"); c.beginPath(); c.arc(-40, H - 120, 330, 0, Math.PI * 2); c.fill();
+  const estrellaC = (x, y, s, col) => { c.save(); c.translate(x, y); c.scale(s, s); c.beginPath(); [[0,-9],[2.4,-2.4],[9,0],[2.4,2.4],[0,9],[-2.4,2.4],[-9,0],[-2.4,-2.4]].forEach(([a, b], i) => i ? c.lineTo(a, b) : c.moveTo(a, b)); c.closePath(); c.fillStyle = col; c.fill(); c.lineWidth = 2; c.strokeStyle = css("--ink"); c.stroke(); c.restore(); };
+  estrellaC(890, 250, 4.5, css("--amarillo")); estrellaC(W - 130, H - 170, 4, "#fff");
+  /* tarjeta */
+  const x0 = 90, y0 = 360, w = W - 180, h = 1220;
+  c.fillStyle = css("--paper"); c.strokeStyle = css("--ink"); c.lineWidth = 8;
+  c.beginPath(); c.roundRect(x0, y0, w, h, 40); c.fill(); c.stroke();
+  c.fillStyle = "rgba(255,201,61,.85)"; c.save(); c.translate(W / 2, y0); c.rotate(.04); c.fillRect(-150, -36, 300, 72); c.restore();
+  c.fillStyle = "#fff"; c.font = "800 92px Unbounded, sans-serif"; c.fillText("NOSOTROS", 90, 210);
+  c.font = "italic 500 64px Fraunces, serif"; c.fillText("Wrapped", 96, 290);
+  c.fillStyle = css("--ink");
+  const etiqueta = (t, x, y) => { c.font = "800 30px Figtree, sans-serif"; c.fillStyle = css("--ink-soft"); c.fillText(t.toUpperCase(), x, y); c.fillStyle = css("--ink"); };
+  etiqueta("Top canciones", x0 + 60, y0 + 110);
+  d.top.forEach((t, i) => { c.font = "800 50px Unbounded, sans-serif"; c.fillStyle = css("--naranja-os"); c.fillText(String(i + 1), x0 + 60, y0 + 190 + i * 82); c.fillStyle = css("--ink"); c.font = "700 46px Figtree, sans-serif"; c.fillText(t.t.titulo, x0 + 130, y0 + 188 + i * 82, w - 190); });
+  const yb = y0 + 650;
+  c.fillRect(x0 + 60, yb - 40, w - 120, 4);
+  etiqueta("Minutos", x0 + 60, yb + 30); etiqueta("Vales", x0 + w / 2 + 10, yb + 30);
+  c.font = "800 120px Unbounded, sans-serif"; c.fillText(String(d.minutos), x0 + 60, yb + 160); c.fillText(`${d.vales}/${VALES.length}`, x0 + w / 2 + 10, yb + 160);
+  etiqueta("Artista #1", x0 + 60, yb + 270);
+  c.font = "800 96px Unbounded, sans-serif"; c.fillText("Ruicito", x0 + 60, yb + 380);
+  c.font = "italic 500 44px Fraunces, serif"; c.fillStyle = css("--ink-soft"); c.fillText(`${tiempoJuntos()} juntos.`, x0 + 60, yb + 470, w - 120);
+  c.fillStyle = "#fff"; c.font = "700 36px Figtree, sans-serif"; c.textAlign = "center"; c.fillText(`${ELLA} & ${EL} · 2019 — hoy`, W / 2, H - 150);
+  const blob = await new Promise(r => cv.toBlob(r, "image/png"));
+  const archivo = new File([blob], "nosotros-wrapped.png", { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
+    try { await navigator.share({ files: [archivo], title: "Nosotros Wrapped" }); return; } catch (e) { if (e.name === "AbortError") return; }
+  }
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "nosotros-wrapped.png";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
 /* ---------- raspaditos ---------- */
 function prepararRascas(raiz) {
   raiz.querySelectorAll("[data-rasca]").forEach(r => {
@@ -1794,7 +1979,6 @@ document.addEventListener("click", e => {
     return;
   }
   if (e.target.closest("[data-ir-guia]")) { document.querySelector("[data-guia]").scrollIntoView({ behavior: suave(), block: "start" }); return; }
-  if (e.target.closest("[data-ir-cartera]")) { document.querySelector("[data-cartera]").scrollIntoView({ behavior: suave(), block: "start" }); return; }
   if (e.target.closest("[data-instalar]") && avisoInstalar) { avisoInstalar.prompt(); avisoInstalar = null; e.target.closest("[data-instalar]").hidden = true; return; }
   if (e.target.closest("[data-play-album]")) {
     const k = TRACKS.findIndex((t, j) => abierta(t) && (visto[j] || 0) < t.versos.length);
@@ -2092,6 +2276,7 @@ if ("serviceWorker" in navigator && location.protocol === "https:" && /github\.i
 }
 pintarCartera();
 pintarLista();
+pintarWrapped();
 armarResumen();
 mostrar(0);
 </script>

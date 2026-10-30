@@ -36,6 +36,11 @@ Luis creó cuenta (plan gratis, 10,000 créditos) y guardó la clave en el entor
   y ya no guarda respuestas 206.
 - Publicado en `ccr-73ad139d-amf649` (trabajado en `claude/elevenlab-voice-samples-mx-6b5ve5`).
 
+## Nosotros Wrapped
+- Tarjeta en la portada (donde estaba «Hoy», que se quitó) cuando termina la pista oculta o dijo que sí.
+- `escuchado` en `mem` cuenta ms por canción desde `bucle`; si no hay datos, se estima con las líneas vistas.
+- `guardarWrapped()` dibuja la imagen en canvas y usa compartir del celular si existe; si no, la descarga.
+
 ## Otros pendientes
 - **Fotos**: descartado; Luis prefiere los dibujitos.
   (ver `fotos/LEEME.md`); el sitio las usa solas si existen.
