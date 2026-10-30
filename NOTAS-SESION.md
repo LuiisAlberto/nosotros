@@ -37,7 +37,7 @@ Luis creó cuenta (plan gratis, 10,000 créditos) y guardó la clave en el entor
 - Publicado en `ccr-73ad139d-amf649` (trabajado en `claude/elevenlab-voice-samples-mx-6b5ve5`).
 
 ## Otros pendientes
-- **Fotos**: Luis las va a mandar. Van en `fotos/portada.jpg` y `fotos/cap-01.jpg` … `cap-10.jpg`
+- **Fotos**: descartado; Luis prefiere los dibujitos.
   (ver `fotos/LEEME.md`); el sitio las usa solas si existen.
 - Premio mayor: el texto actual promete «una sorpresa que ya tengo preparada».
 - Concierto de Little Jesus en Explanada: 28 feb 2025 (confirmado por Luis).
