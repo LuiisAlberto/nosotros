@@ -342,7 +342,7 @@ details.version .guardado { color: var(--tt); opacity: .8; margin-top: 6px; }
 .check .caja { width: 32px; height: 32px; flex: none; }
 .check .palomita { stroke-dasharray: 60; stroke-dashoffset: 60; transition: stroke-dashoffset .5s var(--ease); }
 .check.marcado .palomita { stroke-dashoffset: 0; }
-#btnNo.huye { position: fixed; z-index: 30; transition: left .25s var(--ease), top .25s var(--ease); background: var(--blanco); border-radius: 12px; box-shadow: 0 6px 18px rgba(0, 0, 0, .3); padding: 6px 12px; }
+#btnNo.huye { position: relative; z-index: 2; transition: transform .3s var(--ease); background: var(--blanco); border-radius: 12px; box-shadow: 0 6px 18px rgba(0, 0, 0, .25); padding: 6px 12px; }
 .respuesta { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .respuesta .grande { font-family: var(--f-display); font-weight: 800; font-size: clamp(1.8rem, 8.5vw, 2.3rem); line-height: 1; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
 .respuesta .script { font-family: var(--f-serif); font-style: italic; font-size: 1.4rem; margin: 0; }
@@ -2020,22 +2020,39 @@ const $si = document.getElementById("btnSi");
 const $no = document.getElementById("btnNo");
 const $noTxt = document.getElementById("noTxt");
 const frasesNo = ["¿Segura?", "Piénsalo", "¿Neta?", "Ese no sirve", "Dale al sí"];
-let intentos = 0;
+let intentos = 0, noX = 0, noY = 0;
+/* el «No» se escapa, pero sin salirse de la servilleta: tiene transform y clip-path,
+   así que con position: fixed quedaba recortado y parecía que desaparecía */
 function huir(e) {
   if (e) e.preventDefault();
   intentos++;
   $noTxt.textContent = frasesNo[Math.min(intentos - 1, frasesNo.length - 1)];
   $si.style.transform = `scale(${Math.min(1 + intentos * .12, 1.7)})`;
-  const r = $no.getBoundingClientRect();
   $no.classList.add("huye");
-  const w = r.width, h = r.height, m = 16;
-  $no.style.left = (m + Math.random() * Math.max(0, innerWidth - w - m * 2)) + "px";
-  $no.style.top = (m + Math.random() * Math.max(0, innerHeight - h - 140)) + "px";
-  if (intentos >= 7) $no.hidden = true;
+  const sv = $no.closest(".servilleta").getBoundingClientRect();
+  /* posición sin mover (sin animación de por medio) para calcular el salto desde ahí */
+  $no.style.transition = "none"; $no.style.transform = "none";
+  const r = $no.getBoundingClientRect(), si = $si.getBoundingClientRect();
+  $no.style.transform = `translate(${noX}px, ${noY}px)`; void $no.offsetWidth; $no.style.transition = "";
+  const x0 = r.left, y0 = r.top, m = 14;
+  /* que nunca tape la pregunta: solo se mueve debajo de «(otra vez)» */
+  const arriba = $no.closest(".servilleta").querySelector(".otra").getBoundingClientRect().bottom + 6;
+  const choca = (x, y) => x < si.right + 10 && x + r.width > si.left - 10 && y < si.bottom + 10 && y + r.height > si.top - 10;
+  let x = x0 + noX, y = y0 + noY;
+  for (let i = 0; i < 40; i++) {
+    const cx = sv.left + m + Math.random() * Math.max(0, sv.width - r.width - m * 2);
+    const cy = arriba + Math.random() * Math.max(0, sv.bottom - m - r.height - arriba);
+    if (choca(cx, cy) || Math.hypot(cx - x, cy - y) < 50) continue;
+    x = cx; y = cy; break;
+  }
+  noX = x - x0; noY = y - y0;
+  $no.style.transform = `translate(${noX}px, ${noY}px)`;
 }
 $no.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") huir(); });
-$no.addEventListener("pointerdown", huir);
-$no.addEventListener("click", huir);
+let ultimoToque = 0;
+$no.addEventListener("pointerdown", e => { ultimoToque = performance.now(); huir(e); });
+/* el toque ya contó en pointerdown; el click solo cuenta si no hubo toque (teclado) */
+$no.addEventListener("click", e => { e.preventDefault(); if (performance.now() - ultimoToque > 800) huir(); });
 function decirSi(animar) {
   $si.classList.add("marcado");
   $si.style.transform = "";
